@@ -685,7 +685,7 @@ function renderShell(){
   const moreOn=!prim.includes(tab);
   $("#bottom").replaceChildren(...prim.map(k=>link(k,short[k])),
     h("a",{href:"#more","aria-current":moreOn?"page":null,onclick:e=>{e.preventDefault();
-      openSheet("All sections",h("nav",{class:"nav",style:"--rail-muted:var(--muted);--rail-ink:var(--ink);--rail-line:var(--sunk)"},...TABS.map(([k,l])=>h("a",{href:"#"+k,"aria-current":tab===k?"page":null,onclick:ev=>{ev.preventDefault();closeSheet();go(k);}},icon(k),h("span",{text:l})))));}},icon("more"),h("span",{text:moreOn?(short[tab]||"More"):"More"})));
+      openSheet("All sections",h("nav",{class:"nav",style:"--rail-muted:var(--muted);--rail-ink:var(--ink);--rail-line:var(--sunk)"},...TABS.map(([k,l])=>h("a",{href:"#"+k,"aria-current":tab===k?"page":null,onclick:ev=>{ev.preventDefault();closeSheet();go(k);}},icon(k),h("span",{text:l})))),[h("a",{class:"btn ghost",href:"tel:"+CONTACT.tel},"Call FatAtelier"),h("button",{class:"btn ghost",onclick:()=>{closeSheet();changePasswordSheet();}},"Change password"),h("button",{class:"btn ghost",onclick:async()=>{ await S.sb.auth.signOut(); location.reload(); }},"Sign out")]);}},icon("more"),h("span",{text:moreOn?(short[tab]||"More"):"More"})));
   const t=TABS.find(x=>x[0]===tab);
   const actions=h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"});
   if(dev()&&S.db){
@@ -700,7 +700,7 @@ function renderShell(){
   if(S.me){
     who.append(h("a",{class:"railcall",href:"tel:"+CONTACT.tel},h("span",{text:"Questions? Call FatAtelier"}),h("b",{text:CONTACT.phone})));
     who.append(h("div",{class:"who-row"},h("img",{src:S.me.avatarUrl,alt:""}),h("div",null,h("b",{text:S.me.name||"You"}),h("span",{text:S.isOwner?(S.preview?"Previewing the investor view":"Developer"):"Investor"}))));
-    who.append(h("button",{class:"signout",onclick:async()=>{ await S.sb.auth.signOut(); location.reload(); }},"Sign out"));
+    who.append(h("div",{style:"display:flex;gap:14px"},h("button",{class:"signout",onclick:changePasswordSheet},"Change password"),h("button",{class:"signout",onclick:async()=>{ await S.sb.auth.signOut(); location.reload(); }},"Sign out")));
     if(S.isOwner) who.append(h("div",{class:"switch",role:"group","aria-label":"View as"},
       h("button",{"aria-pressed":String(!S.preview),onclick:()=>{S.preview=false;render();}},"Developer"),
       h("button",{"aria-pressed":String(S.preview),onclick:()=>{S.preview=true;render();toast("Showing what your investor sees.");}},"Investor view")));
@@ -881,7 +881,7 @@ function membersCard(){
   const add=async()=>{ const e=email.value.trim().toLowerCase(); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){err.textContent="Enter a valid email address.";return;}
     const {error}=await S.sb.from('members').insert({email:e,role:'investor',display_name:name.value.trim()||null});
     if(error){ err.textContent=error.code==='23505'?"That email is already on the list.":"That didn’t save. Try again."; return; }
-    toast("Added "+e+". Send them the link to sign in."); email.value=""; name.value=""; loadMembers(); };
+    const nm=name.value.trim(); email.value=""; name.value=""; loadMembers(); passwordSheet({email:e,display_name:nm}); };
   const rows=(S.members||[]).filter(m=>m.role!=='owner');
   return h("div",{class:"card"},
     h("div",{class:"card-head"},h("h3",{text:"Investors who can sign in"}),h("span",{class:"label",text:location.host?"Send them "+location.origin+location.pathname:""})),
@@ -889,11 +889,45 @@ function membersCard(){
       h("thead",null,h("tr",null,h("th",{text:"Name"}),h("th",{text:"Email"}),h("th",{text:"Added"}),h("th"))),
       h("tbody",null,...rows.map(m=>{ const w=h("span");
         w.append(h("button",{class:"btn ghost sm",onclick:()=>{ w.replaceChildren(h("button",{class:"btn danger sm",onclick:async()=>{ const {error}=await S.sb.from('members').delete().eq('email',m.email); if(error) toast("That didn’t save.","bad"); else { toast("Removed "+m.email); loadMembers(); } }},"Remove access"),h("button",{class:"btn ghost sm",onclick:()=>render()},"Keep")); }},"Remove"));
-        return h("tr",null,h("td",{text:m.display_name||"—"}),h("td",{text:m.email}),h("td",{class:"muted",text:fdate(m.invited_at)}),h("td",null,w)); })))) :
+        return h("tr",null,h("td",{text:m.display_name||"—"}),h("td",{text:m.email}),h("td",{class:"muted",text:fdate(m.invited_at)}),h("td",{style:"white-space:nowrap"},h("button",{class:"btn sm",style:"margin-right:6px",onclick:()=>passwordSheet(m)},"Set password"),w)); })))) :
       h("div",{class:"note-line",text:"Nobody else can sign in yet. Add each investor’s email here first."}),
     h("div",{class:"form",style:"grid-template-columns:repeat(2,minmax(0,1fr)) auto;align-items:end"},field("Name",name),field("Email",email),h("button",{class:"btn bronze",style:"margin-bottom:1px",onclick:add},icon("plus"),"Add investor")),
     err,
-    h("p",{class:"fine",text:"Only emails on this list can see the project. Removing someone takes their access away the next time the page checks."}));
+    h("p",{class:"fine",text:"Only emails on this list can see the project. Give each investor a password with “Set password”, then send them the message it writes. Removing someone takes their access away the next time the page checks."}));
+}
+function makePassword(){ const W=["Bergen","Cedar","Harbor","Maple","Summit","Granite","Willow","Copper","Meadow","Falcon","Juniper","Atlas"]; const r=n=>{ const a=new Uint32Array(1); crypto.getRandomValues(a); return a[0]%n; };
+  return W[r(W.length)]+"-"+W[r(W.length)].toLowerCase()+"-"+(1000+r(9000)); }
+function inviteText(m,pw){ const first=(m.display_name||"").split(" ")[0];
+  return `${first?"Hi "+first+", y":"Y"}ou’re invited to The Blend investor room by FatAtelier.\n\nOpen: https://investors.fatatelier.com\nEmail: ${m.email}\nPassword: ${pw}\n\nYou can change your password after you sign in. Questions? Call FatAtelier at ${CONTACT.phone}.`; }
+function passwordSheet(m){
+  const pw=h("input",{id:"ps-pass",value:makePassword(),autocomplete:"off",spellcheck:"false"});
+  const err=h("div",{class:"err"});
+  const out=h("div",{style:"display:flex;flex-direction:column;gap:10px"});
+  const save=h("button",{class:"btn bronze",onclick:async()=>{ const v=pw.value.trim(); if(v.length<10){ err.textContent="Use at least 10 characters."; return; }
+    save.disabled=true; save.textContent="Saving…"; err.textContent="";
+    const {data,error}=await S.sb.functions.invoke("member-access",{body:{action:"set_password",email:m.email,password:v,display_name:m.display_name||null}});
+    if(error||!data||!data.ok){ save.disabled=false; save.textContent="Save password"; let msg=""; try{ msg=(await error.context.json()).error; }catch(_){}; err.textContent="That didn’t save"+(msg?": "+msg:"")+". Try again."; return; }
+    loadMembers(); const txt=inviteText(m,v);
+    const ta=h("textarea",{id:"ps-msg",rows:"8",readonly:true,style:"width:100%;font-size:14px"}); ta.value=txt;
+    out.replaceChildren(h("div",{class:"note-line good",text:`Password saved. ${m.email} can sign in now.`}),
+      h("label",{class:"field full"},"Message to send by text or email",ta),
+      h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},
+        h("button",{class:"btn bronze",onclick:async()=>{ try{ await navigator.clipboard.writeText(txt); toast("Message copied"); }catch(_){ ta.select(); toast("Select and copy the message"); } }},"Copy message"),
+        h("a",{class:"btn ghost",href:"sms:?&body="+encodeURIComponent(txt)},"Text it"),
+        h("a",{class:"btn ghost",href:"mailto:"+encodeURIComponent(m.email)+"?subject="+encodeURIComponent("Your access to The Blend investor room")+"&body="+encodeURIComponent(txt)},"Email it")));
+    save.remove(); }},"Save password");
+  openSheet("Password for "+(m.display_name||m.email),
+    h("div",{class:"form"},h("p",{class:"muted full",style:"margin:0",text:`${m.email} will sign in with this password. Keep the suggested one or type your own (10+ characters).`}),
+      h("label",{class:"field full"},"Password",pw),h("div",{class:"full"},err),h("div",{class:"full"},out)),
+    [h("button",{class:"btn ghost",onclick:closeSheet},"Close"),save]);
+}
+function changePasswordSheet(){
+  const a=h("input",{id:"cp-1",type:"password",autocomplete:"new-password"}), b=h("input",{id:"cp-2",type:"password",autocomplete:"new-password"}); const err=h("div",{class:"err"});
+  const save=h("button",{class:"btn bronze",onclick:async()=>{ if(a.value.length<10){ err.textContent="Use at least 10 characters."; return; } if(a.value!==b.value){ err.textContent="The two passwords don’t match."; return; }
+    save.disabled=true; const {error}=await S.sb.auth.updateUser({password:a.value});
+    if(error){ save.disabled=false; err.textContent=/different|same/i.test(error.message)?"Choose a password different from your current one.":"That didn’t save. Try again."; return; }
+    closeSheet(); toast("Password updated"); }},"Save new password");
+  openSheet("Change your password",h("div",{class:"form"},h("label",{class:"field full"},"New password",a),h("label",{class:"field full"},"Type it again",b),h("div",{class:"full"},err)),[h("button",{class:"btn ghost",onclick:closeSheet},"Cancel"),save]);
 }
 
 /* ---------- DOCUMENTS ---------- */
@@ -1595,6 +1629,25 @@ function showGate(mode,email){
       h("p",{text:`${email} hasn’t been added as an investor. Ask FatAtelier to add this email, then reload this page.`}),
       h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},h("button",{class:"btn bronze",onclick:()=>location.reload()},"Check again"),h("button",{class:"btn ghost",onclick:async()=>{await S.sb.auth.signOut();location.reload();}},"Use another email")),gateHelp());
   } else {
+    if(mode!=="link"){
+      const em=h("input",{id:"g-email",type:"email",autocomplete:"username",placeholder:"you@example.com",value:email||""});
+      const pw=h("input",{id:"g-pass",type:"password",autocomplete:"current-password",placeholder:"Your password"});
+      const err=h("div",{class:"err"});
+      const btn=h("button",{class:"btn bronze",type:"submit"},"Sign in");
+      const show=h("button",{type:"button",class:"btn ghost sm",style:"align-self:flex-start",onclick:()=>{ pw.type=pw.type==="password"?"text":"password"; show.textContent=pw.type==="password"?"Show password":"Hide password"; }},"Show password");
+      const form=h("form",{style:"display:flex;flex-direction:column;gap:12px",onsubmit:async e=>{ e.preventDefault();
+        const v=em.value.trim().toLowerCase(); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ err.textContent="Enter the email FatAtelier invited."; return; }
+        if(!pw.value){ err.textContent="Enter your password."; return; }
+        btn.disabled=true; btn.textContent="Signing in…"; err.textContent="";
+        const {error}=await S.sb.auth.signInWithPassword({email:v,password:pw.value});
+        if(error){ btn.disabled=false; btn.textContent="Sign in"; err.textContent=/invalid/i.test(error.message)?"That email and password don’t match. Check them, or call FatAtelier to reset your password.":/rate|many/i.test(error.message)?"Too many tries. Wait a minute and try again.":"Sign-in didn’t work. Try again in a moment."; return; }
+        location.reload(); }},
+        h("label",{class:"field",for:"g-email"},"Email address",em),
+        h("label",{class:"field",for:"g-pass"},"Password",pw), show, btn, err);
+      box=h("div",{class:"box"},h("h2",{text:"Sign in"}),h("p",{text:"Use the email and password FatAtelier sent you."}),form,
+        h("button",{type:"button",class:"btn ghost sm",style:"align-self:flex-start",onclick:()=>showGate("link",em.value)},"Email me a sign-in link instead"),gateHelp());
+      g.replaceChildren(art,h("div",{class:"form-side"},box)); return;
+    }
     const inp=h("input",{id:"g-email",type:"email",autocomplete:"email",placeholder:"you@example.com",value:email||""});
     const err=h("div",{class:"err"});
     const btn=h("button",{class:"btn bronze",type:"submit"},"Email me a sign-in link");
@@ -1611,9 +1664,10 @@ function showGate(mode,email){
         h("label",{class:"field",for:"g-code"},"Or type the code from the email",code),cbtn);
       box.replaceChildren(h("h2",{text:"Check your email"}),h("p",{text:`A sign-in email is on its way to ${v}. Tap the link in it, or type its code below. It can take a minute; check spam if you don’t see it.`}),
         cform,cerr,
-        h("button",{class:"btn ghost",style:"align-self:flex-start",onclick:()=>showGate("login",v)},"Use a different email"),gateHelp()); }},
+        h("button",{class:"btn ghost",style:"align-self:flex-start",onclick:()=>showGate("link",v)},"Use a different email"),gateHelp()); }},
       h("label",{class:"field",for:"g-email"},"Email address",inp), btn, err);
-    box=h("div",{class:"box"},h("h2",{text:"Sign in"}),h("p",{text:"Enter the email FatAtelier added to the investor list. We’ll email you a sign-in link and code, no password needed."}),form,gateHelp());
+    box=h("div",{class:"box"},h("h2",{text:"Email me a link"}),h("p",{text:"Enter the email FatAtelier added to the investor list and we’ll email you a link that signs you in."}),form,
+      h("button",{type:"button",class:"btn ghost sm",style:"align-self:flex-start",onclick:()=>showGate("login",inp.value)},"Sign in with a password instead"),gateHelp());
   }
   g.replaceChildren(art,h("div",{class:"form-side"},box));
 }
