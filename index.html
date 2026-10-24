@@ -256,8 +256,8 @@ select.pick{background:var(--surface);border:1px solid var(--line);border-radius
 /* sign-in gate */
 .gate{position:fixed;inset:0;z-index:80;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);background:var(--ground)}
 .gate .art{position:relative;background:var(--rail);color:var(--rail-ink);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:40px}
-.gate .art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;opacity:.78}
-.gate .art::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(38,36,32,.95),rgba(38,36,32,0) 55%)}
+.gate .art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%}
+.gate .art::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(20,19,17,.88),rgba(20,19,17,.15) 45%,rgba(20,19,17,0) 70%)}
 .gate .art div{position:relative;z-index:1;display:flex;flex-direction:column;gap:8px}
 .gate .art h1{font-size:clamp(40px,5vw,64px);line-height:1}
 .gate .art span{color:#D9D2C6;font-size:14px}
@@ -528,7 +528,7 @@ const S = { phases:[], gates:[], draws:[], ledger:[], updates:[], project:null, 
   preview:false, docs:[], vault:[], assets:null, docQ:"", docCat:"", pledges:[], myPledge:null, raise:null, draftAmt:null, selPhase:null, drawFilter:"open", lq:"", lphase:"", lkind:"" };
 
 const TABS=[["overview","Overview","See where the project and your money stand today."],
-  ["raise","Commitments","Each investor chooses how much to put toward the $600K raise: $500K of construction and $100K of land partner payments. Francis accepts each commitment, and everyone sees the total."],
+  ["raise","Commitments","Each investor chooses how much to put toward the $600K raise: $500K of construction and $100K of land partner payments. FatAtelier accepts each commitment, and everyone sees the total."],
   ["docs","Documents","Every agreement, deed, City letter and approval for the project, in one place. Open or download anything here."],
   ["design","Design","Renderings, the full drawing set and the presentation, so you can see exactly what is being built."],
   ["draws","Draw requests","Every release of investor capital starts here, and nothing moves until the investor approves it."],
@@ -570,7 +570,7 @@ async function save(fn, okMsg){
   try{ await fn(); if(okMsg) toast(okMsg); return true; }
   catch(e){
     const c=e&&e.code;
-    toast(c==="invalid_argument"?"Your access level can’t change this. Ask Francis for Contributor access.":c==="quota_exceeded"?"The project database is full. Remove old entries first.":"That didn’t save. Check your connection and try again.","bad");
+    toast(c==="invalid_argument"?"Your access level can’t change this. Contact FatAtelier for access.":c==="quota_exceeded"?"The project database is full. Remove old entries first.":"That didn’t save. Check your connection and try again.","bad");
     if(c==="invalid_argument") S.readOnly=true;
     return false; }
 }
@@ -696,7 +696,7 @@ function vRaise(){
 }
 function investorCommit(N,open){
   if(!S.db) return noDb();
-  if(!S.preview && !(S.me&&S.me.id)) return empty("Sign in to commit","Sign in with the email Francis invited to record your commitment.");
+  if(!S.preview && !(S.me&&S.me.id)) return empty("Sign in to commit","Sign in with the email FatAtelier invited to record your commitment.");
   const mine=S.preview?null:S.myPledge;
   const locked=mine&&(mine.status==="accepted"||mine.status==="funded");
   const maxAmt=Math.max(5000,open+((mine&&mine.status==="submitted")?(+mine.amount||0):0));
@@ -712,30 +712,30 @@ function investorCommit(N,open){
     if(a<5000){ err.textContent="The minimum commitment is $5,000."; return; }
     if(a>maxAmt){ err.textContent=`Only ${usd(maxAmt)} is still open.`; return; }
     err.textContent="";
-    await save(()=>S.db.doc("pledges/"+S.me.id).set({amount:a,status:"submitted",investor:S.me.id,updatedAt:new Date().toISOString()}), mine?"Commitment updated to "+usd(a):"Commitment of "+usd(a)+" sent to Francis");
+    await save(()=>S.db.doc("pledges/"+S.me.id).set({amount:a,status:"submitted",investor:S.me.id,updatedAt:new Date().toISOString()}), mine?"Commitment updated to "+usd(a):"Commitment of "+usd(a)+" sent to FatAtelier");
   }});
   const st=mine?mine.status:null;
   const track=h("div",{class:"track3"},
     h("div",{class:st?"on":"now"},h("b",{text:"Commit"}),st?"Sent "+fdate(mine.updatedAt):"Choose an amount"),
-    h("div",{class:st==="accepted"||st==="funded"?"on":st==="submitted"?"now":""},h("b",{text:"Accepted"}),st==="submitted"?"Francis is reviewing":st==="accepted"||st==="funded"?"Operating agreement next":"After review"),
+    h("div",{class:st==="accepted"||st==="funded"?"on":st==="submitted"?"now":""},h("b",{text:"Accepted"}),st==="submitted"?"FatAtelier is reviewing":st==="accepted"||st==="funded"?"Operating agreement next":"After review"),
     h("div",{class:st==="funded"?"on":st==="accepted"?"now":""},h("b",{text:"Funded"}),st==="funded"?"In the LLC account":"Wire to the LLC account"));
   const ret=h("div",{class:"ret",id:"c-ret"});
   setTimeout(syncCommit,0);
   return h("div",{class:"card"},
     h("div",{class:"card-head"},h("h3",{text:"Your commitment"}),st?pbadge(st):null),
-    st==="declined"?h("div",{class:"note-line warn",text:"Francis couldn’t accept this amount. Adjust it and send it again, or talk to him directly."}):null,
+    st==="declined"?h("div",{class:"note-line warn",text:"FatAtelier couldn’t accept this amount. Adjust it and send it again, or talk to him directly."}):null,
     h("div",{class:"commit"},
       h("div",{style:"display:flex;flex-direction:column;gap:16px;min-width:0"},
         h("label",{class:"label",for:"c-amt"},"How much would you like to invest?"),
         h("div",{class:"amt-in"},h("span",{text:"$"}),input),
         slider, chips,
         h("div",{class:"small muted",text:`From $5,000 up to the ${usd(maxAmt)} still open.`}),
-        locked? h("div",{class:"note-line",text:"Your commitment is accepted. To change it, message Francis."}) :
+        locked? h("div",{class:"note-line",text:"Your commitment is accepted. To change it, contact FatAtelier."}) :
           h("div",{style:"display:flex;gap:8px;flex-wrap:wrap;align-items:center"},btn,
             mine&&st==="submitted"?h("button",{class:"btn ghost",onclick:()=>save(()=>S.db.doc("pledges/"+S.me.id).delete(),"Commitment withdrawn").then(ok=>{ if(ok){S.draftAmt=null;S.myPledge=null;render();} })},"Withdraw"):null),
         err, track),
       ret),
-    h("p",{class:"fine",text:"Committing tells Francis how much you intend to invest. Nothing is owed until you sign the LLC operating agreement and wire funds to the project LLC’s own account. Your amount is visible only to you and Francis; other investors see the total."}));
+    h("p",{class:"fine",text:"Committing tells FatAtelier how much you intend to invest. Nothing is owed until you sign the LLC operating agreement and wire funds to the project LLC’s own account. Your amount is visible only to you and FatAtelier; other investors see the total."}));
 }
 function syncCommit(){
   const el=$("#c-ret"); if(!el) return;
@@ -849,9 +849,9 @@ function vDocs(){
     h("div",{class:"toolbar"},h("div",{class:"grow"},search,catSel),h("span",{class:"small muted",text:`${list.length} document${list.length===1?"":"s"}`})),
     groups.length? h("div",{class:"card"},...groups.map(([c,l])=>h("section",{class:"docgroup"},h("h4",{text:c}),...l.map(row)))) :
       all.length? empty("No documents match","Clear the search or pick another category.",h("button",{class:"btn ghost sm",onclick:()=>{S.docQ="";S.docCat="";render();}},"Clear filters")) :
-      empty("No documents yet","Agreements, deeds, City letters and approvals will appear here as Francis adds them.",dev()&&S.assets?h("button",{class:"btn bronze sm",onclick:()=>docSheet()},icon("plus"),"Upload document"):null),
+      empty("No documents yet","Agreements, deeds, City letters and approvals will appear here as FatAtelier adds them.",dev()&&S.assets?h("button",{class:"btn bronze sm",onclick:()=>docSheet()},icon("plus"),"Upload document"):null),
     dev()? h("p",{class:"fine",text:"Upload PDFs, images or text files up to 20 MB each. Export Word files to PDF first. Mark anything sensitive “Only me” so it stays off the investors’ list."}) :
-      h("p",{class:"fine",text:"Francis adds documents as the project moves. Anything you need that isn’t here, ask him for it."})];
+      h("p",{class:"fine",text:"FatAtelier adds documents as the project moves. Anything you need that isn’t here, ask him for it."})];
 }
 function docDelete(d){
   const w=h("span",{style:"display:inline-flex;gap:6px"});
@@ -1005,7 +1005,7 @@ function vOverview(){
       h("div",{class:"elev-legend"},h("span",null,h("i"),"Not yet funded"),h("span",null,h("i",{class:"b"}),"Funding released"),h("span",null,h("i",{class:"k"}),"Phase fully drawn"))),
     h("div",{class:"card"},
       h("div",{class:"card-head"},h("h3",{text:"Where the money goes"}),h("span",{class:"label",text:usd(t.committed)+" total"})),
-      S.db&&!phases.length&&S.loaded.phases? empty("No phases set yet","Francis sets the phase budgets before the first draw.") : !S.db? noDb() : list,
+      S.db&&!phases.length&&S.loaded.phases? empty("No phases set yet","FatAtelier sets the phase budgets before the first draw.") : !S.db? noDb() : list,
       detail));
 
   const openReqs=S.draws.filter(d=>d.status==="requested"||d.status==="approved");
@@ -1058,9 +1058,9 @@ function reqCard(d){
   const act=h("div",{class:"act"});
   if(d.status==="requested"&&investorCtl()){
     if(confirming[d.id]){
-      const mode=confirming[d.id]; const note=h("input",{id:"dn-"+d.id,placeholder:mode==="approved"?"Note for Francis (optional)":"Reason (helps Francis fix it)",style:"background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%"});
+      const mode=confirming[d.id]; const note=h("input",{id:"dn-"+d.id,placeholder:mode==="approved"?"Note for FatAtelier (optional)":"Reason (helps FatAtelier fix it)",style:"background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%"});
       card.append(h("div",{class:"confirm"},
-        h("p",{text: mode==="approved"? `Approve ${usd(d.amount)} for ${phaseName(d.phaseId)}? Francis can then release it from the project account.` : `Decline this ${usd(d.amount)} request? Francis will see your reason.`}),
+        h("p",{text: mode==="approved"? `Approve ${usd(d.amount)} for ${phaseName(d.phaseId)}? FatAtelier can then release it from the project account.` : `Decline this ${usd(d.amount)} request? FatAtelier will see your reason.`}),
         note,
         h("div",{class:"row"},
           h("button",{class:"btn "+(mode==="approved"?"bronze":"danger"),onclick:async()=>{ const ok=await save(()=>S.db.doc("draws/"+d.id).update({status:mode,decisionNote:note.value.trim(),decidedAt:new Date().toISOString(),decidedBy:S.me&&S.me.id}), mode==="approved"?"Approved "+usd(d.amount):"Request declined"); delete confirming[d.id]; if(!ok) render(); }}, mode==="approved"?"Confirm approval":"Confirm decline"),
@@ -1115,7 +1115,7 @@ function drawSheet(preset){
 function vBudget(){
   if(!S.db) return [noDb()];
   const ps=sortedPhases();
-  if(S.loaded.phases&&!ps.length) return [empty("No phases set yet","Phase budgets appear here once Francis enters them.")];
+  if(S.loaded.phases&&!ps.length) return [empty("No phases set yet","Phase budgets appear here once FatAtelier enters them.")];
   const T={budget:0,released:0,pending:0,spent:0,balance:0};
   ps.forEach(p=>{const st=phaseStats(p); for(const k in T) T[k]+=st[k];});
   const committed=totals().committed, diff=T.budget-committed;
@@ -1199,7 +1199,7 @@ function vUpdates(){
   if(!S.db) return [noDb()];
   const list=[...S.updates].sort((a,b)=>(b.date||"").localeCompare(a.date||""));
   return [list.length? h("div",{class:"card"},h("div",{class:"feed"},...list.map(u=>h("article",{class:"post"},h("time",{text:fdate(u.date)}),h("div",null,h("h4",{text:u.title}),u.body?h("p",{text:u.body}):null))))) :
-    empty("No updates yet","Francis posts progress here as each milestone lands.",dev()?h("button",{class:"btn bronze sm",onclick:updateSheet},icon("plus"),"Post update"):null)];
+    empty("No updates yet","FatAtelier posts progress here as each milestone lands.",dev()?h("button",{class:"btn bronze sm",onclick:updateSheet},icon("plus"),"Post update"):null)];
 }
 function updateSheet(){
   const d=h("input",{id:"uf-date",type:"date",value:today()}),t=h("input",{id:"uf-title",placeholder:"Footings poured and inspected"}),b=h("textarea",{id:"uf-body",placeholder:"What happened, what it means for the schedule, what’s next"});
@@ -1362,27 +1362,27 @@ function gateWaves(){ const w=document.createElementNS(SVGNS,"svg"); w.setAttrib
   w.innerHTML=d; return w; }
 function showGate(mode,email){
   const g=$("#gate"); $("#shell").hidden=true; g.hidden=false;
-  const art=h("div",{class:"art"},gateWaves(),h("div",null,
+  const art=h("div",{class:"art"},h("img",{src:"login.jpg",alt:"Rendering of The Blend on Bergen Street"}),h("div",null,
     (()=>{const w=document.createElementNS(SVGNS,"svg");w.setAttribute("viewBox","0 0 120 14");w.setAttribute("class","wave");w.setAttribute("aria-hidden","true");w.innerHTML='<path d="M1 8c15-9 30 9 45 0s30-9 45 0 20 6 28 0"/>';return w;})(),
     h("h1",{text:"The Blend"}),h("span",{text:"686–688 Bergen Street, Newark. Investor room by FatAtelier."})));
   let box;
   if(mode==="notmember"){
     box=h("div",{class:"box"},h("h2",{text:"You’re signed in, but not on the list yet"}),
-      h("p",{text:`${email} hasn’t been added as an investor. Ask Francis to add this email, then reload this page.`}),
+      h("p",{text:`${email} hasn’t been added as an investor. Ask FatAtelier to add this email, then reload this page.`}),
       h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},h("button",{class:"btn bronze",onclick:()=>location.reload()},"Check again"),h("button",{class:"btn ghost",onclick:async()=>{await S.sb.auth.signOut();location.reload();}},"Use another email")));
   } else {
     const inp=h("input",{id:"g-email",type:"email",autocomplete:"email",placeholder:"you@example.com",value:email||""});
     const err=h("div",{class:"err"});
     const btn=h("button",{class:"btn bronze",type:"submit"},"Email me a sign-in link");
     const form=h("form",{style:"display:flex;flex-direction:column;gap:12px",onsubmit:async e=>{ e.preventDefault();
-      const v=inp.value.trim().toLowerCase(); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ err.textContent="Enter the email address Francis invited."; return; }
+      const v=inp.value.trim().toLowerCase(); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ err.textContent="Enter the email address FatAtelier invited."; return; }
       btn.disabled=true; btn.textContent="Sending…"; err.textContent="";
       const {error}=await S.sb.auth.signInWithOtp({email:v,options:{emailRedirectTo:location.origin+location.pathname,shouldCreateUser:true}});
       if(error){ btn.disabled=false; btn.textContent="Email me a sign-in link"; err.textContent=/rate|seconds/i.test(error.message)?"Too many sign-in emails just now. Wait a minute and try again.":"The email didn’t send. Check the address and try again."; return; }
       box.replaceChildren(h("h2",{text:"Check your email"}),h("p",{text:`A sign-in link is on its way to ${v}. Open it on this device to enter the investor room.`}),
         h("button",{class:"btn ghost",style:"align-self:flex-start",onclick:()=>showGate("login",v)},"Use a different email")); }},
       h("label",{class:"field",for:"g-email"},"Email address",inp), btn, err);
-    box=h("div",{class:"box"},h("h2",{text:"Sign in"}),h("p",{text:"Enter the email Francis added to the investor list. You’ll get a link that signs you in, no password needed."}),form);
+    box=h("div",{class:"box"},h("h2",{text:"Sign in"}),h("p",{text:"Enter the email FatAtelier added to the investor list. You’ll get a link that signs you in, no password needed."}),form);
   }
   g.replaceChildren(art,h("div",{class:"form-side"},box));
 }
