@@ -1,0 +1,1430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>The Blend Investor Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Work+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: app shell. Charcoal side rail (project identity + navigation + who is viewing), quiet content area.
+   The one bold element: an architect's front elevation of The Blend that fills in, part by part, as each phase is funded. */
+:root{
+  --ground:#F3F2EE; --surface:#FFFFFF; --sunk:#EDEBE6; --ink:#262420; --muted:#69645C; --line:#E0DCD4;
+  --rail:#262420; --rail-ink:#F2EEE7; --rail-muted:#A9A294; --rail-line:#3A3732;
+  --oak:#B48B58; --bronze:#8A5829; --on-bronze:#FFFFFF; --plan:#BDB6AA;
+  --good:#3E7350; --good-bg:#E4EEE6; --warn:#9A6A12; --warn-bg:#F6ECD8; --bad:#A23F2E; --bad-bg:#F5E2DD;
+  --shadow:0 1px 2px rgba(38,36,32,.06),0 8px 24px rgba(38,36,32,.06);
+  --f-display:"Gloock", Georgia, "Times New Roman", serif;
+  --f-body:"Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#181715; --surface:#211F1C; --sunk:#1C1B18; --ink:#EEEAE3; --muted:#A49C90; --line:#35322D;
+  --rail:#121110; --rail-ink:#EEEAE3; --rail-muted:#8F887D; --rail-line:#2A2825;
+  --oak:#C9A272; --bronze:#D59A5D; --on-bronze:#181715; --plan:#5B564F;
+  --good:#7EBB8F; --good-bg:#1F3026; --warn:#DAA953; --warn-bg:#352B19; --bad:#E3866F; --bad-bg:#3A2420;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#181715; --surface:#211F1C; --sunk:#1C1B18; --ink:#EEEAE3; --muted:#A49C90; --line:#35322D;
+  --rail:#121110; --rail-ink:#EEEAE3; --rail-muted:#8F887D; --rail-line:#2A2825;
+  --oak:#C9A272; --bronze:#D59A5D; --on-bronze:#181715; --plan:#5B564F;
+  --good:#7EBB8F; --good-bg:#1F3026; --warn:#DAA953; --warn-bg:#352B19; --bad:#E3866F; --bad-bg:#3A2420;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;font-variant-numeric:tabular-nums}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--ground)}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;margin:0;text-wrap:balance}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--bronze);outline-offset:2px}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.label{font-size:13px;color:var(--muted)}
+
+/* shell */
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100%;background:linear-gradient(to right,var(--rail) 248px,transparent 248px)}
+.rail{background:var(--rail);color:var(--rail-ink);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:22px;padding:26px 18px 18px max(18px,env(safe-area-inset-left,0px))}
+.rail .mark{display:flex;flex-direction:column;gap:4px;padding:0 6px}
+.rail .mark svg{width:46px;height:22px;margin-bottom:6px}
+.rail .mark svg path{fill:none;stroke:var(--oak);stroke-width:1.6}
+.rail .mark h1{font-size:30px;line-height:1}
+.rail .mark span{font-size:12.5px;color:var(--rail-muted)}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:7px;color:var(--rail-muted);text-decoration:none;font-size:14.5px}
+.nav a svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.nav a:hover{color:var(--rail-ink);background:var(--rail-line)}
+.nav a[aria-current="page"]{color:var(--rail-ink);background:var(--rail-line)}
+.nav a[aria-current="page"] svg{stroke:var(--oak)}
+.nav .ct{margin-left:auto;min-width:20px;text-align:center;font-size:11.5px;font-weight:600;padding:1px 6px;border-radius:10px;background:var(--oak);color:var(--rail)}
+.rail .who{margin-top:auto;border-top:1px solid var(--rail-line);padding:14px 6px 0;display:flex;flex-direction:column;gap:10px}
+.who-row{display:flex;align-items:center;gap:10px}
+.who-row img{width:30px;height:30px;border-radius:50%}
+.who-row b{font-weight:500;font-size:14px;display:block}
+.who-row span{font-size:12.5px;color:var(--rail-muted)}
+.switch{display:flex;background:var(--rail-line);border-radius:7px;padding:3px}
+.switch button{flex:1;border:0;background:transparent;color:var(--rail-muted);padding:6px 8px;border-radius:5px;font-size:12.5px;cursor:pointer}
+.switch button[aria-pressed="true"]{background:var(--rail);color:var(--rail-ink)}
+.content{min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding-block:26px 6px;padding-left:max(16px,min(4vw,40px));padding-right:max(16px,env(safe-area-inset-right,0px),min(4vw,40px))}
+.topbar h2{font-size:32px;line-height:1.1}
+.topbar p{margin:4px 0 0;color:var(--muted);max-width:62ch}
+main{padding-block:18px 96px;padding-left:max(16px,min(4vw,40px));padding-right:max(16px,env(safe-area-inset-right,0px),min(4vw,40px));display:flex;flex-direction:column;gap:22px;max-width:1240px;width:100%}
+.mobile-head{display:none}
+.bottom{display:none}
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr);background:none}
+  .rail{display:none}
+  .mobile-head{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--rail);color:var(--rail-ink);padding-block:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .mobile-head h1{font-size:24px}
+  .mobile-head span{font-size:12px;color:var(--rail-muted)}
+  .bottom{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding:6px max(4px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(4px,env(safe-area-inset-left,0px))}
+  .bottom a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;font-size:10.5px;color:var(--muted);text-decoration:none;position:relative;min-height:44px}
+  .bottom a svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .bottom a[aria-current="page"]{color:var(--bronze)}
+  .bottom .ct{position:absolute;top:2px;left:calc(50% + 6px);font-size:10px;font-weight:600;background:var(--bronze);color:var(--on-bronze);border-radius:8px;padding:0 5px}
+  .topbar h2{font-size:26px}
+}
+
+/* surfaces */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.card.raised{box-shadow:var(--shadow);border-color:transparent}
+.card h3{font-size:20px;line-height:1.2}
+.card-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.cols{display:grid;gap:22px}
+.cols.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cols.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cols.hero{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+@media (max-width:1100px){.cols.c3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.cols.c3>:last-child{grid-column:1/-1}}
+@media (max-width:960px){.cols.hero,.cols.c2{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:640px){.cols.c3{grid-template-columns:minmax(0,1fr)}}
+
+/* figures */
+.figs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.fig{padding:16px 18px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.fig + .fig{border-left:1px solid var(--line)}
+.fig .v{font-family:var(--f-display);font-size:28px;line-height:1.1}
+.fig .s{font-size:12.5px;color:var(--muted)}
+.fig.accent .v{color:var(--bronze)}
+@media (max-width:900px){.figs{grid-template-columns:repeat(2,minmax(0,1fr))}.fig{border-left:0!important;border-top:1px solid var(--line)}.fig:nth-child(-n+2){border-top:0}.fig:nth-child(even){border-left:1px solid var(--line)!important}.fig:last-child{grid-column:1/-1;border-left:0!important}}
+
+/* elevation */
+.elev-card{padding:18px 18px 14px}
+.elev{width:100%;height:auto;display:block;max-height:440px}
+.elev .ph{--p:0;color:color-mix(in srgb,var(--bronze) calc(var(--p) * 100%),var(--plan));cursor:pointer;transition:color .3s}
+.elev .ph *{stroke:currentColor;vector-effect:non-scaling-stroke}
+.elev .ph.planned *{stroke-dasharray:4 3}
+.elev .ph.done{color:var(--ink)}
+.elev .ph.sel{color:var(--bronze)}
+.elev .ph.sel *{stroke-width:2.4;stroke-dasharray:none}
+.elev .ph:hover *{stroke-width:2.2}
+.elev .dim{opacity:.35}
+.elev text{font-family:var(--f-body);font-size:11px;fill:var(--muted);stroke:none}
+.elev-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--muted)}
+.elev-legend span{display:inline-flex;align-items:center;gap:7px}
+.elev-legend i{width:22px;height:0;border-top:2px dashed var(--plan)}
+.elev-legend i.b{border-top:2px solid var(--bronze)}
+.elev-legend i.k{border-top:2px solid var(--ink)}
+
+.phases{display:flex;flex-direction:column;gap:2px;margin:0 -8px}
+.phase-btn{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:4px 12px;align-items:center;text-align:left;border:0;background:transparent;border-radius:8px;padding:9px 8px;cursor:pointer;width:100%}
+.phase-btn:hover{background:var(--sunk)}
+.phase-btn[aria-pressed="true"]{background:var(--sunk)}
+.phase-btn .o{font-size:12px;color:var(--muted)}
+.phase-btn .n{font-weight:500;font-size:14px}
+.phase-btn .a{font-size:13px;color:var(--muted)}
+.phase-btn .track{grid-column:2/-1;height:4px;border-radius:2px;background:var(--line);position:relative;overflow:hidden}
+.phase-btn .track b{position:absolute;inset:0 auto 0 0;background:var(--bronze);border-radius:2px}
+.phase-btn .track em{position:absolute;inset:0 auto 0 0;background:var(--oak);opacity:.45}
+.detail{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:10px}
+.detail h4{margin:0;font-family:var(--f-display);font-weight:400;font-size:22px}
+.kv{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kv div{display:flex;flex-direction:column;gap:1px}
+.kv b{font-weight:500;font-size:15px}
+@media (max-width:480px){.kv{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--sunk);color:var(--muted);white-space:nowrap;border:0}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.badge.good{background:var(--good-bg);color:var(--good)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+.badge.bad{background:var(--bad-bg);color:var(--bad)}
+.badge.ink{background:var(--ink);color:var(--surface)}
+button.badge{cursor:pointer}
+
+/* stepper */
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.steps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;position:relative;padding-bottom:16px}
+.steps li:last-child{padding-bottom:0}
+.steps li::after{content:"";position:absolute;left:13px;top:28px;bottom:2px;width:2px;background:var(--line)}
+.steps li:last-child::after{display:none}
+.steps li.done::after{background:var(--good)}
+.dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);background:var(--surface);display:grid;place-items:center;padding:0;cursor:default;position:relative;z-index:1}
+button.dot{cursor:pointer}
+.dot svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.steps li.done .dot{background:var(--good);border-color:var(--good);color:var(--surface)}
+.steps li.progress .dot{border-color:var(--warn)}
+.steps li.progress .dot::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--warn)}
+.steps .t{font-weight:500;font-size:14.5px;padding-top:3px}
+.steps .d{font-size:13px;color:var(--muted)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:1px solid var(--ink);background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:8px;font-size:14px;font-weight:500;min-height:40px;text-decoration:none;white-space:nowrap}
+.btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn.bronze{background:var(--bronze);border-color:var(--bronze);color:var(--on-bronze)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--muted)}
+.btn.danger{background:transparent;color:var(--bad);border-color:var(--bad)}
+.btn.sm{padding:6px 12px;min-height:34px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.seg{display:inline-flex;background:var(--sunk);border-radius:8px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:6px;font-size:13.5px;color:var(--muted);cursor:pointer;min-height:32px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+/* requests */
+.reqs{display:flex;flex-direction:column;gap:12px}
+.req{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px}
+.req .top{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.req .no{font-size:13px;color:var(--muted)}
+.req .ph{font-weight:500;font-size:16px}
+.req .amt{font-family:var(--f-display);font-size:28px;line-height:1;text-align:right}
+.req .note{font-size:14px;color:var(--muted)}
+.req .trail{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12.5px;color:var(--muted)}
+.req .act{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:12px;margin-top:4px}
+.confirm{grid-column:1/-1;background:var(--sunk);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.confirm p{margin:0;font-size:14px}
+.confirm .row{display:flex;flex-wrap:wrap;gap:8px}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:780px;font-size:14px}
+th{font-size:12.5px;font-weight:500;color:var(--muted);text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--sunk)}
+th:first-child{border-top-left-radius:12px}th:last-child{border-top-right-radius:12px}
+td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:hover td{background:color-mix(in srgb,var(--sunk) 55%,transparent)}
+td.n,th.n{text-align:right;white-space:nowrap}
+tfoot td{border-bottom:0;font-weight:600}
+.minibar{display:inline-flex;align-items:center;gap:8px}
+.minibar i{width:64px;height:5px;border-radius:3px;background:var(--line);position:relative;overflow:hidden;display:inline-block}
+.minibar i b{position:absolute;inset:0 auto 0 0;background:var(--bronze)}
+td input.inl{width:116px;text-align:right;background:transparent;border:1px solid transparent;border-radius:6px;padding:5px 8px}
+td input.inl:hover,td input.inl:focus{border-color:var(--line);background:var(--surface)}
+td select{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:5px 6px;font-size:13px}
+.sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+
+/* budget split bar */
+.split{display:flex;height:34px;border-radius:8px;overflow:hidden;gap:2px}
+.split button{border:0;padding:0;cursor:pointer;background:color-mix(in srgb,var(--oak) calc(30% + var(--i) * 8%),var(--surface));min-width:4px}
+.split button[aria-pressed="true"]{background:var(--bronze)}
+.split-legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--muted)}
+
+/* toolbar */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.toolbar .grow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;flex:1}
+.search{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:0 10px;min-height:40px;flex:1;min-width:180px;max-width:320px}
+.search svg{width:16px;height:16px;fill:none;stroke:var(--muted);stroke-width:1.8}
+.search input{border:0;background:transparent;outline:none;flex:1;min-width:0;padding:8px 0}
+select.pick{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-height:40px}
+
+/* forms & sheet */
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.form .full{grid-column:1/-1}
+@media (max-width:520px){.form{grid-template-columns:minmax(0,1fr)}}
+.field{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted);min-width:0}
+.field input,.field select,.field textarea{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 11px;font-size:15px;color:var(--ink);width:100%;min-width:0}
+.field textarea{min-height:110px;resize:vertical}
+.field .hint{font-size:12.5px}
+.scrim{position:fixed;inset:0;background:rgba(20,19,17,.42);z-index:50;display:flex;justify-content:flex-end}
+.sheet{background:var(--surface);width:min(520px,100%);height:100%;display:flex;flex-direction:column;box-shadow:-12px 0 40px rgba(0,0,0,.18);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);animation:slidein .22s ease-out}
+@keyframes slidein{from{transform:translateX(24px);opacity:.6}to{transform:none;opacity:1}}
+.sheet header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px 22px;border-bottom:1px solid var(--line)}
+.sheet header h3{font-size:24px}
+.sheet .body{padding:20px 22px;overflow:auto;flex:1;display:flex;flex-direction:column;gap:16px}
+.sheet footer{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.iconbtn{width:40px;height:40px;border-radius:8px;border:1px solid var(--line);background:transparent;display:grid;place-items:center;cursor:pointer}
+.iconbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.err{color:var(--bad);font-size:13.5px;min-height:1em}
+.toasts{position:fixed;z-index:60;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:max-content;max-width:calc(100% - 32px)}
+.toast{background:var(--ink);color:var(--surface);padding:11px 16px;border-radius:10px;font-size:14px;box-shadow:var(--shadow);animation:toast .25s ease-out}
+.toast.bad{background:var(--bad);color:#fff}
+@keyframes toast{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+@media (max-width:860px){.toasts{bottom:calc(80px + env(safe-area-inset-bottom,0px))}}
+
+/* sign-in gate */
+.gate{position:fixed;inset:0;z-index:80;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);background:var(--ground)}
+.gate .art{position:relative;background:var(--rail);color:var(--rail-ink);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:40px}
+.gate .art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;opacity:.78}
+.gate .art::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(38,36,32,.95),rgba(38,36,32,0) 55%)}
+.gate .art div{position:relative;z-index:1;display:flex;flex-direction:column;gap:8px}
+.gate .art h1{font-size:clamp(40px,5vw,64px);line-height:1}
+.gate .art span{color:#D9D2C6;font-size:14px}
+.gate .form-side{display:flex;align-items:center;justify-content:center;padding:32px max(20px,env(safe-area-inset-right,0px)) 32px max(20px,env(safe-area-inset-left,0px))}
+.gate .box{width:min(400px,100%);display:flex;flex-direction:column;gap:16px}
+.gate .box h2{font-size:32px}
+.gate .box p{margin:0;color:var(--muted)}
+@media (max-width:820px){.gate{grid-template-columns:minmax(0,1fr);grid-template-rows:240px minmax(0,1fr);overflow:auto}.gate .art{padding:24px}.gate .form-side{align-items:flex-start;padding-top:36px}}
+.signout{background:transparent;border:0;color:var(--rail-muted);font-size:12.5px;cursor:pointer;text-align:left;padding:2px 0;text-decoration:underline}
+/* documents */
+.drop{border:1.5px dashed var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;cursor:pointer;background:var(--sunk)}
+.drop.over{border-color:var(--bronze);background:color-mix(in srgb,var(--bronze) 8%,var(--sunk))}
+.drop b{font-weight:500}
+.drop svg{width:28px;height:28px;fill:none;stroke:var(--bronze);stroke-width:1.6;stroke-linejoin:round}
+.docgroup{display:flex;flex-direction:column;gap:2px}
+.docgroup h4{margin:0 0 6px;font-size:13px;font-weight:500;color:var(--muted)}
+.docrow{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px 10px;border-radius:10px}
+.docrow:hover{background:var(--sunk)}
+.ftype{width:44px;height:52px;border-radius:6px;display:grid;place-items:center;font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--surface);position:relative}
+.ftype::after{content:"";position:absolute;top:0;right:0;width:12px;height:12px;background:linear-gradient(225deg,var(--surface) 50%,rgba(0,0,0,.18) 50%);border-top-right-radius:6px}
+.docrow .t{font-weight:500;font-size:15px;overflow-wrap:anywhere}
+.docrow .m{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.docrow .a{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:600px){.docrow{grid-template-columns:40px minmax(0,1fr)}.docrow .a{grid-column:1/-1;justify-content:flex-start}}
+.lock{font-size:12px;color:var(--warn)}
+/* commitments */
+.raisebar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--line);gap:2px}
+.raisebar i{display:block;height:100%}
+.raise-figs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.raise-figs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.raise-figs div{display:flex;flex-direction:column;gap:2px}
+.raise-figs b{font-family:var(--f-display);font-weight:400;font-size:30px;line-height:1.1}
+.commit{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px}
+@media (max-width:900px){.commit{grid-template-columns:minmax(0,1fr)}}
+.amt-in{display:flex;align-items:baseline;gap:4px;border-bottom:2px solid var(--ink);padding-bottom:6px}
+.amt-in span{font-family:var(--f-display);font-size:44px;line-height:1}
+.amt-in input{border:0;background:transparent;font-family:var(--f-display);font-size:52px;line-height:1.05;width:100%;min-width:0;outline:none;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:7px 14px;font-size:14px;cursor:pointer;min-height:38px}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.ret{background:var(--sunk);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.ret .row{display:flex;justify-content:space-between;gap:12px;align-items:baseline;font-size:14.5px}
+.ret .row b{font-family:var(--f-display);font-weight:400;font-size:22px}
+.ret .row.total{border-top:1px solid var(--line);padding-top:12px}
+.ret .row.total b{font-size:30px;color:var(--bronze)}
+.track3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.track3 div{border-top:3px solid var(--line);padding-top:8px;font-size:13px;color:var(--muted)}
+.track3 div.on{border-color:var(--good);color:var(--ink)}
+.track3 div.now{border-color:var(--warn);color:var(--ink)}
+.track3 b{display:block;font-weight:500;font-size:14px}
+.inv{display:flex;align-items:center;gap:10px;min-width:0}
+.inv img{width:28px;height:28px;border-radius:50%;flex:none}
+/* hero + design tab */
+.intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);border-radius:14px;overflow:hidden;background:var(--rail);color:var(--rail-ink);box-shadow:var(--shadow)}
+.intro .txt{padding:30px 30px 26px;display:flex;flex-direction:column;gap:16px;justify-content:space-between;min-width:0}
+.intro .txt h3{font-size:clamp(28px,3.2vw,40px);line-height:1.08}
+.intro .txt p{margin:0;color:var(--rail-muted);max-width:44ch}
+.intro .ph{position:relative;min-height:320px;background:#33302B}
+.intro .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.intro .ph button{position:absolute;inset:0;border:0;background:transparent;cursor:zoom-in}
+.wave{width:120px;height:14px}
+.wave path{fill:none;stroke:var(--oak);stroke-width:1.6}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px}
+.facts div{border-top:1px solid var(--rail-line);padding-top:8px;display:flex;flex-direction:column}
+.facts b{font-family:var(--f-display);font-weight:400;font-size:22px;line-height:1.15}
+.facts span{font-size:12.5px;color:var(--rail-muted)}
+.intro .btn.light{background:var(--rail-ink);color:var(--rail);border-color:var(--rail-ink);align-self:flex-start}
+@media (max-width:820px){.hero{grid-template-columns:minmax(0,1fr)}.intro .ph{order:-1;min-height:260px}}
+.gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(180px,22vw);gap:10px}
+@media (min-width:1300px){.gal{grid-auto-rows:280px}}
+.gal button{position:relative;border:0;padding:0;border-radius:10px;overflow:hidden;cursor:zoom-in;background:var(--sunk);min-width:0}
+.gal button.big{grid-column:span 2;grid-row:span 2}
+.gal img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+.gal button:hover img{transform:scale(1.03)}
+.gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 11px;text-align:left;color:#fff;font-size:13.5px;background:linear-gradient(to top,rgba(20,19,17,.72),rgba(20,19,17,0))}
+@media (max-width:640px){.gal{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:150px}.gal button.big{grid-row:span 2}}
+.stack{display:flex;flex-direction:column}
+.stack div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:14px;padding:13px 0;border-top:1px solid var(--line);align-items:baseline}
+.stack div:first-child{border-top:0}
+.stack span{font-size:13px;color:var(--muted)}
+.stack b{font-weight:500}
+.comply{display:flex;flex-direction:column}
+.comply div{display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:12px;padding:11px 0;border-top:1px solid var(--line);align-items:center;font-size:14px}
+.comply div:first-child{border-top:0}
+.comply .k{color:var(--muted);font-size:13px}
+@media (max-width:560px){.comply div{grid-template-columns:minmax(0,1fr) auto;gap:2px 12px}.comply .k{grid-column:1/-1}.stack div{grid-template-columns:80px minmax(0,1fr)}}
+.plates{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:1000px){.plates{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.plates{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.plate{border:1px solid var(--line);border-radius:10px;background:#FFFFFF;padding:8px 8px 10px;cursor:zoom-in;display:flex;flex-direction:column;gap:8px;text-align:left;min-width:0}
+.plate img{width:100%;aspect-ratio:1.416;object-fit:contain;display:block}
+.plate b{font-weight:500;font-size:13.5px;color:#262420;padding:0 4px}
+.plate span{font-size:12px;color:#69645C;padding:0 4px;margin-top:-6px}
+.plate:hover{border-color:var(--oak)}
+.doc{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:center}
+.doc .cover{width:150px;aspect-ratio:1.3;border-radius:8px;overflow:hidden;box-shadow:var(--shadow);background:var(--rail)}
+.doc .cover img{width:100%;height:100%;object-fit:cover}
+@media (max-width:560px){.doc{grid-template-columns:minmax(0,1fr)}}
+.lb{position:fixed;inset:0;z-index:70;background:rgba(14,13,12,.97);display:flex;flex-direction:column;color:#F2EEE7;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);outline:none}
+.lb .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px}
+.lb .bar .cap{font-size:14px;min-width:0}
+.lb .bar .cap b{font-family:var(--f-display);font-weight:400;font-size:20px;display:block}
+.lb .tools{display:flex;gap:8px;flex:none}
+.lb .tools button{width:42px;height:42px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:transparent;color:inherit;cursor:pointer;display:grid;place-items:center;font-size:18px}
+.lb .tools svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.lb .stage{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center;padding:0 16px 16px}
+.lb .stage img{max-width:100%;max-height:calc(100vh - 100px);object-fit:contain;cursor:zoom-in;border-radius:4px}
+.lb .stage.zoom{display:block}
+.lb .stage.zoom img{max-width:none;max-height:none;width:250%;cursor:zoom-out}
+.lb .nav2{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;font-size:22px}
+.lb .prev{left:max(12px,env(safe-area-inset-left,0px))}.lb .next{right:max(12px,env(safe-area-inset-right,0px))}
+.empty{border:1.5px dashed var(--line);border-radius:12px;padding:26px 22px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.empty b{font-family:var(--f-display);font-weight:400;font-size:20px}
+.empty p{margin:0;color:var(--muted);font-size:14px;max-width:56ch}
+.note-line{font-size:13.5px;padding:10px 14px;border-radius:8px;background:var(--sunk)}
+.note-line.warn{background:var(--warn-bg);color:var(--warn)}
+.note-line.good{background:var(--good-bg);color:var(--good)}
+
+/* updates */
+.feed{display:flex;flex-direction:column}
+.post{display:grid;grid-template-columns:110px minmax(0,1fr);gap:18px;padding:18px 0;border-top:1px solid var(--line)}
+.post:first-child{border-top:0;padding-top:0}
+.post time{font-size:13px;color:var(--muted);padding-top:4px}
+.post h4{margin:0 0 6px;font-family:var(--f-display);font-weight:400;font-size:21px}
+.post p{margin:0;white-space:pre-wrap;max-width:68ch;color:var(--muted)}
+@media (max-width:560px){.post{grid-template-columns:minmax(0,1fr);gap:2px}}
+
+/* plan */
+.plan{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:1000px){.plan{grid-template-columns:minmax(0,1fr)}}
+.levers{position:sticky;top:calc(16px + env(safe-area-inset-top,0px))}
+@media (max-width:1000px){.levers{position:static}}
+.lever{display:flex;flex-direction:column;gap:6px}
+.lever .lt{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:14px}
+.lever .lt output{font-family:var(--f-display);font-size:19px}
+input[type=range]{width:100%;accent-color:var(--bronze);height:28px}
+details.more{border-top:1px solid var(--line);padding-top:12px}
+details.more summary{cursor:pointer;font-size:14px;font-weight:500;padding:4px 0}
+.more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.more-grid .field input{padding:8px 9px;font-size:14px}
+.big3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.big3 .fig .v{font-size:26px}
+@media (max-width:1240px) and (min-width:1001px){.big3{grid-template-columns:minmax(0,1fr)}}
+.big3 .fig{background:var(--surface);border:1px solid var(--line);border-radius:12px}
+@media (max-width:640px){.big3{grid-template-columns:minmax(0,1fr)}}
+.flowbar{display:flex;height:46px;border-radius:8px;overflow:hidden;gap:2px}
+.flowbar div{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--surface);min-width:0;overflow:hidden;white-space:nowrap;padding:0 4px}
+.fl-legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px 18px}
+.fl-legend div{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px}
+.fl-legend i{width:12px;height:12px;border-radius:3px}
+.fl-legend b{font-weight:500}
+.grid-sens{overflow-x:auto}
+.grid-sens table{min-width:520px;font-size:13.5px}
+.grid-sens td,.grid-sens th{text-align:center;padding:9px 8px}
+.grid-sens th:first-child,.grid-sens td:first-child{text-align:left}
+.grid-sens td.cell{font-weight:500}
+.grid-sens td.pos{background:var(--good-bg);color:var(--good)}
+.grid-sens td.neg{background:var(--bad-bg);color:var(--bad)}
+.grid-sens td.now{outline:2px solid var(--ink);outline-offset:-2px}
+.terms{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px 18px;margin:0}
+.terms dt{font-size:13.5px;color:var(--muted)}
+.terms dd{margin:0;font-size:14.5px}
+@media (max-width:480px){.terms{grid-template-columns:minmax(0,1fr);gap:2px}.terms dd{margin-bottom:8px}}
+.fine{font-size:12.5px;color:var(--muted);max-width:80ch;margin:0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="gate" id="gate" hidden></div>
+<div id="shell" hidden>
+<div class="mobile-head" id="mhead"><div><h1>The Blend</h1><span>686–688 Bergen Street, Newark</span></div><span id="mrole"></span></div>
+<div class="app">
+  <aside class="rail" aria-label="Project">
+    <div class="mark">
+      <svg viewBox="0 0 46 22" aria-hidden="true"><path d="M1 6c7-5 15 5 22 0s15-5 22 0"/><path d="M1 16c7-5 15 5 22 0s15-5 22 0"/></svg>
+      <h1>The Blend</h1>
+      <span>686–688 Bergen Street, Newark</span>
+      <span>Block 2688, Lot 48</span>
+    </div>
+    <nav class="nav" id="nav" aria-label="Sections"></nav>
+    <div class="who" id="who"></div>
+  </aside>
+  <div class="content">
+    <div class="topbar" id="topbar"></div>
+    <main id="main"></main>
+  </div>
+</div>
+<nav class="bottom" id="bottom" aria-label="Sections"></nav>
+</div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script src="config.js"></script>
+<script src="supabase.js"></script>
+<script>
+/* ============ PURE MATH (tested) ============ */
+function saleModel(p){
+  const yrs=p.months/12;
+  const net=p.price*(1-p.sellPct/100), sellCosts=p.price-net;
+  const fatCash=p.carry;
+  const cost=p.principal+p.galoFinal+p.carry;
+  let left=net;
+  const landPaid=Math.min(p.galoFinal,Math.max(0,left)); left-=landPaid;
+  const invBack=Math.min(p.principal,Math.max(0,left)); left-=invBack;
+  const prefDue=p.principal*p.pref/100*yrs;
+  const prefPaid=Math.min(prefDue,Math.max(0,left)); left-=prefPaid;
+  const fatBack=Math.min(fatCash,Math.max(0,left)); left-=fatBack;
+  const pool=Math.max(0,left);
+  const invShare=pool*p.split/100, fatShare=pool-invShare;
+  const projectProfit=net-cost;
+  const invReceives=invBack+prefPaid+invShare, invGain=invReceives-p.principal;
+  const invMultiple=invReceives/p.principal, invYield=yrs>0?invGain/p.principal/yrs:0;
+  const fatReceives=fatBack+fatShare, fatGain=fatReceives-fatCash;
+  const invSafe=(p.principal+p.galoFinal)/(1-p.sellPct/100);
+  const breakEven=cost/(1-p.sellPct/100);
+  return {net,sellCosts,fatCash,cost,landPaid,invBack,prefDue,prefPaid,fatBack,pool,invShare,fatShare,projectProfit,invReceives,invGain,invMultiple,invYield,fatReceives,fatGain,invSafe,breakEven};
+}
+const PLAN_DEFAULTS={principal:600000, price:975000, sellPct:6.5, months:14, split:50, pref:0, galoEarly:100000, galoFinal:100000, carry:30000};
+/* ============ END PURE MATH ============ */
+
+const SCENARIOS = {
+  conservative:{label:"Conservative", price:875000},
+  base:{label:"Base", price:975000},
+  strong:{label:"Strong", price:1150000} };
+
+const $ = s => document.querySelector(s);
+function h(tag, attrs, ...kids){
+  const el = document.createElement(tag);
+  if(attrs) for(const [k,v] of Object.entries(attrs)){
+    if(v==null || v===false) continue;
+    if(k==="class") el.className=v;
+    else if(k==="text") el.textContent=v;
+    else if(k==="style") el.setAttribute("style",v);
+    else if(k.startsWith("on")) el.addEventListener(k.slice(2),v);
+    else el.setAttribute(k, v===true?"":v);
+  }
+  for(const c of kids.flat()){ if(c==null||c===false) continue; el.append(c instanceof Node?c:document.createTextNode(String(c))); }
+  return el;
+}
+const SVGNS="http://www.w3.org/2000/svg";
+function icon(name){ const s=document.createElementNS(SVGNS,"svg"); s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("aria-hidden","true"); s.innerHTML=ICONS[name]||""; return s; }
+const ICONS={
+  overview:'<path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-7h6v7"/>',
+  raise:'<circle cx="12" cy="12" r="9"/><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .9-3 2s1.3 1.7 3 2 3 .9 3 2-1.3 2-3 2c-1.4 0-2.5-.5-3-1.5M12 6.5v11"/>',
+  docs:'<path d="M4 6a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>',
+  more:'<circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>',
+  design:'<path d="M12 4l6.5 16M12 4L5.5 20M8 14h8"/><circle cx="12" cy="4" r="1.2"/>',
+  expand:'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>', ext:'<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/>',
+  draws:'<path d="M4 7h16v12H4z"/><path d="M4 11h16"/><path d="M8 15h3"/>',
+  budget:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  ledger:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
+  updates:'<path d="M5 4h14v12H9l-4 4z"/>',
+  plan:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>', close:'<path d="M6 6l12 12M18 6L6 18"/>',
+  check:'<path d="M5 12l5 5 9-10"/>', search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+  download:'<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>' };
+
+const usd = n => (n<0?"−$":"$") + Math.abs(Math.round(n||0)).toLocaleString("en-US");
+const usdK = n => { const a=Math.abs(n||0); const s=n<0?"−$":"$"; return a>=1e6? s+(a/1e6).toFixed(2).replace(/\.?0+$/,"")+"M" : a>=1000? s+Math.round(a/1000)+"K" : s+Math.round(a); };
+const pct = (n,d=1) => ((n||0)*100).toFixed(d)+"%";
+const today = () => new Date().toISOString().slice(0,10);
+const fdate = iso => { if(!iso) return ""; const d=new Date(iso.length<=10? iso+"T12:00:00" : iso); return d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); };
+const num = v => +String(v).replace(/[^0-9.]/g,"") || 0;
+const lsGet = k => { try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } };
+const lsSet = (k,v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+
+const S = { phases:[], gates:[], draws:[], ledger:[], updates:[], project:null, plan:null,
+  loaded:{phases:false,gates:false,draws:false,ledger:false,updates:false},
+  db:null, user:null, me:null, isOwner:false, canEdit:false, canWrite:null, profiles:{}, readOnly:false, downloads:null,
+  preview:false, docs:[], vault:[], assets:null, docQ:"", docCat:"", pledges:[], myPledge:null, raise:null, draftAmt:null, selPhase:null, drawFilter:"open", lq:"", lphase:"", lkind:"" };
+
+const TABS=[["overview","Overview","See where the project and your money stand today."],
+  ["raise","Commitments","Each investor chooses how much to put toward the $600K raise: $500K of construction and $100K of land partner payments. Francis accepts each commitment, and everyone sees the total."],
+  ["docs","Documents","Every agreement, deed, City letter and approval for the project, in one place. Open or download anything here."],
+  ["design","Design","Renderings, the full drawing set and the presentation, so you can see exactly what is being built."],
+  ["draws","Draw requests","Every release of investor capital starts here, and nothing moves until the investor approves it."],
+  ["budget","Budget","The $600K raise split into eight construction phases and the land partner’s two payments. A draw can never exceed what is left on its line."],
+  ["ledger","Ledger","Every payment out of the project account, matched to a phase and an invoice."],
+  ["updates","Updates","Progress from the site and the shop, written as it happens."],
+  ["plan","Sale and profit","How investors are paid when the finished building sells: capital back first, then the profit is split."]];
+let tab=(location.hash||"").slice(1); if(!TABS.some(t=>t[0]===tab)) tab="overview";
+
+/* ---------- roles ---------- */
+const dev = () => S.isOwner && !S.preview;
+const investorCtl = () => S.preview || (!!S.db && !S.isOwner && S.canWrite!==false && !S.readOnly);
+
+/* ---------- derived ---------- */
+function totals(){
+  const committed=(S.project&&S.project.loanAmount)||PLAN_DEFAULTS.principal;
+  const by=st=>S.draws.filter(d=>d.status===st).reduce((a,d)=>a+(+d.amount||0),0);
+  const released=by("released"), approved=by("approved"), requested=by("requested");
+  const spent=S.ledger.reduce((a,e)=>a+(+e.amount||0),0);
+  return {committed,released,approved,requested,pending:approved+requested,spent,balance:committed-released,unreceipted:Math.max(0,released-spent)};
+}
+function phaseStats(ph){
+  const ds=S.draws.filter(d=>d.phaseId===ph.id);
+  const released=ds.filter(d=>d.status==="released").reduce((a,d)=>a+(+d.amount||0),0);
+  const pending=ds.filter(d=>d.status==="requested"||d.status==="approved").reduce((a,d)=>a+(+d.amount||0),0);
+  const spent=S.ledger.filter(e=>e.phaseId===ph.id).reduce((a,e)=>a+(+e.amount||0),0);
+  const budget=+ph.budget||0;
+  return {released,pending,spent,budget,balance:budget-released,available:budget-released-pending,done:budget?released/budget:0,committedPct:budget?(released+pending)/budget:0};
+}
+const sortedPhases=()=>[...S.phases].sort((a,b)=>(a.order||0)-(b.order||0));
+const phaseName=id=>(S.phases.find(p=>p.id===id)||{}).name||"Unassigned";
+function reqNo(d){ const s=[...S.draws].sort((a,b)=>(a.requestedAt||"").localeCompare(b.requestedAt||"")); return "Request "+(s.indexOf(d)+1); }
+const nameOf=id=>(id&&S.profiles[id]&&S.profiles[id].name)||(id&&S.me&&id===S.me.id?"you":"")||"the investor";
+
+/* ---------- feedback ---------- */
+function toast(msg, kind){ const t=h("div",{class:"toast "+(kind||""),text:msg}); $("#toasts").append(t); setTimeout(()=>t.remove(),3200); }
+async function save(fn, okMsg){
+  if(S.preview){ toast("Preview only. Switch back to Developer to make changes."); return false; }
+  try{ await fn(); if(okMsg) toast(okMsg); return true; }
+  catch(e){
+    const c=e&&e.code;
+    toast(c==="invalid_argument"?"Your access level can’t change this. Ask Francis for Contributor access.":c==="quota_exceeded"?"The project database is full. Remove old entries first.":"That didn’t save. Check your connection and try again.","bad");
+    if(c==="invalid_argument") S.readOnly=true;
+    return false; }
+}
+
+/* ---------- sheet ---------- */
+let lastFocus=null;
+function openSheet(title, body, footer){
+  closeSheet(); lastFocus=document.activeElement;
+  const scrim=h("div",{class:"scrim",id:"scrim",onclick:e=>{ if(e.target===scrim) closeSheet(); }});
+  const sheet=h("div",{class:"sheet",role:"dialog","aria-modal":"true","aria-label":title,onkeydown:e=>{ if(e.key==="Escape") closeSheet(); }},
+    h("header",null,h("h3",{text:title}),h("button",{class:"iconbtn","aria-label":"Close",onclick:closeSheet},icon("close"))),
+    h("div",{class:"body"},body), footer?h("footer",null,footer):null);
+  scrim.append(sheet); document.body.append(scrim);
+  const f=sheet.querySelector("input,select,textarea,button.btn"); if(f) f.focus();
+}
+function closeSheet(){ const s=$("#scrim"); if(s){ s.remove(); if(lastFocus&&lastFocus.focus) lastFocus.focus(); } }
+const field=(label,input,hint,full)=>h("label",{class:"field"+(full?" full":"")},label,input,hint?h("span",{class:"hint",text:hint}):null);
+
+/* ---------- shell ---------- */
+function renderShell(){
+  const open=S.draws.filter(d=>d.status==="requested").length;
+  const link=(k,l,cls)=>h("a",{href:"#"+k,"aria-current":tab===k?"page":null,onclick:e=>{e.preventDefault();go(k);}},icon(k),h("span",{text:l}),k==="draws"&&open?h("span",{class:"ct",text:open}):null);
+  $("#nav").replaceChildren(...TABS.map(([k,l])=>link(k,l)));
+  const short={overview:"Home",raise:"Commit",docs:"Docs",design:"Design",plan:"Profit",draws:"Draws",budget:"Budget",ledger:"Ledger",updates:"Updates"};
+  const prim=["overview","raise","draws","docs"];
+  const moreOn=!prim.includes(tab);
+  $("#bottom").replaceChildren(...prim.map(k=>link(k,short[k])),
+    h("a",{href:"#more","aria-current":moreOn?"page":null,onclick:e=>{e.preventDefault();
+      openSheet("All sections",h("nav",{class:"nav",style:"--rail-muted:var(--muted);--rail-ink:var(--ink);--rail-line:var(--sunk)"},...TABS.map(([k,l])=>h("a",{href:"#"+k,"aria-current":tab===k?"page":null,onclick:ev=>{ev.preventDefault();closeSheet();go(k);}},icon(k),h("span",{text:l})))));}},icon("more"),h("span",{text:moreOn?(short[tab]||"More"):"More"})));
+  const t=TABS.find(x=>x[0]===tab);
+  const actions=h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"});
+  if(dev()&&S.db){
+    if(tab==="draws"||tab==="overview") actions.append(h("button",{class:"btn bronze",onclick:()=>drawSheet()},icon("plus"),"New draw request"));
+    if(tab==="ledger") actions.append(h("button",{class:"btn bronze",onclick:ledgerSheet},icon("plus"),"Record payment"));
+    if(tab==="updates") actions.append(h("button",{class:"btn bronze",onclick:updateSheet},icon("plus"),"Post update"));
+    if(tab==="docs"&&S.assets) actions.append(h("button",{class:"btn bronze",onclick:()=>docSheet()},icon("plus"),"Upload document"));
+  }
+  if(tab==="ledger"&&S.downloads&&S.ledger.length) actions.append(h("button",{class:"btn ghost",onclick:exportCsv},icon("download"),"Download CSV"));
+  $("#topbar").replaceChildren(h("div",null,h("h2",{text:t[1]}),h("p",{text:t[2]})),actions);
+  const who=$("#who"); who.replaceChildren();
+  if(S.me){
+    who.append(h("div",{class:"who-row"},h("img",{src:S.me.avatarUrl,alt:""}),h("div",null,h("b",{text:S.me.name||"You"}),h("span",{text:S.isOwner?(S.preview?"Previewing the investor view":"Developer"):"Investor"}))));
+    who.append(h("button",{class:"signout",onclick:async()=>{ await S.sb.auth.signOut(); location.reload(); }},"Sign out"));
+    if(S.isOwner) who.append(h("div",{class:"switch",role:"group","aria-label":"View as"},
+      h("button",{"aria-pressed":String(!S.preview),onclick:()=>{S.preview=false;render();}},"Developer"),
+      h("button",{"aria-pressed":String(S.preview),onclick:()=>{S.preview=true;render();toast("Showing what your investor sees.");}},"Investor view")));
+  }
+  $("#mrole").textContent = S.me? (S.isOwner?(S.preview?"Investor view":"Developer"):"Investor") : "";
+}
+function go(k){ tab=k; try{history.replaceState(null,"","#"+k);}catch(_){}; render(); window.scrollTo({top:0}); }
+
+const STATUS={requested:["Awaiting approval","warn"],approved:["Approved, to release","ink"],released:["Released","good"],declined:["Declined","bad"],
+  upcoming:["Upcoming",""],active:["Active","warn"],complete:["Complete","good"]};
+const badge=st=>h("span",{class:"badge "+((STATUS[st]||[])[1]||""),text:(STATUS[st]||[st])[0]});
+const empty=(t,b,cta)=>h("div",{class:"empty"},h("b",{text:t}),h("p",{text:b}),cta||null);
+const noDb=()=>empty("Loading the project records","If this doesn’t clear, check your connection and reload the page.");
+
+/* ---------- elevation drawing ---------- */
+const ELEV = {
+  1:'<path d="M24 244H376"/><path d="M34 244v-14M54 244v-14M326 244v-14M346 244v-14M366 244v-14"/><path d="M30 234H58M322 234H370"/>',
+  2:'<rect x="70" y="276" width="260" height="12" fill="currentColor" fill-opacity=".12"/><path d="M80 244V276M320 244V276"/><path d="M86 282h14M114 282h14M142 282h14M170 282h14M198 282h14M226 282h14M254 282h14M282 282h14M310 282h6"/>',
+  3:'<rect x="80" y="90" width="240" height="186" fill="none"/><path d="M80 152H320M80 214H320M74 90H326"/>',
+  4:'<rect x="96" y="100" width="98" height="42" fill="none"/><rect x="212" y="100" width="92" height="42" fill="none"/><rect x="96" y="162" width="98" height="42" fill="none"/><rect x="212" y="162" width="92" height="42" fill="none"/><rect x="96" y="226" width="54" height="36" fill="none"/><rect x="246" y="226" width="58" height="36" fill="none"/><path d="M76 152c32-12 64 12 96 0s64-12 96 0 40 8 56 0" stroke-width="2.4"/><path d="M76 214c32-12 64 12 96 0s64-12 96 0 40 8 56 0" stroke-width="2.4"/>',
+  5:'<path d="M203 96V270M209 96V270" stroke-dasharray="2 3"/><circle cx="206" cy="120" r="3" fill="none"/><circle cx="206" cy="182" r="3" fill="none"/><circle cx="206" cy="244" r="3" fill="none"/>',
+  6:'<path d="M80 90H96V276H80zM194 90H212V276H194zM304 90H320V276H304z" fill="currentColor" fill-opacity=".10" stroke-width=".6"/>',
+  7:'<rect x="160" y="232" width="34" height="44" fill="none"/><path d="M188 254h2"/><rect x="100" y="104" width="90" height="34" fill="currentColor" fill-opacity=".16" stroke="none"/><rect x="216" y="104" width="84" height="34" fill="currentColor" fill-opacity=".16" stroke="none"/><rect x="100" y="166" width="90" height="34" fill="currentColor" fill-opacity=".16" stroke="none"/><rect x="216" y="166" width="84" height="34" fill="currentColor" fill-opacity=".16" stroke="none"/>',
+  8:'<rect x="80" y="76" width="240" height="14" fill="currentColor" fill-opacity=".14"/><rect x="246" y="60" width="38" height="14" fill="none"/><path d="M265 60V46l12 5-12 5"/>' };
+const ELEV_ORDER=[6,7,3,4,5,2,1,8];
+function elevation(){
+  const svg=document.createElementNS(SVGNS,"svg"); svg.setAttribute("viewBox","0 38 400 266"); svg.setAttribute("class","elev");
+  svg.setAttribute("role","img"); svg.setAttribute("aria-label","Front elevation of The Blend. Each part of the building is shaded by how much of its phase has been funded.");
+  const byOrder={}; sortedPhases().forEach(p=>byOrder[p.order]=p);
+  ELEV_ORDER.forEach(o=>{
+    const p=byOrder[o]; const g=document.createElementNS(SVGNS,"g");
+    const st=p?phaseStats(p):{done:0};
+    g.setAttribute("class","ph "+(st.done>=1?"done":st.done>0?"part":"planned")+(p&&S.selPhase===p.id?" sel":"")+(S.selPhase&&p&&S.selPhase!==p.id?" dim":""));
+    g.style.setProperty("--p", Math.min(1,st.done).toFixed(3));
+    g.setAttribute("fill","none"); g.setAttribute("stroke-width","1.4");
+    g.innerHTML=ELEV[o];
+    if(p){ g.addEventListener("click",()=>{ S.selPhase=S.selPhase===p.id?null:p.id; render(); });
+      const tt=document.createElementNS(SVGNS,"title"); tt.textContent=p.name; g.prepend(tt); }
+    svg.append(g);
+  });
+  const t=document.createElementNS(SVGNS,"text"); t.setAttribute("x","24"); t.setAttribute("y","298"); t.textContent="Front elevation, Bergen Street";
+  svg.append(t);
+  return svg;
+}
+
+/* ---------- COMMITMENTS ---------- */
+const CHIPS=[25000,50000,100000,150000,250000];
+const PSTAT={submitted:["Submitted","warn"],accepted:["Accepted","ink"],funded:["Funded","good"],declined:["Declined","bad"]};
+const pbadge=st=>h("span",{class:"badge "+((PSTAT[st]||[])[1]||""),text:(PSTAT[st]||[st])[0]});
+function raiseNumbers(list){
+  const target=totals().committed;
+  const sum=f=>list.filter(f).reduce((a,p)=>a+(+p.amount||0),0);
+  const funded=sum(p=>p.status==="funded"), accepted=sum(p=>p.status==="accepted");
+  return {target,funded,accepted,committed:funded+accepted,pending:sum(p=>p.status==="submitted"),investors:list.filter(p=>p.status==="accepted"||p.status==="funded").length};
+}
+function earnings(amt){ const P=planNow(), R=saleModel(P); const f=P.principal?amt/P.principal:0;
+  const pref=R.prefPaid*f, share=R.invShare*f, back=R.invBack*f;
+  return {back,pref,share,gain:back+pref+share-amt,payoff:back+pref+share,P,R}; }
+function vRaise(){
+  const owner=dev();
+  const N=owner? raiseNumbers(S.pledges) : Object.assign({target:totals().committed,funded:0,committed:0,investors:0,pending:0},S.raise||{});
+  N.target=totals().committed;
+  const open=Math.max(0,N.target-N.committed);
+  const w=v=>Math.min(100,v/N.target*100)+"%";
+  const bar=h("div",{class:"raisebar",role:"img","aria-label":`${usd(N.committed)} committed of ${usd(N.target)}`},
+    h("i",{style:`width:${w(N.funded)};background:var(--good)`}),
+    h("i",{style:`width:${w(N.committed-N.funded)};background:var(--bronze)`}),
+    owner&&N.pending?h("i",{style:`width:${w(N.pending)};background:repeating-linear-gradient(45deg,var(--oak) 0 5px,transparent 5px 10px)`}):null);
+  const progress=h("div",{class:"card raised"},
+    h("div",{class:"card-head"},h("h3",{text:"The raise"}),h("span",{class:"label",text:`Target ${usd(N.target)}`})),
+    h("div",{class:"raise-figs"},
+      h("div",null,h("span",{class:"label",text:"Committed"}),h("b",{text:usdK(N.committed)}),h("span",{class:"small muted",text:pct(N.committed/N.target,0)+" of target"})),
+      h("div",null,h("span",{class:"label",text:"Still open"}),h("b",{text:usdK(open)}),h("span",{class:"small muted",text:open?"Available to commit":"Fully committed"})),
+      h("div",null,h("span",{class:"label",text:"Investors"}),h("b",{text:String(N.investors||0)}),h("span",{class:"small muted",text:"Accepted so far"})),
+      h("div",null,h("span",{class:"label",text:"Funded"}),h("b",{text:usdK(N.funded)}),h("span",{class:"small muted",text:"In the project LLC account"}))),
+    bar,
+    h("div",{class:"elev-legend"},h("span",null,h("i",{class:"k",style:"border-color:var(--good)"}),"Funded"),h("span",null,h("i",{class:"b"}),"Accepted, not yet funded"),owner?h("span",null,h("i",{style:"border-top:2px dashed var(--oak)"}),"Submitted, waiting for you"):null),
+    owner&&N.committed>N.target?h("div",{class:"note-line warn",text:`Accepted commitments are ${usd(N.committed-N.target)} over the target. Lower one or decline it, or raise the loan amount.`}):null);
+  return [progress, owner? ownerPledges(N) : investorCommit(N,open), owner? membersCard() : null];
+}
+function investorCommit(N,open){
+  if(!S.db) return noDb();
+  if(!S.preview && !(S.me&&S.me.id)) return empty("Sign in to commit","Sign in with the email Francis invited to record your commitment.");
+  const mine=S.preview?null:S.myPledge;
+  const locked=mine&&(mine.status==="accepted"||mine.status==="funded");
+  const maxAmt=Math.max(5000,open+((mine&&mine.status==="submitted")?(+mine.amount||0):0));
+  if(S.draftAmt==null) S.draftAmt=mine?+mine.amount:Math.min(50000,maxAmt);
+  const input=h("input",{id:"c-amt",inputmode:"numeric","aria-label":"Commitment amount",value:Math.round(S.draftAmt).toLocaleString("en-US"),disabled:locked||null,
+    oninput:e=>{ S.draftAmt=num(e.target.value); syncCommit(); }, onblur:e=>{ e.target.value=Math.round(S.draftAmt).toLocaleString("en-US"); }});
+  const slider=h("input",{type:"range",id:"c-range",min:5000,max:Math.max(5000,Math.min(N.target,maxAmt)),step:5000,value:S.draftAmt,"aria-label":"Commitment amount slider",disabled:locked||null,
+    oninput:e=>{ S.draftAmt=+e.target.value; input.value=S.draftAmt.toLocaleString("en-US"); syncCommit(); }});
+  const chips=h("div",{class:"chips",role:"group","aria-label":"Quick amounts"},...CHIPS.filter(c=>c<=maxAmt||c===CHIPS[0]).map(c=>h("button",{"data-amt":c,"aria-pressed":String(S.draftAmt===c),disabled:locked||null,onclick:()=>{ S.draftAmt=c; input.value=c.toLocaleString("en-US"); slider.value=c; syncCommit(); }},usdK(c))));
+  const err=h("div",{class:"err",id:"c-err"});
+  const btn=h("button",{class:"btn bronze",id:"c-btn",disabled:locked||null,onclick:async()=>{
+    const a=Math.round(S.draftAmt||0);
+    if(a<5000){ err.textContent="The minimum commitment is $5,000."; return; }
+    if(a>maxAmt){ err.textContent=`Only ${usd(maxAmt)} is still open.`; return; }
+    err.textContent="";
+    await save(()=>S.db.doc("pledges/"+S.me.id).set({amount:a,status:"submitted",investor:S.me.id,updatedAt:new Date().toISOString()}), mine?"Commitment updated to "+usd(a):"Commitment of "+usd(a)+" sent to Francis");
+  }});
+  const st=mine?mine.status:null;
+  const track=h("div",{class:"track3"},
+    h("div",{class:st?"on":"now"},h("b",{text:"Commit"}),st?"Sent "+fdate(mine.updatedAt):"Choose an amount"),
+    h("div",{class:st==="accepted"||st==="funded"?"on":st==="submitted"?"now":""},h("b",{text:"Accepted"}),st==="submitted"?"Francis is reviewing":st==="accepted"||st==="funded"?"Operating agreement next":"After review"),
+    h("div",{class:st==="funded"?"on":st==="accepted"?"now":""},h("b",{text:"Funded"}),st==="funded"?"In the LLC account":"Wire to the LLC account"));
+  const ret=h("div",{class:"ret",id:"c-ret"});
+  setTimeout(syncCommit,0);
+  return h("div",{class:"card"},
+    h("div",{class:"card-head"},h("h3",{text:"Your commitment"}),st?pbadge(st):null),
+    st==="declined"?h("div",{class:"note-line warn",text:"Francis couldn’t accept this amount. Adjust it and send it again, or talk to him directly."}):null,
+    h("div",{class:"commit"},
+      h("div",{style:"display:flex;flex-direction:column;gap:16px;min-width:0"},
+        h("label",{class:"label",for:"c-amt"},"How much would you like to invest?"),
+        h("div",{class:"amt-in"},h("span",{text:"$"}),input),
+        slider, chips,
+        h("div",{class:"small muted",text:`From $5,000 up to the ${usd(maxAmt)} still open.`}),
+        locked? h("div",{class:"note-line",text:"Your commitment is accepted. To change it, message Francis."}) :
+          h("div",{style:"display:flex;gap:8px;flex-wrap:wrap;align-items:center"},btn,
+            mine&&st==="submitted"?h("button",{class:"btn ghost",onclick:()=>save(()=>S.db.doc("pledges/"+S.me.id).delete(),"Commitment withdrawn").then(ok=>{ if(ok){S.draftAmt=null;S.myPledge=null;render();} })},"Withdraw"):null),
+        err, track),
+      ret),
+    h("p",{class:"fine",text:"Committing tells Francis how much you intend to invest. Nothing is owed until you sign the LLC operating agreement and wire funds to the project LLC’s own account. Your amount is visible only to you and Francis; other investors see the total."}));
+}
+function syncCommit(){
+  const el=$("#c-ret"); if(!el) return;
+  const a=Math.max(0,Math.round(S.draftAmt||0)); const E=earnings(a); const target=totals().committed;
+  const b=$("#c-btn"); if(b) b.textContent=(S.myPledge&&!S.preview?"Update to ":"Commit ")+usd(a);
+  document.querySelectorAll(".chips button").forEach(x=>x.setAttribute("aria-pressed",String(+x.dataset.amt===a)));
+  const r=$("#c-range"); if(r&&+r.value!==a) r.value=a;
+  el.replaceChildren(...[
+    h("div",{class:"label",text:`What ${usd(a)} earns if the building sells for ${usdK(E.P.price)}`}),
+    h("div",{class:"row"},h("span",{text:"Your capital back, paid first"}),h("b",{text:usd(E.back)})),
+    E.pref?h("div",{class:"row"},h("span",{text:`Preferred return, ${E.P.pref}% a year`}),h("b",{text:usd(E.pref)})):null,
+    h("div",{class:"row"},h("span",{text:`Your share of the investors’ ${E.P.split}% of profit`}),h("b",{text:usd(E.share)})),
+    h("div",{class:"row total"},h("span",{text:"Paid to you at the sale"}),h("b",{text:usd(E.payoff)})),
+    h("div",{class:"small muted",text:`That is ${pct(target?a/target:0,0)} of the investor capital, a ${usd(E.gain)} profit, about ${pct(E.P.months&&a?E.gain/a/(E.P.months/12):0)} a year. The sale price is an estimate; see the sale and profit plan for other prices.`})].filter(Boolean));
+}
+function ownerPledges(N){
+  if(!S.db) return noDb();
+  const list=[...S.pledges].sort((a,b)=>(+b.amount||0)-(+a.amount||0));
+  const act=p=>{ const b=[];
+    if(p.status==="submitted") b.push(h("button",{class:"btn bronze sm",onclick:()=>setPledge(p,"accepted")},"Accept"),h("button",{class:"btn ghost sm",onclick:()=>setPledge(p,"declined")},"Decline"));
+    if(p.status==="accepted") b.push(h("button",{class:"btn sm",onclick:()=>setPledge(p,"funded")},"Mark funded"),h("button",{class:"btn ghost sm",onclick:()=>setPledge(p,"submitted")},"Undo"));
+    if(p.status==="funded") b.push(h("button",{class:"btn ghost sm",onclick:()=>setPledge(p,"accepted")},"Undo"));
+    if(p.status==="declined") b.push(h("button",{class:"btn ghost sm",onclick:()=>setPledge(p,"submitted")},"Reopen"));
+    return h("div",{style:"display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap"},b); };
+  const prof=id=>S.profiles[id]||{};
+  return h("div",{class:"card"},
+    h("div",{class:"card-head"},h("h3",{text:"Each investor’s commitment"}),h("span",{class:"label",text:N.pending?`${usd(N.pending)} waiting for your review`:"Only you see this list"})),
+    list.length? h("div",{class:"tbl"},h("table",null,
+      h("thead",null,h("tr",null,...["Investor","Amount","Share","Profit at plan price","Status","Updated",""].map((x,i)=>h("th",{class:i>=1&&i<=3?"n":null,text:x})))),
+      h("tbody",null,...list.map(p=>h("tr",null,
+        h("td",null,h("span",{class:"inv"},prof(p.id).avatarUrl?h("img",{src:prof(p.id).avatarUrl,alt:""}):null,h("span",{text:prof(p.id).name||"Investor"}))),
+        h("td",{class:"n",style:"font-weight:500",text:usd(p.amount)}),
+        h("td",{class:"n",text:pct((+p.amount||0)/N.target,1)}),
+        h("td",{class:"n",text:usd(earnings(+p.amount||0).gain)}),
+        h("td",null,pbadge(p.status)),
+        h("td",{class:"muted",style:"white-space:nowrap",text:fdate(p.updatedAt)}),
+        h("td",null,act(p))))),
+      h("tfoot",null,h("tr",null,h("td",{text:"Accepted and funded"}),h("td",{class:"n",text:usd(N.committed)}),h("td",{class:"n",text:pct(N.committed/N.target,0)}),h("td",{class:"n",text:usd(earnings(N.committed).gain)}),h("td"),h("td"),h("td"))))) :
+    empty("No commitments yet","Add each investor’s email below. They sign in with it, choose their amount on this tab, and it appears here for you to accept."),
+    h("p",{class:"fine",text:"Investors see only their own amount and the total. Accepting updates the total everyone sees. Mark funded once the wire lands in the LLC account."}));
+}
+async function setPledge(p,status){
+  const ok=await save(()=>S.db.doc("pledges/"+p.id).update({status,reviewedAt:new Date().toISOString()}), {accepted:"Accepted "+usd(p.amount),funded:"Marked funded",declined:"Declined",submitted:"Moved back to review"}[status]);
+  if(!ok) return;
+  const next=S.pledges.map(x=>x.id===p.id?Object.assign({},x,{status}):x);
+  const N=raiseNumbers(next);
+  await save(()=>S.db.doc("project/raise").set({committed:N.committed,funded:N.funded,investors:N.investors,updatedAt:new Date().toISOString()}));
+}
+
+/* ---------- INVESTOR LIST ---------- */
+async function loadMembers(){ if(!S.sb||!S.isOwner) return; const {data}=await S.sb.from('members').select('*').order('invited_at'); S.members=data||[]; schedule(); }
+function membersCard(){
+  const email=h("input",{id:"mi-email",type:"email",placeholder:"name@example.com",autocomplete:"off"});
+  const name=h("input",{id:"mi-name",placeholder:"Full name"});
+  const err=h("div",{class:"err"});
+  const add=async()=>{ const e=email.value.trim().toLowerCase(); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){err.textContent="Enter a valid email address.";return;}
+    const {error}=await S.sb.from('members').insert({email:e,role:'investor',display_name:name.value.trim()||null});
+    if(error){ err.textContent=error.code==='23505'?"That email is already on the list.":"That didn’t save. Try again."; return; }
+    toast("Added "+e+". Send them the link to sign in."); email.value=""; name.value=""; loadMembers(); };
+  const rows=(S.members||[]).filter(m=>m.role!=='owner');
+  return h("div",{class:"card"},
+    h("div",{class:"card-head"},h("h3",{text:"Investors who can sign in"}),h("span",{class:"label",text:location.host?"Send them "+location.origin+location.pathname:""})),
+    rows.length? h("div",{class:"tbl"},h("table",{style:"min-width:520px"},
+      h("thead",null,h("tr",null,h("th",{text:"Name"}),h("th",{text:"Email"}),h("th",{text:"Added"}),h("th"))),
+      h("tbody",null,...rows.map(m=>{ const w=h("span");
+        w.append(h("button",{class:"btn ghost sm",onclick:()=>{ w.replaceChildren(h("button",{class:"btn danger sm",onclick:async()=>{ const {error}=await S.sb.from('members').delete().eq('email',m.email); if(error) toast("That didn’t save.","bad"); else { toast("Removed "+m.email); loadMembers(); } }},"Remove access"),h("button",{class:"btn ghost sm",onclick:()=>render()},"Keep")); }},"Remove"));
+        return h("tr",null,h("td",{text:m.display_name||"—"}),h("td",{text:m.email}),h("td",{class:"muted",text:fdate(m.invited_at)}),h("td",null,w)); })))) :
+      h("div",{class:"note-line",text:"Nobody else can sign in yet. Add each investor’s email here first."}),
+    h("div",{class:"form",style:"grid-template-columns:repeat(2,minmax(0,1fr)) auto;align-items:end"},field("Name",name),field("Email",email),h("button",{class:"btn bronze",style:"margin-bottom:1px",onclick:add},icon("plus"),"Add investor")),
+    err,
+    h("p",{class:"fine",text:"Only emails on this list can see the project. Removing someone takes their access away the next time the page checks."}));
+}
+
+/* ---------- DOCUMENTS ---------- */
+const DOC_CATS=["Agreements","Property and title","City and approvals","Permits and inspections","Correspondence","Design and drawings","Financial","Insurance","Other"];
+const docUrl=d=>d.path||"#";
+async function signedUrl(d){ if(d.path) return mediaUrl(d.path); const {data,error}=await S.sb.storage.from('project-docs').createSignedUrl(d.storagePath||d.assetId,3600); if(error) throw error; return data.signedUrl; }
+async function openDoc(d){ const w=window.open("","_blank"); try{ const u=await signedUrl(d); if(w) w.location=u; else location.href=u; }catch(e){ if(w) w.close(); toast("That file couldn’t be opened. Try again.","bad"); } }
+function ftype(d){ const t=(d.contentType||"")+" "+(d.fileName||d.path||"");
+  if(/pdf/i.test(t)) return ["PDF","var(--bad)"]; if(/image|\.(png|jpe?g|webp|gif)/i.test(t)) return ["IMG","var(--good)"];
+  if(/csv/i.test(t)) return ["CSV","var(--bronze)"]; return ["TXT","var(--muted)"]; }
+const fsize=b=>!b?"":b>=1048576?(b/1048576).toFixed(1)+" MB":Math.max(1,Math.round(b/1024))+" KB";
+async function saveDoc(d){
+  try{ const r=await fetch(await signedUrl(d)); if(!r.ok) throw 0; const b=await r.blob(); await S.downloads.save({filename:d.fileName||(d.title+".pdf"),data:b}); }
+  catch(e){ toast("Download didn’t start. Use Open instead."); }
+}
+function vDocs(){
+  if(!S.db) return [noDb()];
+  const all=[...S.docs.map(d=>Object.assign({vis:"shared"},d)),...(dev()?S.vault.map(d=>Object.assign({vis:"private"},d)):[])];
+  const q=S.docQ.toLowerCase();
+  const list=all.filter(d=>(!S.docCat||d.category===S.docCat)&&(!q||[d.title,d.note,d.fileName,d.category].join(" ").toLowerCase().includes(q)))
+    .sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const counts={}; all.forEach(d=>counts[d.category]=(counts[d.category]||0)+1);
+  const search=h("label",{class:"search"},icon("search"),h("input",{id:"dq",type:"search",placeholder:"Search documents",value:S.docQ,"aria-label":"Search documents",oninput:e=>{S.docQ=e.target.value;render();}}));
+  const catSel=h("select",{class:"pick",id:"dcat","aria-label":"Filter by category",onchange:e=>{S.docCat=e.target.value;render();}},h("option",{value:""},`All categories (${all.length})`),
+    ...DOC_CATS.filter(c=>counts[c]).map(c=>h("option",{value:c,selected:S.docCat===c},`${c} (${counts[c]})`)));
+  const groups=DOC_CATS.map(c=>[c,list.filter(d=>d.category===c)]).filter(([,l])=>l.length);
+  const row=d=>{ const [lbl,col]=ftype(d); const img=/IMG/.test(lbl);
+    return h("div",{class:"docrow"},
+      h("span",{class:"ftype",style:"background:"+col,"aria-hidden":"true",text:lbl}),
+      h("div",{style:"min-width:0;display:flex;flex-direction:column;gap:3px"},
+        h("div",{class:"t",text:d.title}),
+        h("div",{class:"m"},h("span",{text:fdate(d.date)}),d.size?h("span",{text:fsize(d.size)}):null,d.vis==="private"?h("span",{class:"lock",text:"Only you can see this"}):null),
+        d.note?h("div",{class:"small muted",text:d.note}):null),
+      h("div",{class:"a"},
+        img? h("button",{class:"btn ghost sm",onclick:async()=>{ try{ lightbox([{src:await signedUrl(d),t:d.title,d:d.note||d.category}],0); }catch(e){ toast("That image couldn’t be opened.","bad"); } }},"View") :
+             h("button",{class:"btn ghost sm",onclick:()=>openDoc(d)},icon("ext"),"Open"),
+        h("button",{class:"btn ghost sm","aria-label":"Download "+d.title,onclick:()=>saveDoc(d)},icon("download")),
+        dev()&&d.id!=="presentation"?docDelete(d):null)); };
+  return [
+    h("div",{class:"toolbar"},h("div",{class:"grow"},search,catSel),h("span",{class:"small muted",text:`${list.length} document${list.length===1?"":"s"}`})),
+    groups.length? h("div",{class:"card"},...groups.map(([c,l])=>h("section",{class:"docgroup"},h("h4",{text:c}),...l.map(row)))) :
+      all.length? empty("No documents match","Clear the search or pick another category.",h("button",{class:"btn ghost sm",onclick:()=>{S.docQ="";S.docCat="";render();}},"Clear filters")) :
+      empty("No documents yet","Agreements, deeds, City letters and approvals will appear here as Francis adds them.",dev()&&S.assets?h("button",{class:"btn bronze sm",onclick:()=>docSheet()},icon("plus"),"Upload document"):null),
+    dev()? h("p",{class:"fine",text:"Upload PDFs, images or text files up to 20 MB each. Export Word files to PDF first. Mark anything sensitive “Only me” so it stays off the investors’ list."}) :
+      h("p",{class:"fine",text:"Francis adds documents as the project moves. Anything you need that isn’t here, ask him for it."})];
+}
+function docDelete(d){
+  const w=h("span",{style:"display:inline-flex;gap:6px"});
+  w.append(h("button",{class:"btn ghost sm",onclick:()=>{ w.replaceChildren(
+    h("button",{class:"btn danger sm",onclick:async()=>{ const ok=await save(()=>S.db.doc((d.vis==="private"?"vault/":"docs/")+d.id).delete(),"Document removed"); if(ok&&d.assetId&&S.assets){ try{ await S.assets.delete(d.assetId); }catch(e){} } }},"Remove"),
+    h("button",{class:"btn ghost sm",onclick:()=>render()},"Keep")); }},"Remove"));
+  return w;
+}
+function docSheet(){
+  let file=null;
+  const fin=h("input",{type:"file",id:"df-file",accept:".pdf,.png,.jpg,.jpeg,.webp,.gif,.txt,.csv,.md,application/pdf,image/*",style:"display:none",onchange:e=>pick(e.target.files[0])});
+  const label=h("span",{class:"small muted",text:"PDF, image or text file, up to 20 MB"});
+  const drop=h("label",{class:"drop",for:"df-file",ondragover:e=>{e.preventDefault();drop.classList.add("over");},ondragleave:()=>drop.classList.remove("over"),ondrop:e=>{e.preventDefault();drop.classList.remove("over");pick(e.dataTransfer.files[0]);}},
+    icon("docs"),h("b",{text:"Choose a file or drop it here"}),label);
+  const title=h("input",{id:"df-title",placeholder:"Land contribution agreement, signed"});
+  const cat=h("select",{id:"df-cat"},...DOC_CATS.map(c=>h("option",null,c)));
+  const date=h("input",{id:"df-date",type:"date",value:today()});
+  const note=h("textarea",{id:"df-note",placeholder:"What this is and why it matters (optional)"});
+  const vis=h("select",{id:"df-vis"},h("option",{value:"shared"},"Investors and me"),h("option",{value:"private"},"Only me"));
+  const err=h("div",{class:"err"});
+  const go2=h("button",{class:"btn bronze",onclick:submit},"Upload");
+  function pick(f){ if(!f) return; file=f; label.textContent=`${f.name}, ${fsize(f.size)}`; if(!title.value) title.value=f.name.replace(/\.[^.]+$/,"").replace(/[_-]+/g," ");
+    if(/agree|contract/i.test(f.name)) cat.value="Agreements"; else if(/deed|title|survey/i.test(f.name)) cat.value="Property and title"; else if(/permit|inspect/i.test(f.name)) cat.value="Permits and inspections"; }
+  function typeFor(f){ const e=(f.name.split(".").pop()||"").toLowerCase(); return {pdf:"application/pdf",png:"image/png",jpg:"image/jpeg",jpeg:"image/jpeg",webp:"image/webp",gif:"image/gif",txt:"text/plain",csv:"text/csv",md:"text/markdown"}[e]||f.type; }
+  async function submit(){
+    if(!file){ err.textContent="Choose a file to upload."; return; }
+    if(!title.value.trim()){ err.textContent="Give the document a name."; return; }
+    if(file.size>20*1048576){ err.textContent="That file is over 20 MB. Compress it or split it first."; return; }
+    err.textContent=""; go2.disabled=true; go2.textContent="Uploading…";
+    try{
+      const up=await S.assets.upload(file,{type:typeFor(file)});
+      const ok=await save(()=>S.db.collection(vis.value==="private"?"vault":"docs").add({title:title.value.trim(),category:cat.value,date:date.value,note:note.value.trim(),assetId:up.id,storagePath:up.id,contentType:up.contentType,size:up.sizeBytes,fileName:file.name,addedAt:new Date().toISOString()}),"Uploaded: "+title.value.trim());
+      if(ok) closeSheet(); else { go2.disabled=false; go2.textContent="Upload"; }
+    }catch(e){
+      const c=e&&e.code; go2.disabled=false; go2.textContent="Upload";
+      err.textContent=c==="unsupported_type"?"That file type can’t be stored here. Upload a PDF or image; export Word files to PDF first.":c==="too_large"?"That file is over 20 MB. Compress it or split it first.":c==="quota_or_state"?"Document storage is full. Remove old files first.":"The upload didn’t finish. Check your connection and try again.";
+    }
+  }
+  openSheet("Upload a document",h("div",{class:"form"},h("div",{class:"full"},drop,fin),field("Name",title,null,true),field("Category",cat),field("Date on the document",date),field("Who can see it",vis,null,true),field("Note",note,null,true),h("div",{class:"full"},err)),
+    [h("button",{class:"btn ghost",onclick:closeSheet},"Cancel"),go2]);
+}
+
+/* ---------- MEDIA ---------- */
+const RENDERS=[
+  {src:"img/front.jpg",t:"Bergen Street facade",d:"Curved balcony bands, garden-level entry and rear-loaded parking",big:true},
+  {src:"img/aerial.jpg",t:"From above",d:"Rooftop solar and the stair court between the two halves"},
+  {src:"img/kitchen.jpg",t:"Chef’s kitchen",d:"FatAtelier millwork and a stone island"},
+  {src:"img/rear.jpg",t:"Rear facade",d:"Concept rendering of the garden side"},
+  {src:"img/living.jpg",t:"Open living",d:"Full-floor plan"},
+  {src:"img/study.jpg",t:"Study",d:"Built-in shelving from the shop"}];
+const PLATES=[
+  {src:"img/plate01.jpg",t:"Survey and site layout",d:"Lot 48, Block 2688, 36′ × 105′"},
+  {src:"img/plate02.jpg",t:"Ground floor plan",d:"Garden-level home and parking"},
+  {src:"img/plate03.jpg",t:"First floor plan",d:"Kitchens and living areas"},
+  {src:"img/plate04.jpg",t:"Second floor plan",d:"Bedrooms, ensuite baths and terraces"},
+  {src:"img/plate05.jpg",t:"Third floor plan",d:"Primary suites and roof terraces"},
+  {src:"img/plate06.jpg",t:"Roof plan",d:"Membrane roof and prefabricated steel tubes"},
+  {src:"img/plate07.jpg",t:"Elevations",d:"Front, rear and right side"}];
+const PDF_PATH="files/The-Blend-Presentation.pdf";
+const M=p=>(S.media&&S.media[p])||"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+async function loadMedia(){ if(!S.sb) return; const paths=[...RENDERS,...PLATES].map(x=>x.src).concat([PDF_PATH]);
+  const {data,error}=await S.sb.storage.from("project-media").createSignedUrls(paths,21600);
+  if(error||!data) return; S.media={}; data.forEach(d=>{ if(d.signedUrl) S.media[d.path]=d.signedUrl; }); schedule(); }
+async function mediaUrl(p){ if(S.media&&S.media[p]) return S.media[p]; const {data,error}=await S.sb.storage.from("project-media").createSignedUrl(p,3600); if(error) throw error; return data.signedUrl; }
+async function openMedia(p){ const w=window.open("","_blank"); try{ const u=await mediaUrl(p); if(w) w.location=u; else location.href=u; }catch(e){ if(w) w.close(); toast("That file couldn’t be opened. Try again.","bad"); } }
+function lightbox(list,i){
+  list=list.map(x=>Object.assign({},x,{src:/^(https?:|data:|blob:)/.test(x.src)?x.src:M(x.src)}));
+  let idx=i; const prev=document.activeElement;
+  const img=h("img",{alt:""}); const stage=h("div",{class:"stage"},img);
+  const cap=h("div",{class:"cap"}); const count=h("span",{style:"font-size:12.5px;opacity:.7"});
+  const show=()=>{ const it=list[idx]; img.src=it.src; img.alt=it.t; cap.replaceChildren(h("b",{text:it.t}),h("span",{style:"opacity:.75",text:it.d}),h("span",{text:"  "}),count); count.textContent=`  ${idx+1} of ${list.length}`; stage.classList.remove("zoom"); };
+  const step=n=>{ idx=(idx+n+list.length)%list.length; show(); };
+  const zoom=()=>stage.classList.toggle("zoom");
+  img.addEventListener("click",zoom);
+  const close=()=>{ box.remove(); if(prev&&prev.focus) prev.focus(); };
+  const box=h("div",{class:"lb",role:"dialog","aria-modal":"true","aria-label":"Image viewer",tabindex:"-1",onkeydown:e=>{ if(e.key==="Escape") close(); else if(e.key==="ArrowRight") step(1); else if(e.key==="ArrowLeft") step(-1); }},
+    h("div",{class:"bar"},cap,h("div",{class:"tools"},
+      h("button",{"aria-label":"Zoom",title:"Zoom",onclick:zoom},icon("expand")),
+      h("button",{"aria-label":"Close",title:"Close",onclick:close},icon("close")))),
+    stage,
+    list.length>1?h("button",{class:"nav2 prev","aria-label":"Previous",onclick:()=>step(-1)},"‹"):null,
+    list.length>1?h("button",{class:"nav2 next","aria-label":"Next",onclick:()=>step(1)},"›"):null);
+  document.body.append(box); show(); box.focus();
+}
+async function downloadPdf(){
+  if(!S.downloads){ toast("Use Open PDF, then save it from the viewer."); return; }
+  try{ const r=await fetch(await mediaUrl(PDF_PATH)); const b=await r.blob(); await S.downloads.save({filename:"The-Blend-Presentation.pdf",data:b}); }
+  catch(e){ toast("Download was cancelled."); }
+}
+
+/* ---------- DESIGN ---------- */
+function vDesign(){
+  const gal=h("div",{class:"gal"},...RENDERS.map((r,i)=>h("button",{class:r.big?"big":null,"aria-label":"Open "+r.t,onclick:()=>lightbox(RENDERS,i)},
+    h("img",{src:M(r.src),alt:r.t,loading:i>2?"lazy":null}),h("figcaption",{text:r.t}))));
+  const stack=h("div",{class:"stack"},
+    ...[["Rooftop","Solar array"],["Level 3","3BR full floor, every bedroom ensuite"],["Level 2","3BR full floor, every bedroom ensuite"],["Garden","2BR, partially sunken, at grade"]].map(([k,v])=>h("div",null,h("span",{text:k}),h("b",{text:v}))));
+  const comply=h("div",{class:"comply"},
+    ...[["Lot area","3,949 SF, 3,500 SF required"],["Lot width","36′-0″, 35′ required"],["Lot depth","±105′-0″, 100′ required"],["Density","3 units, 3 permitted at this lot area"],["Height","3 stories, 3 stories or 40′ max"],["Parking","Rear-loaded, side or rear required"],["Sustainability","Solar, high-performance envelope, ENERGY STAR"]]
+      .map(([k,v])=>h("div",null,h("span",{class:"k",text:k}),h("span",{text:v}),h("span",{class:"badge good",text:"Complies"}))));
+  const plates=h("div",{class:"plates"},...PLATES.map((p,i)=>h("button",{class:"plate","aria-label":"Open plate "+(i+1)+", "+p.t,onclick:()=>lightbox(PLATES,i)},
+    h("img",{src:M(p.src),alt:p.t,loading:"lazy"}),h("b",{text:`Plate ${String(i+1).padStart(2,"0")}  ${p.t}`}),h("span",{text:p.d}))));
+  return [
+    gal,
+    h("div",{class:"cols c2"},
+      h("div",{class:"card"},h("div",{class:"card-head"},h("h3",{text:"Three homes, stacked"}),h("span",{class:"label",text:"Kitchens, closets, vanities and trim from FatAtelier’s own shop"})),stack,
+        h("p",{class:"fine",text:"High-performance envelope and rooftop solar. Wall panels are CNC-cut in the Newark shop and arrive on site ready to place."})),
+      h("div",{class:"card"},h("div",{class:"card-head"},h("h3",{text:"Built as of right"}),h("span",{class:"label",text:"South Bergen Street Redevelopment Plan, MUNR district"})),comply,
+        h("p",{class:"fine",text:"No zoning board hearing, plan amendment or variance. The City resolution aligns the deed with the plan already adopted."}))),
+    h("div",{class:"card"},
+      h("div",{class:"card-head"},h("h3",{text:"The drawing set"}),h("span",{class:"label",text:"Sheets A-100 to A-107, drawn by FatAtelier, July 2026. Click any plate to zoom."})),
+      plates),
+    h("div",{class:"card raised"},h("div",{class:"doc"},
+      h("button",{class:"cover",style:"border:0;padding:0;cursor:pointer","aria-label":"Open the presentation PDF",onclick:()=>openMedia(PDF_PATH)},h("img",{src:M("img/front.jpg"),alt:""})),
+      h("div",{style:"display:flex;flex-direction:column;gap:8px;min-width:0"},
+        h("h3",{text:"The Blend presentation"}),
+        h("p",{class:"muted",style:"margin:0;max-width:60ch",text:"The full 15-page design presentation: the site, the building, the homes, the builder and all seven drawing plates at full size. PDF, 9.3 MB."}),
+        h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},
+          h("button",{class:"btn bronze",onclick:()=>openMedia(PDF_PATH)},icon("ext"),"Open PDF"),
+          S.downloads?h("button",{class:"btn ghost",onclick:downloadPdf},icon("download"),"Download"):null))))
+  ];
+}
+
+/* ---------- OVERVIEW ---------- */
+function vOverview(){
+  const t=totals();
+  const figs=h("div",{class:"figs"},
+    fig("Raised from investors",usdK((S.raise&&S.raise.committed)||0),"of the "+usdK(t.committed)+" target, "+(((S.raise&&S.raise.investors)||0))+" investor(s)"),
+    fig("Released",usdK(t.released),pct(t.committed?t.released/t.committed:0,0)+" of the capital",true),
+    fig("Awaiting approval",usdK(t.pending),S.draws.filter(d=>d.status==="requested").length+" open request(s)"),
+    fig("Receipted",usdK(t.spent),t.unreceipted>0?usd(t.unreceipted)+" still to receipt":"Every released dollar receipted"),
+    fig("Balance to finish",usdK(t.balance),"Capital not yet released"));
+  const phases=sortedPhases();
+  const sel=phases.find(p=>p.id===S.selPhase);
+  const list=h("div",{class:"phases"},...phases.map(p=>{ const st=phaseStats(p);
+    return h("button",{class:"phase-btn","aria-pressed":String(S.selPhase===p.id),onclick:()=>{S.selPhase=S.selPhase===p.id?null:p.id;render();}},
+      h("span",{class:"o",text:p.order}),h("span",{class:"n",text:p.name}),h("span",{class:"a",text:usdK(st.released)+" of "+usdK(st.budget)}),
+      h("span",{class:"track"},h("em",{style:`width:${Math.min(100,st.committedPct*100)}%`}),h("b",{style:`width:${Math.min(100,st.done*100)}%`}))); }));
+  let detail=null;
+  if(sel){ const st=phaseStats(sel); const reqs=S.draws.filter(d=>d.phaseId===sel.id);
+    detail=h("div",{class:"detail"},
+      h("div",{class:"card-head"},h("h4",{text:sel.name}),badge(sel.status||"upcoming")),
+      sel.desc?h("div",{class:"muted small",text:sel.desc}):null,
+      h("div",{class:"kv"},kv("Budget",usd(st.budget)),kv("Released",usd(st.released)),kv("Pending",usd(st.pending)),kv("Receipted",usd(st.spent))),
+      h("div",{class:"small muted",text:reqs.length?reqs.length+" request(s) on this phase":"No requests on this phase yet"}),
+      dev()&&st.available>0?h("button",{class:"btn bronze sm",style:"align-self:flex-start",onclick:()=>drawSheet(sel.id)},icon("plus"),"Request a draw from this phase"):null);
+  }
+  const hero=h("div",{class:"cols hero"},
+    h("div",{class:"card raised elev-card"},
+      h("div",{class:"card-head"},h("h3",{text:"The building, by phase"}),h("span",{class:"label",text:"Tap any part"})),
+      elevation(),
+      h("div",{class:"elev-legend"},h("span",null,h("i"),"Not yet funded"),h("span",null,h("i",{class:"b"}),"Funding released"),h("span",null,h("i",{class:"k"}),"Phase fully drawn"))),
+    h("div",{class:"card"},
+      h("div",{class:"card-head"},h("h3",{text:"Where the money goes"}),h("span",{class:"label",text:usd(t.committed)+" total"})),
+      S.db&&!phases.length&&S.loaded.phases? empty("No phases set yet","Francis sets the phase budgets before the first draw.") : !S.db? noDb() : list,
+      detail));
+
+  const openReqs=S.draws.filter(d=>d.status==="requested"||d.status==="approved");
+  const gates=[...S.gates].sort((a,b)=>(a.order||0)-(b.order||0));
+  const doneN=gates.filter(g=>g.status==="done").length;
+  const last=[...S.updates].sort((a,b)=>(b.date||"").localeCompare(a.date||""))[0];
+  const row=h("div",{class:"cols c3"},
+    h("div",{class:"card"},h("div",{class:"card-head"},h("h3",{text:"Needs attention"})),
+      !S.db?noDb(): openReqs.length? h("div",{class:"reqs"},...openReqs.map(reqCard)) :
+      h("div",{class:"note-line good",text:"Nothing is waiting for approval."})),
+    h("div",{class:"card"},h("div",{class:"card-head"},h("h3",{text:"Before the first draw"}),gates.length?h("span",{class:"label",text:doneN+" of "+gates.length+" cleared"}):null),
+      !S.db?noDb(): gates.length? h("ol",{class:"steps"},...gates.map(g=>h("li",{class:g.status||"todo"},
+        dev()? h("button",{class:"dot","aria-label":"Change status of "+g.label,title:"Click to change status",onclick:()=>cycleGate(g)},g.status==="done"?icon("check"):null) : h("span",{class:"dot"},g.status==="done"?icon("check"):null),
+        h("div",null,h("div",{class:"t",text:g.label}),g.note?h("div",{class:"d",text:g.note}):null)))) :
+      empty("No approvals listed yet","The approvals that must clear before money moves will appear here.")),
+    h("div",{class:"card"},h("div",{class:"card-head"},h("h3",{text:"Latest update"}),S.updates.length>1?h("a",{href:"#updates",class:"small",style:"color:var(--bronze)",onclick:e=>{e.preventDefault();go("updates");}},"All updates"):null),
+      !S.db?noDb(): last? h("div",{style:"display:flex;flex-direction:column;gap:6px"},h("span",{class:"label",text:fdate(last.date)}),h("div",{style:"font-family:var(--f-display);font-size:20px;line-height:1.25",text:last.title}),last.body?h("p",{class:"muted",style:"margin:0;white-space:pre-wrap;font-size:14px",text:last.body}):null) :
+      empty("No updates yet","Site and shop progress will show here.")));
+  const intro=h("section",{class:"intro"},
+    h("div",{class:"txt"},
+      h("div",{style:"display:flex;flex-direction:column;gap:12px"},
+        (()=>{const w=document.createElementNS(SVGNS,"svg");w.setAttribute("viewBox","0 0 120 14");w.setAttribute("class","wave");w.setAttribute("aria-hidden","true");w.innerHTML='<path d="M1 8c15-9 30 9 45 0s30-9 45 0 20 6 28 0"/>';return w;})(),
+        h("h3",{text:"Three new homes on Bergen Street"}),
+        h("p",{text:"Designed, prefabricated and built by FatAtelier, a Newark company. One firm is architect, fabricator and general contractor."})),
+      h("div",{class:"facts"},
+        h("div",null,h("b",{text:"3 homes"}),h("span",{text:"One 2BR garden, two 3BR full floors"})),
+        h("div",null,h("b",{text:"As of right"}),h("span",{text:"MUNR district, every standard met"})),
+        h("div",null,h("b",{text:"3,949 SF lot"}),h("span",{text:"Block 2688, Lot 48"})),
+        h("div",null,h("b",{text:"1 mile"}),h("span",{text:"From the Lionsgate Newark studio campus"}))),
+      h("button",{class:"btn light",onclick:()=>go("design")},icon("design"),"See the design and drawings")),
+    h("div",{class:"ph"},h("img",{src:M("img/front.jpg"),alt:"Rendering of The Blend from Bergen Street"}),h("button",{"aria-label":"Enlarge the rendering",onclick:()=>lightbox(RENDERS,0)})));
+  return [intro,figs,hero,row];
+}
+function fig(k,v,s,accent){ return h("div",{class:"fig"+(accent?" accent":"")},h("span",{class:"label",text:k}),h("span",{class:"v",text:v}),h("span",{class:"s",text:s})); }
+function kv(k,v){ return h("div",null,h("span",{class:"label",text:k}),h("b",{text:v})); }
+async function cycleGate(g){ const o=["todo","progress","done"]; const next=o[(o.indexOf(g.status||"todo")+1)%3];
+  await save(()=>S.db.doc("gates/"+g.id).update({status:next,updatedAt:new Date().toISOString()}), next==="done"?"Marked cleared":next==="progress"?"Marked in progress":"Marked to do"); }
+
+/* ---------- DRAW REQUESTS ---------- */
+const confirming={};
+function reqCard(d){
+  const card=h("article",{class:"req"});
+  const trail=["Requested "+fdate(d.requestedAt)];
+  if(d.decidedAt) trail.push((d.status==="declined"?"Declined ":"Approved ")+fdate(d.decidedAt)+" by "+nameOf(d.decidedBy));
+  if(d.releasedAt) trail.push("Released "+fdate(d.releasedAt));
+  card.append(
+    h("div",{style:"display:flex;flex-direction:column;gap:4px;min-width:0"},h("div",{class:"top"},h("span",{class:"no",text:reqNo(d)}),badge(d.status)),h("div",{class:"ph",text:phaseName(d.phaseId)}),d.note?h("div",{class:"note",text:d.note}):null,d.decisionNote?h("div",{class:"note",text:"Investor note: "+d.decisionNote}):null),
+    h("div",{class:"amt",text:usd(d.amount)}),
+    h("div",{class:"trail"},...trail.map(x=>h("span",{text:x}))));
+  const act=h("div",{class:"act"});
+  if(d.status==="requested"&&investorCtl()){
+    if(confirming[d.id]){
+      const mode=confirming[d.id]; const note=h("input",{id:"dn-"+d.id,placeholder:mode==="approved"?"Note for Francis (optional)":"Reason (helps Francis fix it)",style:"background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%"});
+      card.append(h("div",{class:"confirm"},
+        h("p",{text: mode==="approved"? `Approve ${usd(d.amount)} for ${phaseName(d.phaseId)}? Francis can then release it from the project account.` : `Decline this ${usd(d.amount)} request? Francis will see your reason.`}),
+        note,
+        h("div",{class:"row"},
+          h("button",{class:"btn "+(mode==="approved"?"bronze":"danger"),onclick:async()=>{ const ok=await save(()=>S.db.doc("draws/"+d.id).update({status:mode,decisionNote:note.value.trim(),decidedAt:new Date().toISOString(),decidedBy:S.me&&S.me.id}), mode==="approved"?"Approved "+usd(d.amount):"Request declined"); delete confirming[d.id]; if(!ok) render(); }}, mode==="approved"?"Confirm approval":"Confirm decline"),
+          h("button",{class:"btn ghost",onclick:()=>{delete confirming[d.id];render();}},"Cancel"))));
+    } else {
+      act.append(h("button",{class:"btn bronze",onclick:()=>{confirming[d.id]="approved";render();}},icon("check"),"Approve"),
+        h("button",{class:"btn ghost",onclick:()=>{confirming[d.id]="declined";render();}},"Decline"));
+    }
+  } else if(d.status==="requested"&&dev()){
+    act.append(h("span",{class:"small muted",text:"Waiting for the investor to approve."}),
+      h("button",{class:"btn ghost sm",style:"margin-left:auto",onclick:()=>save(()=>S.db.doc("draws/"+d.id).delete(),"Request withdrawn")},"Withdraw"));
+  } else if(d.status==="approved"&&dev()){
+    act.append(h("span",{class:"small muted",text:"Approved. Transfer the funds, then mark it released."}),
+      h("button",{class:"btn sm",style:"margin-left:auto",onclick:()=>save(()=>S.db.doc("draws/"+d.id).update({status:"released",releasedAt:new Date().toISOString(),releasedBy:S.me&&S.me.id}),"Marked released")},"Mark released"));
+  }
+  if(act.childNodes.length) card.append(act);
+  return card;
+}
+function vDraws(){
+  if(!S.db) return [noDb()];
+  const f=S.drawFilter;
+  const all=[...S.draws].sort((a,b)=>(b.requestedAt||"").localeCompare(a.requestedAt||""));
+  const list=all.filter(d=>f==="all"||(f==="open"?(d.status==="requested"||d.status==="approved"):d.status===f));
+  const cnt=k=>all.filter(d=>k==="all"||(k==="open"?(d.status==="requested"||d.status==="approved"):d.status===k)).length;
+  const seg=h("div",{class:"seg",role:"group","aria-label":"Filter requests"},...[["open","Open"],["released","Released"],["declined","Declined"],["all","All"]].map(([k,l])=>
+    h("button",{"aria-pressed":String(f===k),onclick:()=>{S.drawFilter=k;render();}},`${l} (${cnt(k)})`)));
+  return [h("div",{class:"toolbar"},seg),
+    list.length? h("div",{class:"reqs"},...list.map(reqCard)) :
+    empty(f==="open"?"No open requests":"Nothing here yet", all.length?"Try another filter.":"The first request is filed once the building permit is issued. It shows up here for approval.",
+      dev()&&!all.length?h("button",{class:"btn bronze sm",onclick:()=>drawSheet()},icon("plus"),"New draw request"):null)];
+}
+function drawSheet(preset){
+  const ps=sortedPhases(); if(!ps.length){ toast("Set phase budgets first."); return; }
+  const firstOpen=ps.find(p=>phaseStats(p).available>0)||ps[0];
+  const ph=h("select",{id:"df-phase"},...ps.map(p=>{const st=phaseStats(p);return h("option",{value:p.id,selected:(preset||firstOpen.id)===p.id},`${p.order}. ${p.name}`);}));
+  const amt=h("input",{id:"df-amt",inputmode:"decimal",placeholder:"25,000"});
+  const note=h("textarea",{id:"df-note",placeholder:"What this covers, for example: footing concrete, rebar and pump truck"});
+  const avail=h("span",{class:"hint"}); const err=h("div",{class:"err"});
+  const sync=()=>{ const p=S.phases.find(x=>x.id===ph.value); const st=phaseStats(p); avail.textContent=`${usd(st.available)} available on this phase (${usd(st.budget)} budget, ${usd(st.released)} released, ${usd(st.pending)} pending)`; };
+  ph.addEventListener("change",sync); sync();
+  const submit=async()=>{ const a=num(amt.value); const p=S.phases.find(x=>x.id===ph.value); const st=phaseStats(p);
+    if(!a){err.textContent="Enter an amount above zero.";return;}
+    if(a>st.available){err.textContent=`That’s more than the ${usd(st.available)} left on ${p.name}. Raise the phase budget first.`;return;}
+    const ok=await save(()=>S.db.collection("draws").add({phaseId:p.id,amount:a,note:note.value.trim(),status:"requested",requestedAt:new Date().toISOString(),requestedBy:S.me&&S.me.id}),"Draw request filed for "+usd(a));
+    if(ok){ closeSheet(); if(tab!=="draws") go("draws"); } };
+  openSheet("New draw request",
+    h("div",{class:"form"},field("Phase",ph,null,true),h("label",{class:"field full"},"Amount",amt,avail),field("What it covers",note,"The investor sees this note when approving.",true),h("div",{class:"full"},err)),
+    [h("button",{class:"btn ghost",onclick:closeSheet},"Cancel"),h("button",{class:"btn bronze",onclick:submit},"File request")]);
+}
+
+/* ---------- BUDGET ---------- */
+function vBudget(){
+  if(!S.db) return [noDb()];
+  const ps=sortedPhases();
+  if(S.loaded.phases&&!ps.length) return [empty("No phases set yet","Phase budgets appear here once Francis enters them.")];
+  const T={budget:0,released:0,pending:0,spent:0,balance:0};
+  ps.forEach(p=>{const st=phaseStats(p); for(const k in T) T[k]+=st[k];});
+  const committed=totals().committed, diff=T.budget-committed;
+  const split=h("div",{class:"split",role:"group","aria-label":"Budget by phase"},...ps.map((p,i)=>h("button",{style:`flex:${(+p.budget||0)};--i:${i}`,"aria-pressed":String(S.selPhase===p.id),title:`${p.name}: ${usd(p.budget)}`,"aria-label":`${p.name}, ${usd(p.budget)}`,onclick:()=>{S.selPhase=S.selPhase===p.id?null:p.id;render();}})));
+  const sel=ps.find(p=>p.id===S.selPhase);
+  const rows=ps.map(p=>{ const st=phaseStats(p);
+    return h("tr",{style:S.selPhase===p.id?"background:var(--sunk)":null},
+      h("td",{class:"muted",text:p.order}),
+      h("td",null,h("div",{style:"font-weight:500",text:p.name}),p.desc?h("div",{class:"sub",text:p.desc}):null),
+      h("td",{class:"n"},dev()?h("input",{class:"inl",id:"bud-"+p.id,inputmode:"numeric",value:Math.round(st.budget).toLocaleString("en-US"),"aria-label":"Budget for "+p.name,
+        onchange:e=>{ const v=num(e.target.value); save(()=>S.db.doc("phases/"+p.id).update({budget:v,updatedAt:new Date().toISOString()}),"Budget updated: "+p.name+" "+usd(v)); }}):usd(st.budget)),
+      h("td",{class:"n",text:usd(st.released)}),
+      h("td",{class:"n",text:st.pending?usd(st.pending):"—"}),
+      h("td",{class:"n"},h("span",{class:"minibar"},h("i",null,h("b",{style:`width:${Math.min(100,st.done*100)}%`})),pct(st.done,0))),
+      h("td",{class:"n",text:usd(st.balance)}),
+      h("td",{class:"n",text:st.spent?usd(st.spent):"—"}),
+      h("td",null,dev()?h("select",{id:"st-"+p.id,"aria-label":"Status of "+p.name,onchange:e=>save(()=>S.db.doc("phases/"+p.id).update({status:e.target.value}),p.name+": "+STATUS[e.target.value][0])},...["upcoming","active","complete"].map(s=>h("option",{value:s,selected:(p.status||"upcoming")===s},STATUS[s][0]))):badge(p.status||"upcoming")));
+  });
+  return [
+    h("div",{class:"card"},
+      h("div",{class:"card-head"},h("h3",{text:"Where the capital goes"}),h("span",{class:"label",text:sel?`${sel.name}: ${usd(sel.budget)} (${pct(T.budget?sel.budget/T.budget:0,0)})`:"Select a band to highlight its row"})),
+      split,
+      h("div",{class:"split-legend"},...ps.map(p=>h("span",{text:`${p.order}. ${p.name} ${usdK(p.budget)}`})))),
+    diff!==0? h("div",{class:"note-line warn",text:`Phase budgets total ${usd(T.budget)}, which is ${usd(Math.abs(diff))} ${diff>0?"over":"under"} the ${usd(committed)} raise.`}) : h("div",{class:"note-line good",text:`Phase budgets add up exactly to the ${usd(committed)} raise.`}),
+    h("div",{class:"tbl"},h("table",null,
+      h("thead",null,h("tr",null,...["#","Phase","Budget","Released","Pending","Drawn","Balance","Receipted","Status"].map((x,i)=>h("th",{class:i>=2&&i<=7?"n":null,text:x})))),
+      h("tbody",null,rows),
+      h("tfoot",null,h("tr",null,h("td"),h("td",{text:"Total"}),h("td",{class:"n",text:usd(T.budget)}),h("td",{class:"n",text:usd(T.released)}),h("td",{class:"n",text:usd(T.pending)}),h("td",{class:"n",text:pct(T.budget?T.released/T.budget:0,0)}),h("td",{class:"n",text:usd(T.balance)}),h("td",{class:"n",text:usd(T.spent)}),h("td"))))),
+    h("p",{class:"fine",text:"Laid out like an AIA G703 continuation sheet: scheduled value, work drawn to date and balance to finish for each line."})];
+}
+
+/* ---------- LEDGER ---------- */
+const KINDS=["Material","Subcontractor","FatAtelier shop (at cost)","Permit or fee","Equipment","Insurance","Other"];
+function vLedger(){
+  if(!S.db) return [noDb()];
+  const t=totals();
+  const q=S.lq.toLowerCase();
+  const list=[...S.ledger].sort((a,b)=>(b.date||"").localeCompare(a.date||""))
+    .filter(e=>(!S.lphase||e.phaseId===S.lphase)&&(!S.lkind||e.kind===S.lkind)&&(!q||[e.payee,e.desc,e.ref].join(" ").toLowerCase().includes(q)));
+  const sum=list.reduce((a,e)=>a+(+e.amount||0),0);
+  const search=h("label",{class:"search"},icon("search"),h("input",{id:"lq",type:"search",placeholder:"Search payee, item or invoice",value:S.lq,"aria-label":"Search the ledger",oninput:e=>{S.lq=e.target.value;renderMainOnly(true);}}));
+  const phaseSel=h("select",{class:"pick",id:"lphase","aria-label":"Filter by phase",onchange:e=>{S.lphase=e.target.value;render();}},h("option",{value:""},"All phases"),...sortedPhases().map(p=>h("option",{value:p.id,selected:S.lphase===p.id},p.name)));
+  const kindSel=h("select",{class:"pick",id:"lkind","aria-label":"Filter by type",onchange:e=>{S.lkind=e.target.value;render();}},h("option",{value:""},"All types"),...KINDS.map(k=>h("option",{value:k,selected:S.lkind===k},k)));
+  const status = t.released? h("div",{class:"note-line "+(t.unreceipted?"warn":"good"),text:t.unreceipted?`${usd(t.unreceipted)} has been released but not yet matched to receipts.`:"Every released dollar is matched to a receipt."}) : null;
+  const filtered=S.lq||S.lphase||S.lkind;
+  return [status,
+    h("div",{class:"toolbar"},h("div",{class:"grow"},search,phaseSel,kindSel),filtered?h("span",{class:"small muted",text:`${list.length} of ${S.ledger.length} payments, ${usd(sum)}`}):null),
+    S.ledger.length? (list.length? h("div",{class:"tbl"},h("table",null,
+      h("thead",null,h("tr",null,...["Date","Payee","Phase","Type","Invoice","Amount"].map((x,i)=>h("th",{class:i===5?"n":null,text:x})),dev()?h("th"):null)),
+      h("tbody",null,...list.map(e=>h("tr",null,h("td",{style:"white-space:nowrap",text:fdate(e.date)}),h("td",null,h("div",{style:"font-weight:500",text:e.payee||"—"}),e.desc?h("div",{class:"sub",text:e.desc}):null),
+        h("td",{text:phaseName(e.phaseId)}),h("td",null,h("span",{class:"badge",text:e.kind||"Material"})),h("td",{class:"muted",text:e.ref||"—"}),h("td",{class:"n",text:usd(e.amount)}),dev()?h("td",null,removeBtn(e)):null))),
+      h("tfoot",null,h("tr",null,h("td",{text:filtered?"Shown":"Total"}),h("td"),h("td"),h("td"),h("td"),h("td",{class:"n",text:usd(sum)}),dev()?h("td"):null)))) :
+      empty("No payments match","Clear the search or filters to see everything.",h("button",{class:"btn ghost sm",onclick:()=>{S.lq="";S.lphase="";S.lkind="";render();}},"Clear filters"))) :
+    empty("No payments recorded yet","Payments appear here once the first draw is released, each with its payee, phase and invoice number.",dev()?h("button",{class:"btn bronze sm",onclick:ledgerSheet},icon("plus"),"Record payment"):null)];
+}
+function removeBtn(e){
+  const w=h("span",{style:"display:inline-flex;gap:6px"});
+  w.append(h("button",{class:"btn ghost sm",onclick:()=>{ w.replaceChildren(h("button",{class:"btn danger sm",onclick:()=>save(()=>S.db.doc("ledger/"+e.id).delete(),"Payment removed")},"Remove"),h("button",{class:"btn ghost sm",onclick:()=>render()},"Keep")); }},"Remove"));
+  return w;
+}
+function ledgerSheet(){
+  const f={date:h("input",{id:"lf-date",type:"date",value:today()}),payee:h("input",{id:"lf-payee",placeholder:"Home Depot Pro"}),
+    phase:h("select",{id:"lf-phase"},...sortedPhases().map(p=>h("option",{value:p.id,selected:S.lphase===p.id},`${p.order}. ${p.name}`))),
+    kind:h("select",{id:"lf-kind"},...KINDS.map(k=>h("option",null,k))),amount:h("input",{id:"lf-amt",inputmode:"decimal",placeholder:"0.00"}),
+    ref:h("input",{id:"lf-ref",placeholder:"INV-1042"}),desc:h("input",{id:"lf-desc",placeholder:"Rebar #5, 40 sticks"})};
+  const err=h("div",{class:"err"});
+  const submit=async()=>{ const a=num(f.amount.value); if(!f.payee.value.trim()){err.textContent="Add who was paid.";return;} if(!a){err.textContent="Enter an amount above zero.";return;}
+    const ok=await save(()=>S.db.collection("ledger").add({date:f.date.value,payee:f.payee.value.trim(),phaseId:f.phase.value,kind:f.kind.value,amount:a,ref:f.ref.value.trim(),desc:f.desc.value.trim(),createdAt:new Date().toISOString()}),"Payment recorded: "+usd(a));
+    if(ok) closeSheet(); };
+  openSheet("Record a payment",h("div",{class:"form"},field("Date",f.date),field("Amount",f.amount),field("Paid to",f.payee,null,true),field("Phase",f.phase),field("Type",f.kind),field("Invoice number",f.ref),field("What was bought",f.desc),h("div",{class:"full"},err)),
+    [h("button",{class:"btn ghost",onclick:closeSheet},"Cancel"),h("button",{class:"btn bronze",onclick:submit},"Record payment")]);
+}
+async function exportCsv(){
+  const rows=[["Date","Payee","Phase","Type","Invoice","Description","Amount"],...[...S.ledger].sort((a,b)=>(a.date||"").localeCompare(b.date||"")).map(e=>[e.date,e.payee,phaseName(e.phaseId),e.kind,e.ref,e.desc,e.amount])];
+  const csv=rows.map(r=>r.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  try{ await S.downloads.save({filename:"the-blend-ledger-"+today()+".csv",data:new Blob([csv],{type:"text/csv"})}); }catch(e){ toast("Download was cancelled."); }
+}
+
+/* ---------- UPDATES ---------- */
+function vUpdates(){
+  if(!S.db) return [noDb()];
+  const list=[...S.updates].sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  return [list.length? h("div",{class:"card"},h("div",{class:"feed"},...list.map(u=>h("article",{class:"post"},h("time",{text:fdate(u.date)}),h("div",null,h("h4",{text:u.title}),u.body?h("p",{text:u.body}):null))))) :
+    empty("No updates yet","Francis posts progress here as each milestone lands.",dev()?h("button",{class:"btn bronze sm",onclick:updateSheet},icon("plus"),"Post update"):null)];
+}
+function updateSheet(){
+  const d=h("input",{id:"uf-date",type:"date",value:today()}),t=h("input",{id:"uf-title",placeholder:"Footings poured and inspected"}),b=h("textarea",{id:"uf-body",placeholder:"What happened, what it means for the schedule, what’s next"});
+  const err=h("div",{class:"err"});
+  openSheet("Post an update",h("div",{class:"form"},field("Date",d),h("span"),field("Headline",t,null,true),field("Details",b,null,true),h("div",{class:"full"},err)),
+    [h("button",{class:"btn ghost",onclick:closeSheet},"Cancel"),h("button",{class:"btn bronze",onclick:async()=>{ if(!t.value.trim()){err.textContent="Add a headline.";return;} const ok=await save(()=>S.db.collection("updates").add({date:d.value,title:t.value.trim(),body:b.value.trim(),author:S.me&&S.me.id}),"Update posted"); if(ok) closeSheet(); }},"Post update")]);
+}
+
+/* ---------- SALE AND PROFIT PLAN ---------- */
+let localPlan=lsGet("blend-plan-v3");
+const planNow=()=>{ const shared=S.plan&&S.plan.model==="sale"?S.plan:{}; return Object.assign({},PLAN_DEFAULTS,shared,localPlan||{}); };
+function setPlan(patch){ localPlan=Object.assign({},localPlan||{},patch); lsSet("blend-plan-v3",localPlan); }
+function vPlan(){
+  const P=planNow();
+  const scen=Object.entries(SCENARIOS).find(([k,x])=>x.price===P.price);
+  const seg=h("div",{class:"seg",role:"group","aria-label":"Sale scenario"},...Object.entries(SCENARIOS).map(([k,x])=>h("button",{"aria-pressed":String(!!scen&&scen[0]===k),onclick:()=>{setPlan({price:x.price});render();}},`${x.label} ${usdK(x.price)}`)));
+  const lever=(k,label,min,max,step,fmt)=>{ const out=h("output",{id:"o-"+k,text:fmt(P[k])});
+    const inp=h("input",{type:"range",id:"r-"+k,min,max,step,value:P[k],"aria-label":label,oninput:e=>{ const v=+e.target.value; out.textContent=fmt(v); setPlan({[k]:v}); updatePlanResults(); syncSeg(); }});
+    return h("div",{class:"lever"},h("div",{class:"lt"},h("span",{text:label}),out),inp); };
+  const more=(k,label,suf)=>field(label+(suf?` (${suf})`:""),h("input",{type:"number",id:"m-"+k,step:"any",value:P[k],oninput:e=>{const v=parseFloat(e.target.value); if(isNaN(v)) return; setPlan({[k]:v}); updatePlanResults();}}));
+  const shared=Object.assign({},PLAN_DEFAULTS,S.plan&&S.plan.model==="sale"?S.plan:{});
+  const changed=localPlan&&Object.keys(localPlan).some(k=>localPlan[k]!==shared[k]);
+  const levers=h("div",{class:"card levers"},
+    h("div",{class:"card-head"},h("h3",{text:"Test the numbers"})),
+    h("div",{style:"display:flex;flex-direction:column;gap:6px"},h("span",{class:"label",text:"Sale price scenario"}),seg),
+    lever("price","Sale price of the finished building",750000,1300000,5000,usdK),
+    lever("months","Months from funding to sale",9,24,1,v=>v+" mo"),
+    lever("split","Investors’ share of the profit",30,70,5,v=>v+"%"),
+    lever("pref","Preferred return to investors first",0,10,0.5,v=>v?v+"% a year":"None"),
+    h("details",{class:"more"},h("summary",null,"More assumptions"),
+      h("div",{class:"more-grid"},more("principal","Investor capital, all in","$"),more("sellPct","Selling costs","% of price"),more("carry","Carrying and soft costs (FatAtelier)","$"),more("galoFinal","Land partner, at sale","$"))),
+    h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},
+      changed?h("button",{class:"btn ghost sm",onclick:()=>{localPlan=null;lsSet("blend-plan-v3",null);render();toast("Back to the shared plan");}},"Reset to shared plan"):null,
+      dev()&&S.db?h("button",{class:"btn sm",onclick:async()=>{ const ok=await save(()=>S.db.doc("project/plan").set(Object.assign({},planNow(),{model:"sale",savedAt:new Date().toISOString()})),"Saved as the shared plan"); if(ok){localPlan=null;lsSet("blend-plan-v3",null);render();} }},"Save as shared plan"):null),
+    h("p",{class:"fine",text:"Your changes stay on this device. Market check, Oct 2026: a new-construction three-family on 20th Street, Newark (07103) is under contract from an $840,000 list price, and a new two-family on South 11th Street listed at $850,000. The Blend’s all-ensuite homes and design are meant to sell above those."}));
+  return [h("div",{class:"plan"},levers,h("div",{id:"plan-out",style:"display:flex;flex-direction:column;gap:22px;min-width:0"}))];
+}
+function syncSeg(){ const P=planNow(); document.querySelectorAll('.levers .seg button').forEach((b,i)=>{ const x=Object.values(SCENARIOS)[i]; b.setAttribute("aria-pressed",String(x.price===P.price)); }); }
+function updatePlanResults(){
+  const el=$("#plan-out"); if(!el) return;
+  const P=planNow(), R=saleModel(P);
+  const parts=[["Selling costs",R.sellCosts,"var(--plan)","var(--ink)"],["Land partner, final",R.landPaid,"var(--oak)","var(--ink)"],["Investor capital back",R.invBack,"var(--ink)","var(--surface)"]];
+  if(R.prefPaid>0) parts.push(["Investor preferred return",R.prefPaid,"color-mix(in srgb,var(--bronze) 60%,var(--ink))","var(--surface)"]);
+  parts.push(["FatAtelier cash back",R.fatBack,"color-mix(in srgb,var(--good) 45%,var(--plan))","var(--ink)"],["Investors’ profit share",R.invShare,"var(--bronze)","var(--on-bronze)"],["FatAtelier profit share",R.fatShare,"var(--good)","var(--surface)"]);
+  const shown=parts.filter(x=>x[1]>0);
+  const total=Math.max(P.price,1);
+  const bar=h("div",{class:"flowbar",role:"img","aria-label":"How the sale price is divided"},...shown.map(([l,v,c,tc])=>h("div",{style:`flex:${v/total};background:${c};color:${tc}`,title:`${l}: ${usd(v)}`},v/total>.1?usdK(v):"")));
+  const legend=h("div",{class:"fl-legend"},...shown.map(([l,v,c])=>h("div",null,h("i",{style:"background:"+c}),h("span",{text:l}),h("b",{text:usd(v)}))));
+  const lossNote=R.projectProfit<0? h("div",{class:"note-line warn",text:R.invBack<P.principal?`At this price investors would get back ${usd(R.invBack)} of their ${usdK(P.principal)}.`:`At this price there is no profit to split; investors get their capital back${R.prefPaid?" and the preferred return":""} and FatAtelier absorbs the shortfall.`}) :
+    h("div",{class:"note-line good",text:`Sold at ${usdK(P.price)}, the project clears ${usd(R.projectProfit)} after every cost. Investors are paid back first, then the profit is split ${P.split}/${100-P.split}.`});
+  const prices=[P.price-150000,P.price-75000,P.price,P.price+75000,P.price+150000].map(v=>Math.max(600000,Math.round(v/5000)*5000));
+  const monthsCols=[10,12,14,18];
+  const sens=h("div",{class:"grid-sens tbl"},h("table",null,
+    h("thead",null,h("tr",null,h("th",{text:"Sale price"}),h("th",{text:"Investors receive"}),...monthsCols.map(m=>h("th",{text:m+" mo"})))),
+    h("tbody",null,...prices.map(v=>{ const base=saleModel(Object.assign({},P,{price:v}));
+      return h("tr",null,h("td",{text:usdK(v)}),h("td",{text:usd(base.invReceives)}),...monthsCols.map(m=>{ const r=saleModel(Object.assign({},P,{price:v,months:m}));
+        return h("td",{class:"cell "+(r.invGain>=0?"pos":"neg")+(v===P.price&&m===P.months?" now":""),title:`Gain ${usd(r.invGain)}`,text:pct(r.invYield,0)}); })); }))));
+  el.replaceChildren(
+    h("div",{class:"big3"},
+      fig("Investors’ profit",usd(R.invGain),`${R.invMultiple.toFixed(2)}× their capital, about ${pct(R.invYield)} a year over ${P.months} months`,true),
+      fig("Investors’ capital is whole down to",usdK(R.invSafe),`A ${usdK(P.price-R.invSafe)} cushion below the ${usdK(P.price)} sale price`),
+      fig("FatAtelier’s profit",usd(R.fatGain),`After recovering the ${usdK(R.fatCash)} of carrying costs FatAtelier covers`)),
+    h("div",{class:"card raised"},
+      h("div",{class:"card-head"},h("h3",{text:"When the building sells"}),h("span",{class:"label",text:"Sale price "+usd(P.price)})),
+      bar, legend, lossNote),
+    h("div",{class:"cols",style:"grid-template-columns:minmax(0,1fr)"},
+      h("div",{class:"card"},
+        h("div",{class:"card-head"},h("h3",{text:"Order of payment at closing"})),
+        h("ol",{class:"steps"},
+          ...[["Selling costs",`${P.sellPct}% for commission and transfer fees`,R.sellCosts],
+             ["Land partner",`Final payment under the signed agreement, which ends the claim`,R.landPaid],
+             ["Investors’ capital",`Every investor gets their full commitment back before anyone profits. This covers the $500K of construction and the $100K paid to the land partner during construction.`,R.invBack],
+             ...(P.pref?[["Preferred return",`${P.pref}% a year on investor capital, paid before the split`,R.prefPaid]]:[]),
+             ["FatAtelier’s cash",`${usdK(P.carry)} of carrying and soft costs FatAtelier covers during construction`,R.fatBack],
+             ["Profit split",`${P.split}% to investors by commitment, ${100-P.split}% to FatAtelier`,R.pool]]
+          .map(([t,d,v])=>h("li",{class:v>0?"done":""},h("span",{class:"dot"},v>0?icon("check"):null),h("div",null,h("div",{class:"t",text:`${t}  ${usd(v)}`}),h("div",{class:"d",text:d})))))),
+      h("div",{class:"card"},
+        h("div",{class:"card-head"},h("h3",{text:"Investors’ yearly return"}),h("span",{class:"label",text:"By sale price and months to sale"})),
+        sens,
+        h("p",{class:"fine",text:"Each cell is the investors’ annualized return. A faster sale lifts the yearly return because the profit arrives sooner."}))),
+    h("div",{class:"card"},
+      h("h3",{text:"Proposed investment terms"}),
+      h("dl",{class:"terms"},
+        h("dt",{text:"Vehicle"}),h("dd",{text:"The Blend project LLC (to be formed), which will hold title and sell the building"}),
+        h("dt",{text:"Investors"}),h("dd",{text:`Members of the LLC who contribute ${usdK(P.principal)} all in: $500K of construction and $100K of land partner payments during construction. Each investor’s share follows the amount they commit.`}),
+        h("dt",{text:"Developer"}),h("dd",{text:"FatAtelier is managing member: design, fabrication and construction, with no design, fabrication or GC fee charged to the project"}),
+        h("dt",{text:"Exit"}),h("dd",{text:"The building is listed for sale at completion and the LLC winds up after closing"}),
+        h("dt",{text:"Payment order"}),h("dd",{text:`Selling costs, land partner, investor capital${P.pref?", preferred return":""}, FatAtelier’s cash, then profit ${P.split}/${100-P.split}`}),
+        h("dt",{text:"Oversight"}),h("dd",{text:"Investors approve every draw from the LLC account and see every receipt on this page"}),
+        h("dt",{text:"Land partner"}),h("dd",{text:`$50K at permit and $50K after rough-in inspections, paid from investor capital as draws; ${usdK(P.galoFinal)} from the sale, after which the claim ends`})),
+      h("p",{class:"fine",text:"Draft for discussion. This is not an offer of securities or legal advice. Final terms belong in the LLC operating agreement, reviewed by each party’s counsel."})));
+}
+
+/* ---------- render ---------- */
+function render(){
+  const prevFocus=document.activeElement&&document.activeElement.id;
+  renderShell();
+  const v={overview:vOverview,raise:vRaise,docs:vDocs,design:vDesign,draws:vDraws,budget:vBudget,ledger:vLedger,updates:vUpdates,plan:vPlan}[tab]();
+  $("#main").replaceChildren(...[].concat(v).filter(Boolean));
+  if(tab==="plan") updatePlanResults();
+  if(prevFocus){ const el=document.getElementById(prevFocus); if(el&&el!==document.activeElement){ el.focus(); if(el.setSelectionRange&&el.type==="search"){ const n=el.value.length; el.setSelectionRange(n,n);} } }
+}
+function renderMainOnly(){ render(); }
+let rq=0, pending=false;
+function schedule(){ cancelAnimationFrame(rq); rq=requestAnimationFrame(()=>{ const a=document.activeElement; if(a&&a.matches("input:not([type=search]),textarea,select")&&(a.closest(".scrim")||a.closest("td")||a.closest(".levers")||a.closest(".commit"))){ pending=true; return; } render(); }); }
+document.addEventListener("focusout",()=>{ if(pending){ pending=false; setTimeout(()=>{ if(!$("#scrim")) render(); },0);} });
+window.addEventListener("hashchange",()=>{ const k=(location.hash||"").slice(1); if(TABS.some(t=>t[0]===k)&&k!==tab){ tab=k; render(); } });
+
+/* ---------- SUPABASE ---------- */
+function initialsAvatar(name,email){ const t=((name||email||"?").split(/[\s@.]+/).filter(Boolean).slice(0,2).map(x=>x[0].toUpperCase()).join(""))||"?";
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" rx="32" fill="#8A5829"/><text x="32" y="41" font-family="Arial" font-size="24" fill="#fff" text-anchor="middle">${t}</text></svg>`;
+  return "data:image/svg+xml,"+encodeURIComponent(svg); }
+function makeDb(sb){
+  const cache={}, colSubs={}, docSubs={}, loading={};
+  const toErr=e=>({code:(e&&(e.code==="42501"||e.code==="PGRST116"||/row-level|policy|not a member|not open/i.test(e.message||"")))?"invalid_argument":"unavailable",message:e&&e.message});
+  const snap=col=>{ const m=cache[col]||new Map(); const docs=[...m.entries()].map(([id,d])=>({id,exists:true,data:()=>d})); return {docs,size:docs.length,empty:!docs.length,docChanges:()=>[]}; };
+  function emit(col){ (colSubs[col]||new Set()).forEach(f=>f(snap(col)));
+    for(const k in docSubs){ if(k.startsWith(col+"/")){ const id=k.slice(col.length+1); const d=cache[col]&&cache[col].get(id); docSubs[k].forEach(f=>f({id,exists:!!d,data:()=>d})); } } }
+  async function load(col){ const {data,error}=await sb.from("records").select("id,data").eq("collection",col); if(error) throw toErr(error); cache[col]=new Map(data.map(r=>[r.id,r.data])); emit(col); }
+  function ensure(col,onErr){ if(cache[col]) { emit(col); return; } if(!loading[col]) loading[col]=load(col).catch(e=>{ delete loading[col]; onErr&&onErr(e); }); }
+  sb.channel("records-live").on("postgres_changes",{event:"*",schema:"public",table:"records"},p=>{
+    const row=(p.new&&p.new.collection)?p.new:p.old; if(!row||!row.collection||!cache[row.collection]) return;
+    if(p.eventType==="DELETE") cache[row.collection].delete(row.id); else cache[row.collection].set(row.id,p.new.data);
+    emit(row.collection); }).subscribe();
+  async function write(kind,col,id,data){
+    let q=sb.from("records");
+    if(kind==="insert") q=q.insert({collection:col,id,data}).select("id");
+    else if(kind==="upsert") q=q.upsert({collection:col,id,data,updated_at:new Date().toISOString()}).select("id");
+    else if(kind==="update") q=q.update({data,updated_at:new Date().toISOString()}).eq("collection",col).eq("id",id).select("id");
+    else q=q.delete().eq("collection",col).eq("id",id).select("id");
+    const {data:rows,error}=await q; if(error) throw toErr(error); if(!rows||!rows.length) throw {code:"invalid_argument",message:"not allowed"};
+    await load(col).catch(()=>{});
+  }
+  function docRef(col,id){ const key=col+"/"+id; return {id,
+    set:d=>write("upsert",col,id,d),
+    update:async patch=>{
+      if(col==="draws"&&!S.isOwner&&patch.status){ const {error}=await sb.rpc("decide_draw",{draw_id:id,decision:patch.status,note:patch.decisionNote||""}); if(error) throw toErr(error); await load(col).catch(()=>{}); return; }
+      if(!cache[col]) await load(col); const cur=cache[col].get(id); if(!cur) throw {code:"invalid_argument",message:"missing"};
+      await write("update",col,id,Object.assign({},cur,patch)); },
+    delete:()=>write("delete",col,id),
+    onSnapshot(f,onErr){ (docSubs[key]=docSubs[key]||new Set()).add(f); ensure(col,onErr); return ()=>docSubs[key].delete(f); } }; }
+  return {
+    collection(col){ return { onSnapshot(f,onErr){ (colSubs[col]=colSubs[col]||new Set()).add(f); ensure(col,onErr); return ()=>colSubs[col].delete(f); },
+      add:async d=>{ const id=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)); await write("insert",col,id,d); return {id}; },
+      doc:id=>docRef(col,id) }; },
+    doc(path){ const i=path.indexOf("/"); return docRef(path.slice(0,i),path.slice(i+1)); } };
+}
+function makeAssets(sb){ return {
+  async upload(file,opts){ const safe=file.name.replace(/[^A-Za-z0-9._-]+/g,"-").slice(-80); const path=(crypto.randomUUID?crypto.randomUUID():Date.now())+"-"+safe;
+    if(file.size>50*1048576) throw {code:"too_large"};
+    const {error}=await sb.storage.from("project-docs").upload(path,file,{contentType:(opts&&opts.type)||file.type||"application/octet-stream",upsert:false});
+    if(error) throw {code:/size/i.test(error.message)?"too_large":/mime|type/i.test(error.message)?"unsupported_type":"upstream_error",message:error.message};
+    return {id:path,url:null,sizeBytes:file.size,contentType:(opts&&opts.type)||file.type}; },
+  async delete(path){ await sb.storage.from("project-docs").remove([path]); return {deleted:true}; } }; }
+const DL={ async save({filename,data}){ const u=URL.createObjectURL(data); const a=document.createElement("a"); a.href=u; a.download=filename; document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),4000); } };
+
+function gateWaves(){ const w=document.createElementNS(SVGNS,"svg"); w.setAttribute("viewBox","0 0 600 600"); w.setAttribute("preserveAspectRatio","xMidYMid slice"); w.setAttribute("aria-hidden","true");
+  w.setAttribute("style","position:absolute;inset:0;width:100%;height:100%");
+  let d=""; for(let i=0;i<9;i++){ const y=70+i*52; d+=`<path d="M-20 ${y} C 120 ${y-40}, 220 ${y+40}, 320 ${y} S 520 ${y-40}, 640 ${y}" fill="none" stroke="#B48B58" stroke-width="1.6" opacity="${(0.85-i*0.08).toFixed(2)}"/>`; }
+  w.innerHTML=d; return w; }
+function showGate(mode,email){
+  const g=$("#gate"); $("#shell").hidden=true; g.hidden=false;
+  const art=h("div",{class:"art"},gateWaves(),h("div",null,
+    (()=>{const w=document.createElementNS(SVGNS,"svg");w.setAttribute("viewBox","0 0 120 14");w.setAttribute("class","wave");w.setAttribute("aria-hidden","true");w.innerHTML='<path d="M1 8c15-9 30 9 45 0s30-9 45 0 20 6 28 0"/>';return w;})(),
+    h("h1",{text:"The Blend"}),h("span",{text:"686–688 Bergen Street, Newark. Investor room by FatAtelier."})));
+  let box;
+  if(mode==="notmember"){
+    box=h("div",{class:"box"},h("h2",{text:"You’re signed in, but not on the list yet"}),
+      h("p",{text:`${email} hasn’t been added as an investor. Ask Francis to add this email, then reload this page.`}),
+      h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},h("button",{class:"btn bronze",onclick:()=>location.reload()},"Check again"),h("button",{class:"btn ghost",onclick:async()=>{await S.sb.auth.signOut();location.reload();}},"Use another email")));
+  } else {
+    const inp=h("input",{id:"g-email",type:"email",autocomplete:"email",placeholder:"you@example.com",value:email||""});
+    const err=h("div",{class:"err"});
+    const btn=h("button",{class:"btn bronze",type:"submit"},"Email me a sign-in link");
+    const form=h("form",{style:"display:flex;flex-direction:column;gap:12px",onsubmit:async e=>{ e.preventDefault();
+      const v=inp.value.trim().toLowerCase(); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ err.textContent="Enter the email address Francis invited."; return; }
+      btn.disabled=true; btn.textContent="Sending…"; err.textContent="";
+      const {error}=await S.sb.auth.signInWithOtp({email:v,options:{emailRedirectTo:location.origin+location.pathname,shouldCreateUser:true}});
+      if(error){ btn.disabled=false; btn.textContent="Email me a sign-in link"; err.textContent=/rate|seconds/i.test(error.message)?"Too many sign-in emails just now. Wait a minute and try again.":"The email didn’t send. Check the address and try again."; return; }
+      box.replaceChildren(h("h2",{text:"Check your email"}),h("p",{text:`A sign-in link is on its way to ${v}. Open it on this device to enter the investor room.`}),
+        h("button",{class:"btn ghost",style:"align-self:flex-start",onclick:()=>showGate("login",v)},"Use a different email")); }},
+      h("label",{class:"field",for:"g-email"},"Email address",inp), btn, err);
+    box=h("div",{class:"box"},h("h2",{text:"Sign in"}),h("p",{text:"Enter the email Francis added to the investor list. You’ll get a link that signs you in, no password needed."}),form);
+  }
+  g.replaceChildren(art,h("div",{class:"form-side"},box));
+}
+
+(async function boot(){
+  const C=window.BLEND_CONFIG||{};
+  if(!window.supabase||!C.url){ $("#shell").hidden=false; render(); return; }
+  const sb=window.supabase.createClient(C.url,C.key,{auth:{persistSession:true,detectSessionInUrl:true,flowType:"implicit"}});
+  S.sb=sb;
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){ showGate("login"); sb.auth.onAuthStateChange((ev,ss)=>{ if(ss) location.reload(); }); return; }
+  const email=(session.user.email||"").toLowerCase();
+  const {data:mem}=await sb.rpc("member_names");
+  const meRow=(mem||[]).find(m=>m.email===email);
+  if(!meRow){ showGate("notmember",email); return; }
+  try{ if(location.hash&&/access_token|refresh_token/.test(location.hash)) history.replaceState(null,"",location.pathname); }catch(_){}
+  S.isOwner=meRow.role==="owner"; S.canEdit=S.isOwner; S.canWrite=true;
+  S.me={id:email,name:meRow.display_name||"",email,avatarUrl:initialsAvatar(meRow.display_name,email),isOwner:S.isOwner,canEdit:S.isOwner};
+  S.user={ async profiles(ids){ const {data}=await sb.rpc("member_names"); const map={}; (data||[]).forEach(m=>map[m.email]=m);
+    const out={}; ids.forEach(id=>{ const m=map[id]; out[id]={id,name:(m&&m.display_name)||"",avatarUrl:initialsAvatar(m&&m.display_name,id),isMe:id===email}; }); return out; } };
+  S.downloads=DL; S.assets=S.isOwner?makeAssets(sb):null;
+  const db=makeDb(sb); S.db=db;
+  $("#gate").hidden=true; $("#shell").hidden=false;
+  loadMedia(); setInterval(loadMedia,5*3600*1000);
+  const sub=(path,key)=>db.collection(path).onSnapshot(snap=>{ S[key]=snap.docs.map(d=>Object.assign({id:d.id},d.data())); S.loaded[key]=true; if(key==="draws") resolveNames(); schedule(); },()=>{ S.loaded[key]=true; schedule(); });
+  sub("phases","phases"); sub("gates","gates"); sub("draws","draws"); sub("ledger","ledger"); sub("updates","updates");
+  db.doc("project/main").onSnapshot(s=>{ S.project=s.exists?s.data():null; schedule(); },()=>{});
+  db.doc("project/plan").onSnapshot(s=>{ S.plan=s.exists?s.data():null; schedule(); },()=>{});
+  db.collection("docs").onSnapshot(snap=>{ S.docs=snap.docs.map(d=>Object.assign({id:d.id},d.data())); schedule(); },()=>{});
+  if(S.isOwner) db.collection("vault").onSnapshot(snap=>{ S.vault=snap.docs.map(d=>Object.assign({id:d.id},d.data())); schedule(); },()=>{});
+  db.doc("project/raise").onSnapshot(s=>{ S.raise=s.exists?s.data():null; schedule(); },()=>{});
+  if(S.isOwner){ db.collection("pledges").onSnapshot(snap=>{ S.pledges=snap.docs.map(d=>Object.assign({id:d.id},d.data())); resolveNames(); schedule(); },()=>{}); loadMembers(); }
+  else db.doc("pledges/"+email).onSnapshot(s=>{ S.myPledge=s.exists?Object.assign({id:s.id},s.data()):null; schedule(); },()=>{});
+  render();
+})();
+async function resolveNames(){
+  if(!S.user) return;
+  const ids=[...new Set(S.draws.flatMap(d=>[d.decidedBy,d.requestedBy]).concat(S.pledges.map(p=>p.id)).filter(Boolean))]; if(!ids.length) return;
+  const ps=await S.user.profiles(ids); let ch=false;
+  for(const id of ids){ if(!S.profiles[id]||S.profiles[id].name!==ps[id].name){ S.profiles[id]=ps[id]; ch=true; } }
+  if(ch) schedule();
+}
+</script>
+</body>
+</html>
