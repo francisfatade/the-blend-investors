@@ -325,7 +325,7 @@ select.pick{background:var(--surface);border:1px solid var(--line);border-radius
 .facts b{font-family:var(--f-display);font-weight:400;font-size:22px;line-height:1.15}
 .facts span{font-size:12.5px;color:var(--rail-muted)}
 .intro .btn.light{background:var(--rail-ink);color:var(--rail);border-color:var(--rail-ink);align-self:flex-start}
-@media (max-width:820px){.hero{grid-template-columns:minmax(0,1fr)}.intro .ph{order:-1;min-height:260px}}
+@media (max-width:820px){.hero,.intro{grid-template-columns:minmax(0,1fr)}.intro .ph{order:-1;min-height:260px}.intro .btn.light{white-space:normal}}
 .gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(180px,22vw);gap:10px}
 @media (min-width:1300px){.gal{grid-auto-rows:280px}}
 .gal button{position:relative;border:0;padding:0;border-radius:10px;overflow:hidden;cursor:zoom-in;background:var(--sunk);min-width:0}
@@ -460,8 +460,55 @@ details.more summary{cursor:pointer;font-size:14px;font-weight:500;padding:4px 0
 .boq details[open] summary .c{transform:rotate(45deg)}
 .boq .tbl{margin:0 0 14px}
 .boq td.item{min-width:220px}
-@media (max-width:600px){.boq th:nth-child(2),.boq td:nth-child(2),.boq th:nth-child(3),.boq td:nth-child(3){display:none}.boq td.item{min-width:0}}
+@media (max-width:600px){.boq table{min-width:0}.boq th:nth-child(2),.boq td:nth-child(2),.boq th:nth-child(3),.boq td:nth-child(3){display:none}.boq td.item{min-width:0}}
 .tag{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap}
+/* deal summary, viability, contact */
+.deal{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);gap:28px}
+@media (max-width:900px){.deal{grid-template-columns:minmax(0,1fr)}}
+.deal h4{margin:0 0 10px;font-size:13px;font-weight:500;color:var(--muted);letter-spacing:.02em}
+.inflow{display:flex;flex-direction:column;gap:10px}
+.inflow .tot{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:8px}
+.inflow .tot b{font-family:var(--f-display);font-size:30px;font-weight:400}
+.inflow .ln{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:10px;align-items:start;font-size:14px}
+.inflow .ln i{width:10px;height:10px;border-radius:3px;margin-top:5px}
+.inflow .ln small{display:block;color:var(--muted);font-size:12.5px}
+.inflow .ln b{font-weight:500;font-variant-numeric:tabular-nums}
+.galo{margin-top:6px;padding:12px 14px;border-radius:10px;background:var(--sunk);font-size:13.5px;line-height:1.5}
+.galo b{font-weight:500}
+.wf{width:100%;min-width:0;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.wf td{padding:9px 6px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+.wf td.n{text-align:right;white-space:nowrap}
+.wf td.m{color:var(--muted)}
+.wf tr.head td{font-family:var(--f-display);font-size:18px}
+.wf tr.split td{border-bottom:0;font-weight:500;color:var(--bronze)}
+.wf small{display:block;color:var(--muted);font-size:12px}
+@media (max-width:600px){.wf td.m,.wf tr.head td:nth-child(2){display:none}.wf td{font-size:13.5px;padding:8px 4px}.wf tr.split td.n:last-child{display:none}}
+.sum4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:12px;margin-top:18px}
+.sum4 > div{padding:14px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.sum4 > div + div{border-left:1px solid var(--line)}
+.sum4 b{font-family:var(--f-display);font-weight:400;font-size:24px}
+.sum4 b.acc{color:var(--bronze)}
+.sum4 span{font-size:12.5px;color:var(--muted)}
+@media (max-width:760px){.sum4{grid-template-columns:repeat(2,minmax(0,1fr))}.sum4 > div:nth-child(3){border-left:0}.sum4 > div:nth-child(n+3){border-top:1px solid var(--line)}}
+.viab{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+@media (max-width:980px){.viab{grid-template-columns:minmax(0,1fr)}}
+.viab h4{margin:0 0 10px;font-size:13px;font-weight:500;color:var(--muted)}
+.viab ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.viab li{font-size:13.5px;line-height:1.5;color:var(--muted);padding-left:16px;position:relative}
+.viab li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;background:var(--good)}
+.viab .risk li::before{background:var(--warn)}
+.viab li b{color:var(--ink);font-weight:500}
+.card.contact{flex-direction:row;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:space-between}
+.contact .t h3{margin:0 0 4px}
+.contact .t p{margin:0;color:var(--muted);font-size:14px}
+.contact .a{display:flex;gap:8px;flex-wrap:wrap}
+.railcall{display:flex;flex-direction:column;gap:2px;margin:0 0 14px;padding:10px 12px;border:1px solid var(--rail-line,rgba(255,255,255,.12));border-radius:10px;text-decoration:none;color:inherit}
+.railcall span{font-size:12px;color:var(--rail-muted)}
+.railcall b{font-weight:500;font-size:14px}
+.gatehelp{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+.gatehelp a{color:var(--bronze)}
+.codeform{display:flex;gap:8px;align-items:flex-end}
+.codeform .field{flex:1}
 </style>
 </head>
 <body>
@@ -651,6 +698,7 @@ function renderShell(){
   $("#topbar").replaceChildren(h("div",null,h("h2",{text:t[1]}),h("p",{text:t[2]})),actions);
   const who=$("#who"); who.replaceChildren();
   if(S.me){
+    who.append(h("a",{class:"railcall",href:"tel:"+CONTACT.tel},h("span",{text:"Questions? Call FatAtelier"}),h("b",{text:CONTACT.phone})));
     who.append(h("div",{class:"who-row"},h("img",{src:S.me.avatarUrl,alt:""}),h("div",null,h("b",{text:S.me.name||"You"}),h("span",{text:S.isOwner?(S.preview?"Previewing the investor view":"Developer"):"Investor"}))));
     who.append(h("button",{class:"signout",onclick:async()=>{ await S.sb.auth.signOut(); location.reload(); }},"Sign out"));
     if(S.isOwner) who.append(h("div",{class:"switch",role:"group","aria-label":"View as"},
@@ -1076,7 +1124,7 @@ function vOverview(){
         h("div",null,h("b",{text:"1 mile"}),h("span",{text:"From the Lionsgate Newark studio campus"}))),
       h("button",{class:"btn light",onclick:()=>go("design")},icon("design"),"See the design and drawings")),
     h("div",{class:"ph"},h("img",{src:M("img/front.jpg"),alt:"Rendering of The Blend from Bergen Street"}),h("button",{"aria-label":"Enlarge the rendering",onclick:()=>lightbox(RENDERS,0)})));
-  return [intro,figs,hero,costStory(),row];
+  return [intro,figs,dealCard(),viabilityCard(),hero,costStory(),row,contactCard()];
 }
 function fig(k,v,s,accent){ return h("div",{class:"fig"+(accent?" accent":"")},h("span",{class:"label",text:k}),h("span",{class:"v",text:v}),h("span",{class:"s",text:s})); }
 function kv(k,v){ return h("div",null,h("span",{class:"label",text:k}),h("b",{text:v})); }
@@ -1254,6 +1302,72 @@ function boqCard(ps){
     h("div",{style:"display:flex;gap:10px;align-items:center;flex-wrap:wrap"},
       h("button",{class:"btn ghost sm",onclick:csv},icon("download"),"Download as spreadsheet (CSV)"),
       h("span",{class:"fine",style:"margin:0",text:"Quantities are rough and will be refined with the final construction drawings and bids."})));
+}
+
+/* ---------- DEAL SUMMARY + VIABILITY + CONTACT ---------- */
+const CONTACT={phone:"(973) 755-5528",tel:"+19737555528",phone2:"(281) 506-6899",tel2:"+12815066899",email:"info@fatatelier.com"};
+function sharedPlan(){ return Object.assign({},PLAN_DEFAULTS,S.plan&&S.plan.model==="sale"?S.plan:{}); }
+function dealCard(){
+  const P=sharedPlan(), R=saleModel(P);
+  const build=(S.project&&S.project.constructionBudget)||(P.principal-P.galoEarly);
+  const galoTotal=P.galoEarly+P.galoFinal;
+  const allIn=build+galoTotal+P.carry+R.sellCosts;
+  let left=P.price;
+  const step=(label,sub,amt)=>{ left-=amt; return h("tr",null,h("td",null,label,sub?h("small",{text:sub}):null),h("td",{class:"n",text:"−"+usd(amt)}),h("td",{class:"n m",text:usd(left)})); };
+  const rows=[
+    h("tr",{class:"head"},h("td",{text:"Sale price"}),h("td"),h("td",{class:"n",text:usd(P.price)})),
+    step("Selling costs",`${P.sellPct}% commission and transfer fees`,R.sellCosts),
+    step("Land partner, final payment","Galo’s second $100K, which ends his claim",R.landPaid),
+    step("Investors’ money back","Every dollar of the "+usdK(P.principal)+" raise",R.invBack)];
+  if(R.prefPaid>0) rows.push(step("Preferred return",`${P.pref}% a year`,R.prefPaid));
+  rows.push(step("FatAtelier carrying costs","Insurance, taxes, utilities and soft costs FatAtelier covers",R.fatBack));
+  rows.push(h("tr",{class:"split"},h("td",{text:`Profit, split ${P.split}/${100-P.split}`}),h("td",{class:"n",text:usd(R.invShare)+" each"}),h("td",{class:"n",text:usd(R.pool)})));
+  return h("section",{class:"card"},
+    h("div",{class:"card-head"},h("h3",{text:"The deal, start to finish"}),h("span",{class:"label",text:`At the ${usdK(P.price)} minimum sale`})),
+    h("div",{class:"deal"},
+      h("div",null,h("h4",{text:"WHAT INVESTORS PUT IN"}),
+        h("div",{class:"inflow"},
+          h("div",{class:"tot"},h("span",{class:"muted",text:"The raise"}),h("b",{text:usd(P.principal)})),
+          h("div",{class:"ln"},h("i",{style:"background:var(--ink)"}),h("div",null,"Construction",h("small",{text:"Every line in the bill of quantities, at cost"})),h("b",{text:usd(build)})),
+          h("div",{class:"ln"},h("i",{style:"background:var(--oak)"}),h("div",null,"Land partner, during construction",h("small",{text:"$50K at permit, $50K after rough-in inspections"})),h("b",{text:usd(P.galoEarly)})),
+          h("div",{class:"galo"},h("b",{text:`Galo’s lot costs ${usdK(galoTotal)} in total, paid in two halves. `}),`${usdK(P.galoEarly)} comes from the raise while the building goes up. The other ${usdK(P.galoFinal)} comes out of the sale at closing, before investors are repaid, so it is already counted in every number on this page. Galo is owed nothing beyond that.`))),
+      h("div",null,h("h4",{text:"WHAT HAPPENS AT CLOSING"}),
+        h("table",{class:"wf"},h("tbody",null,...rows)))),
+    h("div",{class:"sum4"},
+      h("div",null,h("span",{text:"Total project cost"}),h("b",{text:usdK(allIn)}),h("span",{text:"Build, land, carrying and selling"})),
+      h("div",null,h("span",{text:"Profit"}),h("b",{text:usdK(R.pool)}),h("span",{text:"After every cost"})),
+      h("div",null,h("span",{text:"Investors receive"}),h("b",{class:"acc",text:usd(R.invReceives)}),h("span",{text:`Their ${usdK(P.principal)} back plus ${usd(R.invGain)}`})),
+      h("div",null,h("span",{text:"Break-even sale price"}),h("b",{text:usdK(R.breakEven)}),h("span",{text:`${pct(1-R.breakEven/P.price,0)} below the minimum`}))),
+    h("button",{class:"btn ghost sm",style:"align-self:flex-start",onclick:()=>go("plan")},icon("plan"),"Test other sale prices and timelines"));
+}
+function viabilityCard(){
+  const P=sharedPlan(), R=saleModel(P);
+  const sf=(S.boq&&S.boq.livingSf)||LIVING_SF;
+  const refi=Math.round(P.price*0.75/1000)*1000;
+  return h("section",{class:"card"},
+    h("div",{class:"card-head"},h("h3",{text:"Why the numbers hold up"}),h("span",{class:"label",text:"Evidence, safeguards and what we watch"})),
+    h("div",{class:"viab"},
+      h("div",null,h("h4",{text:"MARKET EVIDENCE"}),h("ul",null,
+        h("li",null,h("b",{text:"695 South 11th Street, 07103. "}),"A 4,042 sq ft two-family built in 2007 sold for $800,000 in 2025: $198 per sq ft."),
+        h("li",null,h("b",{text:"706 Bergen Street, on our block. "}),"Closed at $880,000 on September 30, 2026."),
+        h("li",null,h("b",{text:`The Blend at ${usdK(P.price)}: about $${Math.round(P.price/sf)} per sq ft. `}),`About ${sf.toLocaleString("en-US")} sq ft of brand-new homes, priced below what an 18-year-old building sold for.`))),
+      h("div",null,h("h4",{text:"SAFEGUARDS FOR INVESTORS"}),h("ul",null,
+        h("li",null,h("b",{text:`A ${pct(1-R.breakEven/P.price,0)} cushion. `}),`The project breaks even at ${usdK(R.breakEven)}, and investors get every dollar back at any sale above ${usdK(R.invSafe)}.`),
+        h("li",null,h("b",{text:"Investors are repaid before FatAtelier. "}),"FatAtelier recovers its costs and takes its share only after investors have their money back."),
+        h("li",null,h("b",{text:"Nothing moves without you. "}),"Every draw needs investor approval, every receipt is posted here, and the first draw waits for the building permit."),
+        h("li",null,h("b",{text:"A second way out. "}),`If the market is soft, the three homes can be rented and refinanced instead of sold. A loan at 75% of a ${usdK(P.price)} appraisal is about ${usdK(refi)}, enough to repay the raise and Galo’s final payment.`))),
+      h("div",{class:"risk"},h("h4",{text:"WHAT WE WATCH CLOSELY"}),h("ul",null,
+        h("li",null,h("b",{text:"Construction cost. "}),"The budget is priced at cost with FatAtelier’s own shop and crew. Plumbing, electrical, HVAC and sprinkler lines are estimates until licensed trades bid them."),
+        h("li",null,h("b",{text:"City approvals. "}),"The escrow funding agreement and the amended redevelopment agreement are in progress. Track them under “Before the first draw.”"),
+        h("li",null,h("b",{text:"Sale price. "}),"Few three-family homes this new have sold nearby. FatAtelier will confirm the price with a broker opinion and an appraisal before listing.")))));
+}
+function contactCard(){
+  return h("section",{class:"card contact"},
+    h("div",{class:"t"},h("h3",{text:"Talk to FatAtelier"}),h("p",{text:`Questions about the project, a draw or your commitment? Call ${CONTACT.phone}, or ${CONTACT.phone2} if the first line is busy.`})),
+    h("div",{class:"a"},
+      h("a",{class:"btn bronze",href:"tel:"+CONTACT.tel},"Call "+CONTACT.phone),
+      h("a",{class:"btn ghost",href:"tel:"+CONTACT.tel2},"Call "+CONTACT.phone2),
+      h("a",{class:"btn ghost",href:"mailto:"+CONTACT.email+"?subject=The%20Blend"},"Email")));
 }
 
 /* ---------- LEDGER ---------- */
@@ -1469,6 +1583,7 @@ function gateWaves(){ const w=document.createElementNS(SVGNS,"svg"); w.setAttrib
   w.setAttribute("style","position:absolute;inset:0;width:100%;height:100%");
   let d=""; for(let i=0;i<9;i++){ const y=70+i*52; d+=`<path d="M-20 ${y} C 120 ${y-40}, 220 ${y+40}, 320 ${y} S 520 ${y-40}, 640 ${y}" fill="none" stroke="#B48B58" stroke-width="1.6" opacity="${(0.85-i*0.08).toFixed(2)}"/>`; }
   w.innerHTML=d; return w; }
+function gateHelp(){ return h("div",{class:"gatehelp"},"Need access or help signing in? Call FatAtelier at ",h("a",{href:"tel:+19737555528",text:"(973) 755-5528"})," or email ",h("a",{href:"mailto:info@fatatelier.com",text:"info@fatatelier.com"}),"."); }
 function showGate(mode,email){
   const g=$("#gate"); $("#shell").hidden=true; g.hidden=false;
   const art=h("div",{class:"art"},h("img",{src:"login.jpg",alt:"Rendering of The Blend on Bergen Street"}),h("div",null,
@@ -1478,7 +1593,7 @@ function showGate(mode,email){
   if(mode==="notmember"){
     box=h("div",{class:"box"},h("h2",{text:"You’re signed in, but not on the list yet"}),
       h("p",{text:`${email} hasn’t been added as an investor. Ask FatAtelier to add this email, then reload this page.`}),
-      h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},h("button",{class:"btn bronze",onclick:()=>location.reload()},"Check again"),h("button",{class:"btn ghost",onclick:async()=>{await S.sb.auth.signOut();location.reload();}},"Use another email")));
+      h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},h("button",{class:"btn bronze",onclick:()=>location.reload()},"Check again"),h("button",{class:"btn ghost",onclick:async()=>{await S.sb.auth.signOut();location.reload();}},"Use another email")),gateHelp());
   } else {
     const inp=h("input",{id:"g-email",type:"email",autocomplete:"email",placeholder:"you@example.com",value:email||""});
     const err=h("div",{class:"err"});
@@ -1488,10 +1603,17 @@ function showGate(mode,email){
       btn.disabled=true; btn.textContent="Sending…"; err.textContent="";
       const {error}=await S.sb.auth.signInWithOtp({email:v,options:{emailRedirectTo:location.origin+location.pathname,shouldCreateUser:true}});
       if(error){ btn.disabled=false; btn.textContent="Email me a sign-in link"; err.textContent=/rate|seconds/i.test(error.message)?"Too many sign-in emails just now. Wait a minute and try again.":"The email didn’t send. Check the address and try again."; return; }
-      box.replaceChildren(h("h2",{text:"Check your email"}),h("p",{text:`A sign-in link is on its way to ${v}. Open it on this device to enter the investor room.`}),
-        h("button",{class:"btn ghost",style:"align-self:flex-start",onclick:()=>showGate("login",v)},"Use a different email")); }},
+      const code=h("input",{id:"g-code",inputmode:"numeric",autocomplete:"one-time-code",maxlength:"10",placeholder:"123456"});
+      const cerr=h("div",{class:"err"}); const cbtn=h("button",{class:"btn",type:"submit"},"Sign in");
+      const cform=h("form",{class:"codeform",onsubmit:async ev=>{ ev.preventDefault(); const t=code.value.replace(/\D/g,""); if(t.length<6){ cerr.textContent="Enter the code from the email."; return; }
+        cbtn.disabled=true; cerr.textContent=""; const {error:ve}=await S.sb.auth.verifyOtp({email:v,token:t,type:"email"});
+        if(ve){ cbtn.disabled=false; cerr.textContent="That code didn’t work. Check the latest email, or request a new one."; return; } location.reload(); }},
+        h("label",{class:"field",for:"g-code"},"Or type the code from the email",code),cbtn);
+      box.replaceChildren(h("h2",{text:"Check your email"}),h("p",{text:`A sign-in email is on its way to ${v}. Tap the link in it, or type its code below. It can take a minute; check spam if you don’t see it.`}),
+        cform,cerr,
+        h("button",{class:"btn ghost",style:"align-self:flex-start",onclick:()=>showGate("login",v)},"Use a different email"),gateHelp()); }},
       h("label",{class:"field",for:"g-email"},"Email address",inp), btn, err);
-    box=h("div",{class:"box"},h("h2",{text:"Sign in"}),h("p",{text:"Enter the email FatAtelier added to the investor list. You’ll get a link that signs you in, no password needed."}),form);
+    box=h("div",{class:"box"},h("h2",{text:"Sign in"}),h("p",{text:"Enter the email FatAtelier added to the investor list. We’ll email you a sign-in link and code, no password needed."}),form,gateHelp());
   }
   g.replaceChildren(art,h("div",{class:"form-side"},box));
 }
