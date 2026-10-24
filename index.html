@@ -898,7 +898,7 @@ function membersCard(){
 function makePassword(){ const W=["Bergen","Cedar","Harbor","Maple","Summit","Granite","Willow","Copper","Meadow","Falcon","Juniper","Atlas"]; const r=n=>{ const a=new Uint32Array(1); crypto.getRandomValues(a); return a[0]%n; };
   return W[r(W.length)]+"-"+W[r(W.length)].toLowerCase()+"-"+(1000+r(9000)); }
 function inviteText(m,pw){ const first=(m.display_name||"").split(" ")[0];
-  return `${first?"Hi "+first+", y":"Y"}ou’re invited to The Blend investor room by FatAtelier.\n\nOpen: https://investors.fatatelier.com\nEmail: ${m.email}\nPassword: ${pw}\n\nYou can change your password after you sign in. Questions? Call FatAtelier at ${CONTACT.phone}.`; }
+  return `${first?"Hi "+first+", y":"Y"}ou’re invited to The Blend investor room by FatAtelier.\n\nOpen: https://investors.fatatelier.com\nEmail: ${m.email}\nPassword: ${pw}\n\nYou can change your password after you sign in. Questions or a password reset? Call ${CONTACT.phone} or email ${CONTACT.email}.`; }
 function passwordSheet(m){
   const pw=h("input",{id:"ps-pass",value:makePassword(),autocomplete:"off",spellcheck:"false"});
   const err=h("div",{class:"err"});
@@ -1339,7 +1339,7 @@ function boqCard(ps){
 }
 
 /* ---------- DEAL SUMMARY + VIABILITY + CONTACT ---------- */
-const CONTACT={phone:"(973) 755-5528",tel:"+19737555528",phone2:"(281) 506-6899",tel2:"+12815066899",email:"info@fatatelier.com"};
+const CONTACT={phone:"(281) 506-6899",tel:"+12815066899",email:"francisfatade@fatatelier.com"};
 function sharedPlan(){ return Object.assign({},PLAN_DEFAULTS,S.plan&&S.plan.model==="sale"?S.plan:{}); }
 function dealCard(){
   const P=sharedPlan(), R=saleModel(P);
@@ -1397,10 +1397,9 @@ function viabilityCard(){
 }
 function contactCard(){
   return h("section",{class:"card contact"},
-    h("div",{class:"t"},h("h3",{text:"Talk to FatAtelier"}),h("p",{text:`Questions about the project, a draw or your commitment? Call ${CONTACT.phone}, or ${CONTACT.phone2} if the first line is busy.`})),
+    h("div",{class:"t"},h("h3",{text:"Talk to FatAtelier"}),h("p",{text:`Questions about the project, a draw, your commitment or your password? Call ${CONTACT.phone} or email ${CONTACT.email}.`})),
     h("div",{class:"a"},
       h("a",{class:"btn bronze",href:"tel:"+CONTACT.tel},"Call "+CONTACT.phone),
-      h("a",{class:"btn ghost",href:"tel:"+CONTACT.tel2},"Call "+CONTACT.phone2),
       h("a",{class:"btn ghost",href:"mailto:"+CONTACT.email+"?subject=The%20Blend"},"Email")));
 }
 
@@ -1617,7 +1616,7 @@ function gateWaves(){ const w=document.createElementNS(SVGNS,"svg"); w.setAttrib
   w.setAttribute("style","position:absolute;inset:0;width:100%;height:100%");
   let d=""; for(let i=0;i<9;i++){ const y=70+i*52; d+=`<path d="M-20 ${y} C 120 ${y-40}, 220 ${y+40}, 320 ${y} S 520 ${y-40}, 640 ${y}" fill="none" stroke="#B48B58" stroke-width="1.6" opacity="${(0.85-i*0.08).toFixed(2)}"/>`; }
   w.innerHTML=d; return w; }
-function gateHelp(){ return h("div",{class:"gatehelp"},"Need access or help signing in? Call FatAtelier at ",h("a",{href:"tel:+19737555528",text:"(973) 755-5528"})," or email ",h("a",{href:"mailto:info@fatatelier.com",text:"info@fatatelier.com"}),"."); }
+function gateHelp(){ return h("div",{class:"gatehelp"},"Need access or help signing in? Call FatAtelier at ",h("a",{href:"tel:+12815066899",text:"(281) 506-6899"})," or email ",h("a",{href:"mailto:francisfatade@fatatelier.com",text:"francisfatade@fatatelier.com"}),"."); }
 function showGate(mode,email){
   const g=$("#gate"); $("#shell").hidden=true; g.hidden=false;
   const art=h("div",{class:"art"},h("img",{src:"login.jpg",alt:"Rendering of The Blend on Bergen Street"}),h("div",null,
