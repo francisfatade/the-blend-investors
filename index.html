@@ -423,6 +423,45 @@ details.more summary{cursor:pointer;font-size:14px;font-weight:500;padding:4px 0
 @media (max-width:480px){.terms{grid-template-columns:minmax(0,1fr);gap:2px}.terms dd{margin-bottom:8px}}
 .fine{font-size:12.5px;color:var(--muted);max-width:80ch;margin:0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* cost story + bill of quantities */
+.cost{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px}
+@media (max-width:860px){.cost{grid-template-columns:minmax(0,1fr)}}
+.cmp{display:flex;flex-direction:column;gap:16px}
+.cmp .r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;align-items:end}
+.cmp .r .t{font-size:14px;font-weight:500}
+.cmp .r .t small{display:block;color:var(--muted);font-size:12.5px;font-weight:400}
+.cmp .r .v{font-family:var(--f-display);font-size:20px;white-space:nowrap;text-align:right;line-height:1.15}
+.cmp .r .v small{display:block;font-family:var(--f-body,inherit);font-size:12px;color:var(--muted)}
+.cmp .bar{grid-column:1/-1;height:12px;border-radius:6px;background:var(--sunk);overflow:hidden;position:relative}
+.cmp .bar i{position:absolute;top:0;bottom:0;left:0;border-radius:6px;background:var(--plan)}
+.cmp .bar i.range{background:color-mix(in srgb,var(--plan) 40%,transparent)}
+.cmp .r.us .v{color:var(--bronze)} .cmp .r.us .bar i{background:var(--bronze)}
+.why{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;counter-reset:w}
+.why li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;counter-increment:w}
+.why li::before{content:counter(w);width:24px;height:24px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:12px;color:var(--muted)}
+.why b{font-weight:500;font-size:14.5px;display:block;margin-bottom:2px}
+.why span{font-size:13.5px;color:var(--muted)}
+.srcbar{display:flex;height:12px;border-radius:6px;overflow:hidden;gap:2px}
+.srcbar i{display:block;min-width:2px}
+.srcleg{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px}
+.srcleg span{display:inline-flex;align-items:center;gap:6px}
+.srcleg i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.srcleg b{font-weight:500}
+.boq{display:flex;flex-direction:column}
+.boq details{border-top:1px solid var(--line)}
+.boq details:last-child{border-bottom:1px solid var(--line)}
+.boq summary{cursor:pointer;display:grid;grid-template-columns:24px minmax(0,1fr) auto 18px;gap:10px;align-items:center;padding:12px 2px;list-style:none}
+.boq summary::-webkit-details-marker{display:none}
+.boq summary .o{color:var(--muted);font-size:13px}
+.boq summary .n{font-weight:500;font-size:14.5px;min-width:0}
+.boq summary .n small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.boq summary .a{font-variant-numeric:tabular-nums;font-weight:500;white-space:nowrap}
+.boq summary .c{color:var(--muted);transition:transform .15s;font-size:16px;text-align:center}
+.boq details[open] summary .c{transform:rotate(45deg)}
+.boq .tbl{margin:0 0 14px}
+.boq td.item{min-width:220px}
+@media (max-width:600px){.boq th:nth-child(2),.boq td:nth-child(2),.boq th:nth-child(3),.boq td:nth-child(3){display:none}.boq td.item{min-width:0}}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -473,13 +512,13 @@ function saleModel(p){
   const breakEven=cost/(1-p.sellPct/100);
   return {net,sellCosts,fatCash,cost,landPaid,invBack,prefDue,prefPaid,fatBack,pool,invShare,fatShare,projectProfit,invReceives,invGain,invMultiple,invYield,fatReceives,fatGain,invSafe,breakEven};
 }
-const PLAN_DEFAULTS={principal:600000, price:975000, sellPct:6.5, months:14, split:50, pref:0, galoEarly:100000, galoFinal:100000, carry:30000};
+const PLAN_DEFAULTS={principal:690000, price:1100000, sellPct:6.5, months:14, split:50, pref:0, galoEarly:100000, galoFinal:100000, carry:30000};
 /* ============ END PURE MATH ============ */
 
 const SCENARIOS = {
-  conservative:{label:"Conservative", price:875000},
-  base:{label:"Base", price:975000},
-  strong:{label:"Strong", price:1150000} };
+  conservative:{label:"Minimum", price:1100000},
+  base:{label:"Expected", price:1200000},
+  strong:{label:"Strong", price:1300000} };
 
 const $ = s => document.querySelector(s);
 function h(tag, attrs, ...kids){
@@ -528,11 +567,11 @@ const S = { phases:[], gates:[], draws:[], ledger:[], updates:[], project:null, 
   preview:false, docs:[], vault:[], assets:null, docQ:"", docCat:"", pledges:[], myPledge:null, raise:null, draftAmt:null, selPhase:null, drawFilter:"open", lq:"", lphase:"", lkind:"" };
 
 const TABS=[["overview","Overview","See where the project and your money stand today."],
-  ["raise","Commitments","Each investor chooses how much to put toward the $600K raise: $500K of construction and $100K of land partner payments. FatAtelier accepts each commitment, and everyone sees the total."],
+  ["raise","Commitments","Each investor chooses how much to put toward the $690K raise: $590K of construction and $100K of land partner payments. FatAtelier accepts each commitment, and everyone sees the total."],
   ["docs","Documents","Every agreement, deed, City letter and approval for the project, in one place. Open or download anything here."],
   ["design","Design","Renderings, the full drawing set and the presentation, so you can see exactly what is being built."],
   ["draws","Draw requests","Every release of investor capital starts here, and nothing moves until the investor approves it."],
-  ["budget","Budget","The $600K raise split into eight construction phases and the land partner’s two payments. A draw can never exceed what is left on its line."],
+  ["budget","Budget","The $690K raise split into eight construction phases and the land partner’s two payments, with the bill of quantities behind every phase. A draw can never exceed what is left on its line."],
   ["ledger","Ledger","Every payment out of the project account, matched to a phase and an invoice."],
   ["updates","Updates","Progress from the site and the shop, written as it happens."],
   ["plan","Sale and profit","How investors are paid when the finished building sells: capital back first, then the profit is split."]];
@@ -1037,7 +1076,7 @@ function vOverview(){
         h("div",null,h("b",{text:"1 mile"}),h("span",{text:"From the Lionsgate Newark studio campus"}))),
       h("button",{class:"btn light",onclick:()=>go("design")},icon("design"),"See the design and drawings")),
     h("div",{class:"ph"},h("img",{src:M("img/front.jpg"),alt:"Rendering of The Blend from Bergen Street"}),h("button",{"aria-label":"Enlarge the rendering",onclick:()=>lightbox(RENDERS,0)})));
-  return [intro,figs,hero,row];
+  return [intro,figs,hero,costStory(),row];
 }
 function fig(k,v,s,accent){ return h("div",{class:"fig"+(accent?" accent":"")},h("span",{class:"label",text:k}),h("span",{class:"v",text:v}),h("span",{class:"s",text:s})); }
 function kv(k,v){ return h("div",null,h("span",{class:"label",text:k}),h("b",{text:v})); }
@@ -1144,7 +1183,77 @@ function vBudget(){
       h("thead",null,h("tr",null,...["#","Phase","Budget","Released","Pending","Drawn","Balance","Receipted","Status"].map((x,i)=>h("th",{class:i>=2&&i<=7?"n":null,text:x})))),
       h("tbody",null,rows),
       h("tfoot",null,h("tr",null,h("td"),h("td",{text:"Total"}),h("td",{class:"n",text:usd(T.budget)}),h("td",{class:"n",text:usd(T.released)}),h("td",{class:"n",text:usd(T.pending)}),h("td",{class:"n",text:pct(T.budget?T.released/T.budget:0,0)}),h("td",{class:"n",text:usd(T.balance)}),h("td",{class:"n",text:usd(T.spent)}),h("td"))))),
-    h("p",{class:"fine",text:"Laid out like an AIA G703 continuation sheet: scheduled value, work drawn to date and balance to finish for each line."})];
+    h("p",{class:"fine",text:"Laid out like an AIA G703 continuation sheet: scheduled value, work drawn to date and balance to finish for each line."}),
+    boqCard(ps)];
+}
+
+/* ---------- BILL OF QUANTITIES + COST STORY ---------- */
+const SRC={Shop:["Built in FatAtelier’s shop","var(--bronze)","var(--on-bronze)"],Buy:["Bought direct","var(--oak)","var(--ground)"],Sub:["Licensed subcontractor","var(--plan)","var(--ink)"],Crew:["FatAtelier site crew","var(--good)","var(--surface)"],Fee:["City fees","var(--muted)","var(--surface)"],"—":["Contingency","var(--line)","var(--ink)"]};
+const LIVING_SF=6200;
+function boqRows(){ return (S.boq&&Array.isArray(S.boq.rows))?S.boq.rows:[]; }
+function conventionalCost(rows,build){
+  if(!rows.length) return Math.round(build*1.67);
+  let d=0;
+  rows.forEach(r=>{ let a=+r.amount||0;
+    if(r.source==="Shop") a*=1.9; else if(/factory-direct|sliding doors/i.test(r.item)) a*=1.7; else if(r.source==="Crew") a*=1.4;
+    d+=a; });
+  d+=25000;           // ducted central air in place of split units
+  return Math.round(d*1.28/1000)*1000;  // + 20% general contractor, + 8% design
+}
+function costStory(){
+  const rows=boqRows();
+  const build=(S.project&&S.project.constructionBudget)||rows.reduce((a,r)=>a+(+r.amount||0),0)||590000;
+  const sf=(S.boq&&S.boq.livingSf)||LIVING_SF;
+  const conv=conventionalCost(rows,build);
+  const lo=205*sf, hi=277*sf, max=hi;
+  const shop=rows.filter(r=>r.source==="Shop").reduce((a,r)=>a+r.amount,0);
+  const line=(t,sub,v,per,w,opt)=>h("div",{class:"r"+(opt&&opt.us?" us":"")},
+    h("div",{class:"t"},t,h("small",{text:sub})),
+    h("div",{class:"v"},v,h("small",{text:per})),
+    h("div",{class:"bar"},opt&&opt.from!=null?[h("i",{class:"range",style:`width:${w*100}%`}),h("i",{style:`width:${opt.from*100}%`})]:h("i",{style:`width:${w*100}%`})));
+  return h("section",{class:"card"},
+    h("div",{class:"card-head"},h("h3",{text:`Why The Blend costs ${usdK(build)} to build`}),h("span",{class:"label",text:`About ${sf.toLocaleString("en-US")} sq ft of homes`})),
+    h("div",{class:"cost"},
+      h("div",{class:"cmp"},
+        line("Typical new build in Newark","Standard finish, 2026 published averages",`${usdK(lo)}–${usdK(hi)}`,"$205–277 per sq ft",1,{from:lo/max}),
+        line("This building, built the usual way","Outside general contractor, architect and suppliers",usdK(conv),`about $${Math.round(conv/sf)} per sq ft`,conv/max),
+        line("This building, built by FatAtelier","Every line in the bill of quantities, labor included",usdK(build),`about $${Math.round(build/sf)} per sq ft`,build/max,{us:true}),
+        h("p",{class:"fine",style:"margin:0",text:"“The usual way” is FatAtelier’s own bill of quantities repriced with outside millwork and panel shops, retail windows, ducted central air and market labor rates, plus a 20% general contractor markup and 8% design fees. Published averages: CostToBuildHouse.com, Newark 2026."})),
+      h("ol",{class:"why"},
+        h("li",null,h("div",null,h("b",{text:"One firm, no markups"}),h("span",{text:"FatAtelier is the architect, the fabricator and the builder. The project pays no general contractor markup and no outside design fee."}))),
+        h("li",null,h("div",null,h("b",{text:"Made in our own Newark shop"}),h("span",{text:`${shop?usdK(shop)+" of ":""}wall panels, stairs, steel balcony bands, kitchens, vanities and closets are built at cost in FatAtelier’s 10,000 sq ft shop.`}))),
+        h("li",null,h("div",null,h("b",{text:"Bought direct"}),h("span",{text:"Windows and sliders come factory-direct. Appliances, fixtures and finishes are bought at trade price, with no supplier markup passed through."}))),
+        h("li",null,h("div",null,h("b",{text:"Split-unit heating and cooling"}),h("span",{text:"Thirteen ductless zones across three homes: no ductwork, no air handlers, lower install cost and lower bills."}))),
+        h("li",null,h("div",null,h("b",{text:"Faster on site"}),h("span",{text:"Panels built indoors go up in days, which cuts site labor, equipment rental and the months of carrying cost."}))))),
+    h("button",{class:"btn ghost sm",style:"align-self:flex-start",onclick:()=>go("budget")},icon("budget"),"See the full bill of quantities"));
+}
+function boqCard(ps){
+  const rows=boqRows(); if(!rows.length) return null;
+  const total=rows.reduce((a,r)=>a+(+r.amount||0),0);
+  const bySrc={}; rows.forEach(r=>bySrc[r.source]=(bySrc[r.source]||0)+r.amount);
+  const order=["Shop","Buy","Sub","Crew","Fee","—"].filter(k=>bySrc[k]);
+  const qtyTxt=r=>r.unit==="ls"?"Lump sum":`${(+r.qty).toLocaleString("en-US")} ${r.unit}`;
+  const rateTxt=r=>r.unit==="ls"?"—":(r.rate<10?"$"+(+r.rate).toFixed(2):usd(r.rate));
+  const tag=s=>{ const x=SRC[s]||[s,"var(--line)","var(--ink)"]; return h("span",{class:"tag",style:`background:${x[1]};color:${x[2]}`,text:s==="—"?"Reserve":s}); };
+  const csv=()=>{ const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+    const lines=[["Phase","Item","Qty","Unit","Rate","Amount","Source"].join(",")].concat(rows.map(r=>{ const p=ps.find(x=>x.id===r.phase); return [q(p?p.order+". "+p.name:r.phase),q(r.item),r.qty,q(r.unit),r.rate,r.amount,q((SRC[r.source]||[r.source])[0])].join(","); }));
+    lines.push(["","Total","","","",total,""].join(","));
+    DL.save({filename:"The-Blend-Bill-of-Quantities.csv",data:new Blob([lines.join("\n")],{type:"text/csv"})}); };
+  return h("div",{class:"card"},
+    h("div",{class:"card-head"},h("h3",{text:"Bill of quantities"}),h("span",{class:"label",text:`${rows.length} lines · ${usd(total)}`})),
+    h("p",{class:"muted small",style:"margin:0",text:"A rough takeoff from the permit drawings: about 6,200 sq ft of homes, 3 kitchens, 8 full baths and 3 powder rooms, about 38 windows and 6 terrace doors, and 13 split-unit zones. Prices are at cost, with FatAtelier’s shop and crew labor included."}),
+    h("div",{class:"srcbar",role:"img","aria-label":"Cost by source"},...order.map(k=>h("i",{style:`flex:${bySrc[k]};background:${SRC[k][1]}`,title:`${SRC[k][0]}: ${usd(bySrc[k])}`}))),
+    h("div",{class:"srcleg"},...order.map(k=>h("span",null,h("i",{style:"background:"+SRC[k][1]}),SRC[k][0]+" ",h("b",{text:usdK(bySrc[k])})))),
+    h("div",{class:"boq"},...ps.filter(p=>rows.some(r=>r.phase===p.id)).map(p=>{ const rs=rows.filter(r=>r.phase===p.id); const sub=rs.reduce((a,r)=>a+r.amount,0);
+      return h("details",null,
+        h("summary",null,h("span",{class:"o",text:p.order}),h("span",{class:"n"},p.name,h("small",{text:rs.length+" lines"})),h("span",{class:"a",text:usd(sub)}),h("span",{class:"c","aria-hidden":"true",text:"+"})),
+        h("div",{class:"tbl"},h("table",null,
+          h("thead",null,h("tr",null,h("th",{text:"Item"}),h("th",{class:"n",text:"Quantity"}),h("th",{class:"n",text:"Rate"}),h("th",{class:"n",text:"Amount"}),h("th",{text:"Source"}))),
+          h("tbody",null,...rs.map(r=>h("tr",null,h("td",{class:"item",text:r.item}),h("td",{class:"n",text:qtyTxt(r)}),h("td",{class:"n",text:rateTxt(r)}),h("td",{class:"n",text:usd(r.amount)}),h("td",{class:"src"},tag(r.source))))),
+          h("tfoot",null,h("tr",null,h("td",{text:"Phase total"}),h("td"),h("td"),h("td",{class:"n",text:usd(sub)}),h("td")))))); })),
+    h("div",{style:"display:flex;gap:10px;align-items:center;flex-wrap:wrap"},
+      h("button",{class:"btn ghost sm",onclick:csv},icon("download"),"Download as spreadsheet (CSV)"),
+      h("span",{class:"fine",style:"margin:0",text:"Quantities are rough and will be refined with the final construction drawings and bids."})));
 }
 
 /* ---------- LEDGER ---------- */
@@ -1225,7 +1334,7 @@ function vPlan(){
   const levers=h("div",{class:"card levers"},
     h("div",{class:"card-head"},h("h3",{text:"Test the numbers"})),
     h("div",{style:"display:flex;flex-direction:column;gap:6px"},h("span",{class:"label",text:"Sale price scenario"}),seg),
-    lever("price","Sale price of the finished building",750000,1300000,5000,usdK),
+    lever("price","Sale price of the finished building",850000,1500000,5000,usdK),
     lever("months","Months from funding to sale",9,24,1,v=>v+" mo"),
     lever("split","Investors’ share of the profit",30,70,5,v=>v+"%"),
     lever("pref","Preferred return to investors first",0,10,0.5,v=>v?v+"% a year":"None"),
@@ -1234,7 +1343,7 @@ function vPlan(){
     h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},
       changed?h("button",{class:"btn ghost sm",onclick:()=>{localPlan=null;lsSet("blend-plan-v3",null);render();toast("Back to the shared plan");}},"Reset to shared plan"):null,
       dev()&&S.db?h("button",{class:"btn sm",onclick:async()=>{ const ok=await save(()=>S.db.doc("project/plan").set(Object.assign({},planNow(),{model:"sale",savedAt:new Date().toISOString()})),"Saved as the shared plan"); if(ok){localPlan=null;lsSet("blend-plan-v3",null);render();} }},"Save as shared plan"):null),
-    h("p",{class:"fine",text:"Your changes stay on this device. Market check, Oct 2026: a new-construction three-family on 20th Street, Newark (07103) is under contract from an $840,000 list price, and a new two-family on South 11th Street listed at $850,000. The Blend’s all-ensuite homes and design are meant to sell above those."}));
+    h("p",{class:"fine",text:"Your changes stay on this device. The plan is built on a $1.1M minimum sale. Market check, Oct 2026: a new-construction three-family on 20th Street, Newark (07103) is under contract from an $840,000 list price, and a new two-family on South 11th Street listed at $850,000. The Blend is larger, every bedroom is ensuite, and each upper home has private terraces; FatAtelier will support the price with a broker opinion and appraisal before listing."}));
   return [h("div",{class:"plan"},levers,h("div",{id:"plan-out",style:"display:flex;flex-direction:column;gap:22px;min-width:0"}))];
 }
 function syncSeg(){ const P=planNow(); document.querySelectorAll('.levers .seg button').forEach((b,i)=>{ const x=Object.values(SCENARIOS)[i]; b.setAttribute("aria-pressed",String(x.price===P.price)); }); }
@@ -1271,7 +1380,7 @@ function updatePlanResults(){
         h("ol",{class:"steps"},
           ...[["Selling costs",`${P.sellPct}% for commission and transfer fees`,R.sellCosts],
              ["Land partner",`Final payment under the signed agreement, which ends the claim`,R.landPaid],
-             ["Investors’ capital",`Every investor gets their full commitment back before anyone profits. This covers the $500K of construction and the $100K paid to the land partner during construction.`,R.invBack],
+             ["Investors’ capital",`Every investor gets their full commitment back before anyone profits. This covers the $590K of construction and the $100K paid to the land partner during construction.`,R.invBack],
              ...(P.pref?[["Preferred return",`${P.pref}% a year on investor capital, paid before the split`,R.prefPaid]]:[]),
              ["FatAtelier’s cash",`${usdK(P.carry)} of carrying and soft costs FatAtelier covers during construction`,R.fatBack],
              ["Profit split",`${P.split}% to investors by commitment, ${100-P.split}% to FatAtelier`,R.pool]]
@@ -1284,7 +1393,7 @@ function updatePlanResults(){
       h("h3",{text:"Proposed investment terms"}),
       h("dl",{class:"terms"},
         h("dt",{text:"Vehicle"}),h("dd",{text:"The Blend project LLC (to be formed), which will hold title and sell the building"}),
-        h("dt",{text:"Investors"}),h("dd",{text:`Members of the LLC who contribute ${usdK(P.principal)} all in: $500K of construction and $100K of land partner payments during construction. Each investor’s share follows the amount they commit.`}),
+        h("dt",{text:"Investors"}),h("dd",{text:`Members of the LLC who contribute ${usdK(P.principal)} all in: $590K of construction and $100K of land partner payments during construction. Each investor’s share follows the amount they commit.`}),
         h("dt",{text:"Developer"}),h("dd",{text:"FatAtelier is managing member: design, fabrication and construction, with no design, fabrication or GC fee charged to the project"}),
         h("dt",{text:"Exit"}),h("dd",{text:"The building is listed for sale at completion and the LLC winds up after closing"}),
         h("dt",{text:"Payment order"}),h("dd",{text:`Selling costs, land partner, investor capital${P.pref?", preferred return":""}, FatAtelier’s cash, then profit ${P.split}/${100-P.split}`}),
@@ -1410,6 +1519,7 @@ function showGate(mode,email){
   const sub=(path,key)=>db.collection(path).onSnapshot(snap=>{ S[key]=snap.docs.map(d=>Object.assign({id:d.id},d.data())); S.loaded[key]=true; if(key==="draws") resolveNames(); schedule(); },()=>{ S.loaded[key]=true; schedule(); });
   sub("phases","phases"); sub("gates","gates"); sub("draws","draws"); sub("ledger","ledger"); sub("updates","updates");
   db.doc("project/main").onSnapshot(s=>{ S.project=s.exists?s.data():null; schedule(); },()=>{});
+  db.doc("project/boq").onSnapshot(s=>{ S.boq=s.exists?s.data():null; schedule(); },()=>{});
   db.doc("project/plan").onSnapshot(s=>{ S.plan=s.exists?s.data():null; schedule(); },()=>{});
   db.collection("docs").onSnapshot(snap=>{ S.docs=snap.docs.map(d=>Object.assign({id:d.id},d.data())); schedule(); },()=>{});
   if(S.isOwner) db.collection("vault").onSnapshot(snap=>{ S.vault=snap.docs.map(d=>Object.assign({id:d.id},d.data())); schedule(); },()=>{});
