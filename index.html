@@ -559,7 +559,7 @@ function saleModel(p){
   const breakEven=cost/(1-p.sellPct/100);
   return {net,sellCosts,fatCash,cost,landPaid,invBack,prefDue,prefPaid,fatBack,pool,invShare,fatShare,projectProfit,invReceives,invGain,invMultiple,invYield,fatReceives,fatGain,invSafe,breakEven};
 }
-const PLAN_DEFAULTS={principal:690000, price:1100000, sellPct:6.5, months:14, split:50, pref:0, galoEarly:100000, galoFinal:100000, carry:30000};
+const PLAN_DEFAULTS={principal:723000, price:1100000, sellPct:6.5, months:14, split:50, pref:0, galoEarly:100000, galoFinal:100000, carry:30000};
 /* ============ END PURE MATH ============ */
 
 const SCENARIOS = {
@@ -614,11 +614,11 @@ const S = { phases:[], gates:[], draws:[], ledger:[], updates:[], project:null, 
   preview:false, docs:[], vault:[], assets:null, docQ:"", docCat:"", pledges:[], myPledge:null, raise:null, draftAmt:null, selPhase:null, drawFilter:"open", lq:"", lphase:"", lkind:"" };
 
 const TABS=[["overview","Overview","See where the project and your money stand today."],
-  ["raise","Commitments","Each investor chooses how much to put toward the $690K raise: $590K of construction and $100K of land partner payments. FatAtelier accepts each commitment, and everyone sees the total."],
+  ["raise","Commitments","Each investor chooses how much to put toward the $723K raise: $623K of construction and $100K of land partner payments. FatAtelier accepts each commitment, and everyone sees the total."],
   ["docs","Documents","Every agreement, deed, City letter and approval for the project, in one place. Open or download anything here."],
   ["design","Design","Renderings, the full drawing set and the presentation, so you can see exactly what is being built."],
   ["draws","Draw requests","Every release of investor capital starts here, and nothing moves until the investor approves it."],
-  ["budget","Budget","The $690K raise split into eight construction phases and the land partner’s two payments, with the bill of quantities behind every phase. A draw can never exceed what is left on its line."],
+  ["budget","Budget","The $723K raise split into eight construction phases and the land partner’s two payments, with the bill of quantities behind every phase. A draw can never exceed what is left on its line."],
   ["ledger","Ledger","Every payment out of the project account, matched to a phase and an invoice."],
   ["updates","Updates","Progress from the site and the shop, written as it happens."],
   ["plan","Sale and profit","How investors are paid when the finished building sells: capital back first, then the profit is split."]];
@@ -1527,7 +1527,7 @@ function updatePlanResults(){
         h("ol",{class:"steps"},
           ...[["Selling costs",`${P.sellPct}% for commission and transfer fees`,R.sellCosts],
              ["Land partner",`Final payment under the signed agreement, which ends the claim`,R.landPaid],
-             ["Investors’ capital",`Every investor gets their full commitment back before anyone profits. This covers the $590K of construction and the $100K paid to the land partner during construction.`,R.invBack],
+             ["Investors’ capital",`Every investor gets their full commitment back before anyone profits. This covers the $623K of construction and the $100K paid to the land partner during construction.`,R.invBack],
              ...(P.pref?[["Preferred return",`${P.pref}% a year on investor capital, paid before the split`,R.prefPaid]]:[]),
              ["FatAtelier’s cash",`${usdK(P.carry)} of carrying and soft costs FatAtelier covers during construction`,R.fatBack],
              ["Profit split",`${P.split}% to investors by commitment, ${100-P.split}% to FatAtelier`,R.pool]]
@@ -1540,7 +1540,7 @@ function updatePlanResults(){
       h("h3",{text:"Proposed investment terms"}),
       h("dl",{class:"terms"},
         h("dt",{text:"Vehicle"}),h("dd",{text:"The Blend project LLC (to be formed), which will hold title and sell the building"}),
-        h("dt",{text:"Investors"}),h("dd",{text:`Members of the LLC who contribute ${usdK(P.principal)} all in: $590K of construction and $100K of land partner payments during construction. Each investor’s share follows the amount they commit.`}),
+        h("dt",{text:"Investors"}),h("dd",{text:`Members of the LLC who contribute ${usdK(P.principal)} all in: $623K of construction and $100K of land partner payments during construction. Each investor’s share follows the amount they commit.`}),
         h("dt",{text:"Developer"}),h("dd",{text:"FatAtelier is managing member: design, fabrication and construction, with no design, fabrication or GC fee charged to the project"}),
         h("dt",{text:"Exit"}),h("dd",{text:"The building is listed for sale at completion and the LLC winds up after closing"}),
         h("dt",{text:"Payment order"}),h("dd",{text:`Selling costs, land partner, investor capital${P.pref?", preferred return":""}, FatAtelier’s cash, then profit ${P.split}/${100-P.split}`}),
