@@ -562,7 +562,7 @@ function saleModel(p){
   const fatBreakEven=(p.principal+p.galoFinal+(p.split<100?fatCash/(1-p.split/100):0))/baseRate;
   return {net,sellRate,sellCosts,fatCash,cost,landPaid,invBack,prefDue,prefPaid,fatBack,pool,invShare,fatShare,projectProfit,invReceives,invGain,invMultiple,invYield,fatReceives,fatGain,invSafe,breakEven,fatBreakEven};
 }
-const PLAN_DEFAULTS={principal:723000, price:1100000, sellPct:6.5, months:14, split:50, pref:0, galoEarly:100000, galoFinal:100000, carry:30000, mansionPct:1, mansionAt:1000000};
+const PLAN_DEFAULTS={principal:723000, price:1100000, sellPct:6.5, months:12, split:50, pref:0, galoEarly:100000, galoFinal:100000, carry:30000, mansionPct:1, mansionAt:1000000};
 /* ============ END PURE MATH ============ */
 
 const SCENARIOS = {
@@ -1484,7 +1484,7 @@ function vPlan(){
     h("div",{class:"card-head"},h("h3",{text:"Test the numbers"})),
     h("div",{style:"display:flex;flex-direction:column;gap:6px"},h("span",{class:"label",text:"Sale price scenario"}),seg),
     lever("price","Sale price of the finished building",850000,1500000,5000,usdK),
-    lever("months","Months from funding to sale",9,24,1,v=>v+" mo"),
+    lever("months","Months from funding to sale",6,24,1,v=>v+" mo"),
     lever("split","Investors’ share of the profit",30,70,5,v=>v+"%"),
     lever("pref","Preferred return to investors first",0,10,0.5,v=>v?v+"% a year":"None"),
     h("details",{class:"more"},h("summary",null,"More assumptions"),
@@ -1509,7 +1509,7 @@ function updatePlanResults(){
   const lossNote=R.projectProfit<0? h("div",{class:"note-line warn",text:R.invBack<P.principal?`At this price investors would get back ${usd(R.invBack)} of their ${usdK(P.principal)}.`:`At this price there is no profit to split; investors get their capital back${R.prefPaid?" and the preferred return":""} and FatAtelier absorbs the shortfall.`}) :
     h("div",{class:"note-line good",text:`Sold at ${usdK(P.price)}, the project clears ${usd(R.projectProfit)} after every cost. Investors are paid back first, then the profit is split ${P.split}/${100-P.split}.`});
   const prices=[P.price-150000,P.price-75000,P.price,P.price+75000,P.price+150000].map(v=>Math.max(600000,Math.round(v/5000)*5000));
-  const monthsCols=[10,12,14,18];
+  const monthsCols=[8,10,12,15];
   const sens=h("div",{class:"grid-sens tbl"},h("table",null,
     h("thead",null,h("tr",null,h("th",{text:"Sale price"}),h("th",{text:"Investors receive"}),...monthsCols.map(m=>h("th",{text:m+" mo"})))),
     h("tbody",null,...prices.map(v=>{ const base=saleModel(Object.assign({},P,{price:v}));
