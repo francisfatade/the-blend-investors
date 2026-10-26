@@ -540,26 +540,29 @@ details.more summary{cursor:pointer;font-size:14px;font-weight:500;padding:4px 0
 /* ============ PURE MATH (tested) ============ */
 function saleModel(p){
   const yrs=p.months/12;
-  const net=p.price*(1-p.sellPct/100), sellCosts=p.price-net;
-  const fatCash=p.carry;
-  const cost=p.principal+p.galoFinal+p.carry;
+  const sellRate=p.sellPct/100+(p.price>(p.mansionAt||1e12)?(p.mansionPct||0)/100:0);
+  const net=p.price*(1-sellRate), sellCosts=p.price-net;
+  const fatCash=p.carry;               // FatAtelier's own carrying costs: never reimbursed, recovered only through its profit share
+  const cost=p.principal+p.galoFinal;  // what must be repaid before any profit exists
   let left=net;
   const landPaid=Math.min(p.galoFinal,Math.max(0,left)); left-=landPaid;
   const invBack=Math.min(p.principal,Math.max(0,left)); left-=invBack;
   const prefDue=p.principal*p.pref/100*yrs;
   const prefPaid=Math.min(prefDue,Math.max(0,left)); left-=prefPaid;
-  const fatBack=Math.min(fatCash,Math.max(0,left)); left-=fatBack;
+  const fatBack=0;
   const pool=Math.max(0,left);
   const invShare=pool*p.split/100, fatShare=pool-invShare;
   const projectProfit=net-cost;
   const invReceives=invBack+prefPaid+invShare, invGain=invReceives-p.principal;
   const invMultiple=invReceives/p.principal, invYield=yrs>0?invGain/p.principal/yrs:0;
-  const fatReceives=fatBack+fatShare, fatGain=fatReceives-fatCash;
-  const invSafe=(p.principal+p.galoFinal)/(1-p.sellPct/100);
-  const breakEven=cost/(1-p.sellPct/100);
-  return {net,sellCosts,fatCash,cost,landPaid,invBack,prefDue,prefPaid,fatBack,pool,invShare,fatShare,projectProfit,invReceives,invGain,invMultiple,invYield,fatReceives,fatGain,invSafe,breakEven};
+  const fatReceives=fatShare, fatGain=fatShare-fatCash;
+  const baseRate=1-p.sellPct/100;
+  const invSafe=(p.principal+p.galoFinal)/baseRate;
+  const breakEven=invSafe;
+  const fatBreakEven=(p.principal+p.galoFinal+(p.split<100?fatCash/(1-p.split/100):0))/baseRate;
+  return {net,sellRate,sellCosts,fatCash,cost,landPaid,invBack,prefDue,prefPaid,fatBack,pool,invShare,fatShare,projectProfit,invReceives,invGain,invMultiple,invYield,fatReceives,fatGain,invSafe,breakEven,fatBreakEven};
 }
-const PLAN_DEFAULTS={principal:723000, price:1100000, sellPct:6.5, months:14, split:50, pref:0, galoEarly:100000, galoFinal:100000, carry:30000};
+const PLAN_DEFAULTS={principal:723000, price:1100000, sellPct:6.5, months:14, split:50, pref:0, galoEarly:100000, galoFinal:100000, carry:30000, mansionPct:1, mansionAt:1000000};
 /* ============ END PURE MATH ============ */
 
 const SCENARIOS = {
@@ -1345,16 +1348,15 @@ function dealCard(){
   const P=sharedPlan(), R=saleModel(P);
   const build=(S.project&&S.project.constructionBudget)||(P.principal-P.galoEarly);
   const galoTotal=P.galoEarly+P.galoFinal;
-  const allIn=build+galoTotal+P.carry+R.sellCosts;
+  const allIn=build+galoTotal+R.sellCosts;
   let left=P.price;
   const step=(label,sub,amt)=>{ left-=amt; return h("tr",null,h("td",null,label,sub?h("small",{text:sub}):null),h("td",{class:"n",text:"−"+usd(amt)}),h("td",{class:"n m",text:usd(left)})); };
   const rows=[
     h("tr",{class:"head"},h("td",{text:"Sale price"}),h("td"),h("td",{class:"n",text:usd(P.price)})),
-    step("Selling costs",`${P.sellPct}% commission and transfer fees`,R.sellCosts),
+    step("Selling costs",`${(R.sellRate*100).toFixed(1)}%: commission, transfer fee${P.price>P.mansionAt?", 1% NJ mansion tax (seller pays)":""}`,R.sellCosts),
     step("Land partner, final payment","Galo’s second $100K, which ends his claim",R.landPaid),
     step("Investors’ money back","Every dollar of the "+usdK(P.principal)+" raise",R.invBack)];
   if(R.prefPaid>0) rows.push(step("Preferred return",`${P.pref}% a year`,R.prefPaid));
-  rows.push(step("FatAtelier carrying costs","Insurance, taxes, utilities and soft costs FatAtelier covers",R.fatBack));
   rows.push(h("tr",{class:"split"},h("td",{text:`Profit, split ${P.split}/${100-P.split}`}),h("td",{class:"n",text:usd(R.invShare)+" each"}),h("td",{class:"n",text:usd(R.pool)})));
   return h("section",{class:"card"},
     h("div",{class:"card-head"},h("h3",{text:"The deal, start to finish"}),h("span",{class:"label",text:`At the ${usdK(P.price)} minimum sale`})),
@@ -1368,10 +1370,10 @@ function dealCard(){
       h("div",null,h("h4",{text:"WHAT HAPPENS AT CLOSING"}),
         h("table",{class:"wf"},h("tbody",null,...rows)))),
     h("div",{class:"sum4"},
-      h("div",null,h("span",{text:"Total project cost"}),h("b",{text:usdK(allIn)}),h("span",{text:"Build, land, carrying and selling"})),
-      h("div",null,h("span",{text:"Profit"}),h("b",{text:usdK(R.pool)}),h("span",{text:"After every cost"})),
+      h("div",null,h("span",{text:"Total project cost"}),h("b",{text:usdK(allIn)}),h("span",{text:"Build, land and selling"})),
+      h("div",null,h("span",{text:"Profit to split"}),h("b",{text:usdK(R.pool)}),h("span",{text:"FatAtelier’s own costs come out of its half"})),
       h("div",null,h("span",{text:"Investors receive"}),h("b",{class:"acc",text:usd(R.invReceives)}),h("span",{text:`Their ${usdK(P.principal)} back plus ${usd(R.invGain)}`})),
-      h("div",null,h("span",{text:"Break-even sale price"}),h("b",{text:usdK(R.breakEven)}),h("span",{text:`${pct(1-R.breakEven/P.price,0)} below the minimum`}))),
+      h("div",null,h("span",{text:"Investors whole down to"}),h("b",{text:usdK(R.invSafe)}),h("span",{text:`${pct(1-R.invSafe/P.price,0)} below the minimum`}))),
     h("button",{class:"btn ghost sm",style:"align-self:flex-start",onclick:()=>go("plan")},icon("plan"),"Test other sale prices and timelines"));
 }
 function viabilityCard(){
@@ -1386,8 +1388,8 @@ function viabilityCard(){
         h("li",null,h("b",{text:"706 Bergen Street, on our block. "}),"Closed at $880,000 on September 30, 2026."),
         h("li",null,h("b",{text:`The Blend at ${usdK(P.price)}: about $${Math.round(P.price/sf)} per sq ft. `}),`About ${sf.toLocaleString("en-US")} sq ft of brand-new homes, priced below what an 18-year-old building sold for.`))),
       h("div",null,h("h4",{text:"SAFEGUARDS FOR INVESTORS"}),h("ul",null,
-        h("li",null,h("b",{text:`A ${pct(1-R.breakEven/P.price,0)} cushion. `}),`The project breaks even at ${usdK(R.breakEven)}, and investors get every dollar back at any sale above ${usdK(R.invSafe)}.`),
-        h("li",null,h("b",{text:"Investors are repaid before FatAtelier. "}),"FatAtelier recovers its costs and takes its share only after investors have their money back."),
+        h("li",null,h("b",{text:`A ${pct(1-R.invSafe/P.price,0)} cushion. `}),`Investors get every dollar back at any sale above ${usdK(R.invSafe)}, ${usdK(P.price-R.invSafe)} below the minimum price.`),
+        h("li",null,h("b",{text:"Investors are repaid before FatAtelier. "}),"FatAtelier is paid only from its share of the profit, after investors have every dollar back. Its own carrying costs are never charged to the project."),
         h("li",null,h("b",{text:"Nothing moves without you. "}),"Every draw needs investor approval, every receipt is posted here, and the first draw waits for the building permit."),
         h("li",null,h("b",{text:"A second way out. "}),`If the market is soft, the three homes can be rented and refinanced instead of sold. A loan at 75% of a ${usdK(P.price)} appraisal is about ${usdK(refi)}, enough to repay the raise and Galo’s final payment.`))),
       h("div",{class:"risk"},h("h4",{text:"WHAT WE WATCH CLOSELY"}),h("ul",null,
@@ -1486,7 +1488,7 @@ function vPlan(){
     lever("split","Investors’ share of the profit",30,70,5,v=>v+"%"),
     lever("pref","Preferred return to investors first",0,10,0.5,v=>v?v+"% a year":"None"),
     h("details",{class:"more"},h("summary",null,"More assumptions"),
-      h("div",{class:"more-grid"},more("principal","Investor capital, all in","$"),more("sellPct","Selling costs","% of price"),more("carry","Carrying and soft costs (FatAtelier)","$"),more("galoFinal","Land partner, at sale","$"))),
+      h("div",{class:"more-grid"},more("principal","Investor capital, all in","$"),more("sellPct","Selling costs","% of price"),more("carry","FatAtelier’s own carrying costs (paid from its share)","$"),more("galoFinal","Land partner, at sale","$"))),
     h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},
       changed?h("button",{class:"btn ghost sm",onclick:()=>{localPlan=null;lsSet("blend-plan-v3",null);render();toast("Back to the shared plan");}},"Reset to shared plan"):null,
       dev()&&S.db?h("button",{class:"btn sm",onclick:async()=>{ const ok=await save(()=>S.db.doc("project/plan").set(Object.assign({},planNow(),{model:"sale",savedAt:new Date().toISOString()})),"Saved as the shared plan"); if(ok){localPlan=null;lsSet("blend-plan-v3",null);render();} }},"Save as shared plan"):null),
@@ -1499,7 +1501,7 @@ function updatePlanResults(){
   const P=planNow(), R=saleModel(P);
   const parts=[["Selling costs",R.sellCosts,"var(--plan)","var(--ink)"],["Land partner, final",R.landPaid,"var(--oak)","var(--ink)"],["Investor capital back",R.invBack,"var(--ink)","var(--surface)"]];
   if(R.prefPaid>0) parts.push(["Investor preferred return",R.prefPaid,"color-mix(in srgb,var(--bronze) 60%,var(--ink))","var(--surface)"]);
-  parts.push(["FatAtelier cash back",R.fatBack,"color-mix(in srgb,var(--good) 45%,var(--plan))","var(--ink)"],["Investors’ profit share",R.invShare,"var(--bronze)","var(--on-bronze)"],["FatAtelier profit share",R.fatShare,"var(--good)","var(--surface)"]);
+  parts.push(["Investors’ profit share",R.invShare,"var(--bronze)","var(--on-bronze)"],["FatAtelier profit share",R.fatShare,"var(--good)","var(--surface)"]);
   const shown=parts.filter(x=>x[1]>0);
   const total=Math.max(P.price,1);
   const bar=h("div",{class:"flowbar",role:"img","aria-label":"How the sale price is divided"},...shown.map(([l,v,c,tc])=>h("div",{style:`flex:${v/total};background:${c};color:${tc}`,title:`${l}: ${usd(v)}`},v/total>.1?usdK(v):"")));
@@ -1517,7 +1519,7 @@ function updatePlanResults(){
     h("div",{class:"big3"},
       fig("Investors’ profit",usd(R.invGain),`${R.invMultiple.toFixed(2)}× their capital, about ${pct(R.invYield)} a year over ${P.months} months`,true),
       fig("Investors’ capital is whole down to",usdK(R.invSafe),`A ${usdK(P.price-R.invSafe)} cushion below the ${usdK(P.price)} sale price`),
-      fig("FatAtelier’s profit",usd(R.fatGain),`After recovering the ${usdK(R.fatCash)} of carrying costs FatAtelier covers`)),
+      fig("FatAtelier’s profit share",usd(R.fatShare),`About ${usdK(R.fatGain)} after the ${usdK(R.fatCash)} of carrying costs FatAtelier pays itself`)),
     h("div",{class:"card raised"},
       h("div",{class:"card-head"},h("h3",{text:"When the building sells"}),h("span",{class:"label",text:"Sale price "+usd(P.price)})),
       bar, legend, lossNote),
@@ -1525,12 +1527,11 @@ function updatePlanResults(){
       h("div",{class:"card"},
         h("div",{class:"card-head"},h("h3",{text:"Order of payment at closing"})),
         h("ol",{class:"steps"},
-          ...[["Selling costs",`${P.sellPct}% for commission and transfer fees`,R.sellCosts],
+          ...[["Selling costs",`${(R.sellRate*100).toFixed(1)}% for commission and transfer fees${P.price>P.mansionAt?", including the 1% NJ mansion tax the seller pays above $1M":""}`,R.sellCosts],
              ["Land partner",`Final payment under the signed agreement, which ends the claim`,R.landPaid],
              ["Investors’ capital",`Every investor gets their full commitment back before anyone profits. This covers the $623K of construction and the $100K paid to the land partner during construction.`,R.invBack],
              ...(P.pref?[["Preferred return",`${P.pref}% a year on investor capital, paid before the split`,R.prefPaid]]:[]),
-             ["FatAtelier’s cash",`${usdK(P.carry)} of carrying and soft costs FatAtelier covers during construction`,R.fatBack],
-             ["Profit split",`${P.split}% to investors by commitment, ${100-P.split}% to FatAtelier`,R.pool]]
+             ["Profit split",`${P.split}% to investors by commitment, ${100-P.split}% to FatAtelier. FatAtelier pays its own carrying costs out of its share.`,R.pool]]
           .map(([t,d,v])=>h("li",{class:v>0?"done":""},h("span",{class:"dot"},v>0?icon("check"):null),h("div",null,h("div",{class:"t",text:`${t}  ${usd(v)}`}),h("div",{class:"d",text:d})))))),
       h("div",{class:"card"},
         h("div",{class:"card-head"},h("h3",{text:"Investors’ yearly return"}),h("span",{class:"label",text:"By sale price and months to sale"})),
@@ -1543,7 +1544,7 @@ function updatePlanResults(){
         h("dt",{text:"Investors"}),h("dd",{text:`Members of the LLC who contribute ${usdK(P.principal)} all in: $623K of construction and $100K of land partner payments during construction. Each investor’s share follows the amount they commit.`}),
         h("dt",{text:"Developer"}),h("dd",{text:"FatAtelier is managing member: design, fabrication and construction, with no design, fabrication or GC fee charged to the project"}),
         h("dt",{text:"Exit"}),h("dd",{text:"The building is listed for sale at completion and the LLC winds up after closing"}),
-        h("dt",{text:"Payment order"}),h("dd",{text:`Selling costs, land partner, investor capital${P.pref?", preferred return":""}, FatAtelier’s cash, then profit ${P.split}/${100-P.split}`}),
+        h("dt",{text:"Payment order"}),h("dd",{text:`Selling costs, land partner, investor capital${P.pref?", preferred return":""}, then profit ${P.split}/${100-P.split}. FatAtelier’s carrying costs (about ${usdK(P.carry)}) are paid by FatAtelier and recovered only from its share.`}),
         h("dt",{text:"Oversight"}),h("dd",{text:"Investors approve every draw from the LLC account and see every receipt on this page"}),
         h("dt",{text:"Land partner"}),h("dd",{text:`$50K at permit and $50K after rough-in inspections, paid from investor capital as draws; ${usdK(P.galoFinal)} from the sale, after which the claim ends`})),
       h("p",{class:"fine",text:"Draft for discussion. This is not an offer of securities or legal advice. Final terms belong in the LLC operating agreement, reviewed by each party’s counsel."})));
